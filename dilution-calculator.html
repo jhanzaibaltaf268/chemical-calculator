@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dilution Calculator</title>
+<meta name="description" content="Dilute a stock with C1V1 = C2V2: stock volume, diluent, dilution factor, purity-corrected stocks, and an automatic serial plan when one step would need an unpipettable volume.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; Dilution</p>
+    <h1>Dilution Calculator</h1>
+    <p class="standfirst">How much stock to take, how much diluent to add &mdash; and when a single step asks for a volume too small to pipette, the serial plan that replaces it.</p>
+    <div class="calc">
+      <div class="fields">
+        <div class="field">
+          <label for="unitC">Concentration unit</label>
+          <select id="unitC">
+            <option value="M">M</option>
+            <option value="mM">mM</option>
+            <option value="uM" selected>&micro;M</option>
+            <option value="nM">nM</option>
+            <option value="mg/mL">mg/mL</option>
+            <option value="ug/mL">&micro;g/mL</option>
+            <option value="% w/v">% w/v</option>
+            <option value="X">&times; (fold)</option>
+          </select>
+          <p class="hint">One unit for both, so they can never be mixed.</p>
+        </div>
+        <div class="field">
+          <label for="c1">Stock concentration C&#8321;</label>
+          <input type="number" id="c1" value="10000" step="any" min="0">
+        </div>
+        <div class="field">
+          <label for="c2">Target concentration C&#8322;</label>
+          <input type="number" id="c2" value="1" step="any" min="0">
+        </div>
+        <div class="field">
+          <label for="v2">Final total volume V&#8322;</label>
+          <div class="pair">
+            <input type="number" id="v2" value="100" step="any" min="0">
+            <select id="unitV"><option value="1">mL</option><option value="0.001">&micro;L</option><option value="1000">L</option></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="pur">Stock purity (%)</label>
+          <input type="number" id="pur" value="100" step="any" min="0" max="100">
+          <p class="hint">The true stock is the label times this.</p>
+        </div>
+      </div>
+      <div class="go-row">
+        <button class="go" id="go" type="button">Calculate</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-set="uM|10000|1|100|1|100">10 mM &rarr; 1 &micro;M</button>
+        <button class="chip" type="button" data-set="uM|10000|50|100|1|100">10 mM &rarr; 50 &micro;M</button>
+        <button class="chip" type="button" data-set="mg/mL|10|1|50|1|95">95% pure stock</button>
+        <button class="chip" type="button" data-set="X|10|1|500|0.001|100">10&times; buffer</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <ul class="kv" id="kv"></ul>
+      <div id="alerts"></div>
+      <p class="basis">C&#8321;V&#8321; = C&#8322;V&#8322; works because dilution adds solvent but no solute, so the amount C &times; V does not change.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">Diluent is what you add; V&#8322; is what you end up with. Confusing the two is the most common dilution error.</p>
+    </div>
+    <div class="panel">
+      <h2>What goes in the flask</h2>
+      <div id="flask"></div>
+      <p class="cap">Drawn to scale. When the stock slice is almost invisible, the volume is probably too small to pipette accurately.</p>
+    </div>
+    <div class="panel span">
+      <h2 id="planHead">The plan</h2>
+      <div class="scroll"><table id="plan"></table></div>
+      <p class="cap" id="planNote"></p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">Diluent means &ldquo;top up to&rdquo;, not &ldquo;add on top&rdquo;</h2>
+    <p>Adding 99.5 mL of diluent to 0.5 mL of stock gives 100 mL. Adding <em>100</em> mL to 0.5 mL gives 100.5 mL, and the concentration is wrong. With a bigger stock volume the error grows: 20 mL of stock plus 200 mL of diluent is 220 mL, so the result lands at 200/220 = 0.909 of what you wanted. Make the final volume in a volumetric flask and top up to the mark.</p>
+
+    <h3>Worked by hand: 100 mL of 1 &micro;M from a 10 mM stock</h3>
+    <p>10 mM is 10,000 &micro;M, so the factor is 10,000&times;. In one step, V&#8321; = (1 &times; 100) &divide; 10,000 = 0.01 mL, which is 10 &micro;L. The arithmetic is right and the pipetting is not: a small error at 10 &micro;L becomes a large error in the result.</p>
+    <p>Split it into two 100&times; steps instead. Make 10 mL of 100 &micro;M by taking 100 &micro;L of stock into 9.9 mL of diluent; then make 100 mL of 1 &micro;M by taking 1.0 mL of that into 99.0 mL. The cumulative factor is 100 &times; 100 = 10,000, and every volume is comfortable.</p>
+    <p>Not every large number needs splitting. The same 10 mM stock to 50 &micro;M in 100 mL needs 0.5 mL &mdash; 500 &micro;L, perfectly pipettable &mdash; so one step is right there.</p>
+
+    <h3>Reading dilution notation</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Written</th><th>Stock : diluent</th><th>Parts</th><th>Factor</th><th>Strength</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1:2</td><td class="mono">1 : 1</td><td class="mono">2</td><td class="mono">2&times;</td><td class="mono">1/2</td></tr>
+        <tr><td class="mono">1:5</td><td class="mono">1 : 4</td><td class="mono">5</td><td class="mono">5&times;</td><td class="mono">1/5</td></tr>
+        <tr><td class="mono">1:10</td><td class="mono">1 : 9</td><td class="mono">10</td><td class="mono">10&times;</td><td class="mono">1/10</td></tr>
+        <tr><td class="mono">1:100</td><td class="mono">1 : 99</td><td class="mono">100</td><td class="mono">100&times;</td><td class="mono">1/100</td></tr>
+        <tr><td class="mono">10&times; stock to 1&times;</td><td class="mono">1 : 9</td><td class="mono">10</td><td class="mono">10&times;</td><td class="mono">1/10</td></tr>
+      </tbody>
+    </table></div>
+    <div class="flagnote">Some protocols write <span class="mono">1:10</span> to mean one part stock <em>plus</em> ten parts diluent &mdash; eleven parts total, so 1/11. That is a 10% difference in the final concentration. If a protocol does not say &ldquo;total&rdquo;, confirm before pipetting.</div>
+
+    <h3>Purity-corrected stocks</h3>
+    <p>A stock made from powder is really its label times the assay purity. A stock labelled 10 mg/mL at 95% purity is 9.5 mg/mL. To make 50 mL of 1 mg/mL you need (1 &times; 50) &divide; 9.5 = 5.26 mL, not 5.0 mL &mdash; using the uncorrected figure lands you at 0.95 mg/mL, 5% low. For hydrated or salt forms, take the molar mass from the vial label rather than from memory.</p>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Traps worth knowing</h2>
+    <ul>
+      <li><strong>Diluent against final volume.</strong> Add V&#8322; &minus; V&#8321;, never V&#8322;.</li>
+      <li><strong>Swapped C&#8321; and C&#8322;.</strong> If V&#8321; comes out larger than V&#8322;, the inputs are the wrong way round.</li>
+      <li><strong>Thousand-fold unit slips.</strong> mM against &micro;M, mL against &micro;L, mg against &micro;g. This is the usual cause of a 1,000&times; error.</li>
+      <li><strong>Nominal against true stock concentration.</strong> Correct for purity before the equation, not after.</li>
+      <li><strong>Assuming volumes simply add.</strong> Fine for dilute aqueous solutions; not for concentrated mixtures &mdash; 50 mL of ethanol plus 50 mL of water is about 96 mL. Top up to the mark.</li>
+      <li><strong>Rounding volumes early.</strong> 5.26 mL rounded to 5.3 shifts the result by 0.8%. At the microlitre scale, rounding to the nearest &micro;L can shift it by 10%.</li>
+      <li><strong>Compounding error down a series.</strong> Every transfer carries its own error. Use the largest practical transfer volume, change tips each step, and mix every tube fully.</li>
+    </ul>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>How much diluent do I add?</summary><div class="ans"><p>V&#8322; &minus; V&#8321;. For 0.5 mL of stock made up to 100 mL, that is 99.5 mL.</p></div></details>
+    <details class="faq"><summary>When should I use a serial dilution?</summary><div class="ans"><p>When one step would need a volume too small to pipette accurately, or the factor is above about 1,000&times;. For 10,000&times;, two 100&times; steps.</p></div></details>
+    <details class="faq"><summary>Do C&#8321; and C&#8322; need the same units?</summary><div class="ans"><p>Yes &mdash; the same kind and the same scale. This calculator uses one unit selector for both so they cannot drift apart. Volumes must match each other, but need not match the concentrations.</p></div></details>
+    <details class="faq"><summary>Does purity change the calculation?</summary><div class="ans"><p>Yes. Correct C&#8321; first. A 95%-pure stock labelled 10 mg/mL is really 9.5 mg/mL, so 50 mL of 1 mg/mL needs 5.26 mL.</p></div></details>
+    <details class="faq"><summary>Do 1:10, 10&times; and a factor of 10 mean the same thing?</summary><div class="ans"><p>Here, yes: one part stock plus nine parts diluent, ten parts total, one tenth the strength. Some protocols use 1:10 differently, so confirm the convention.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="protein-molarity-calculator.html">Protein Molarity</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="protein-molarity-calculator.html">Next: Protein Molarity</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var C1=document.getElementById('c1'),C2=document.getElementById('c2'),V2=document.getElementById('v2'),
+    UC=document.getElementById('unitC'),UV=document.getElementById('unitV'),PUR=document.getElementById('pur'),
+    ro=document.getElementById('readout'),big=document.getElementById('big'),
+    unit=document.getElementById('unit'),side=document.getElementById('side'),
+    kv=document.getElementById('kv'),alerts=document.getElementById('alerts'),
+    steps=document.getElementById('steps'),flask=document.getElementById('flask'),
+    plan=document.getElementById('plan'),planHead=document.getElementById('planHead'),
+    planNote=document.getElementById('planNote');
+
+function vol(mL){
+  if(!isFinite(mL)){return '\u2014';}
+  if(mL>=1000){return Chem.sig(mL/1000,4)+' L';}
+  if(mL>=1){return Chem.sig(mL,4)+' mL';}
+  return Chem.sig(mL*1000,4)+' \u00b5L';
+}
+function kvAdd(k,v,lead){
+  var li=Chem.el('li',lead?'lead':'');
+  li.appendChild(Chem.el('span','k',k));
+  li.appendChild(Chem.el('span','v',v));
+  kv.appendChild(li);
+}
+function bar(label,frac,colour,value){
+  var w=Chem.el('div');w.style.marginBottom='0.6rem';
+  var top=Chem.el('div','line');
+  top.appendChild(Chem.el('span','name',label));
+  top.appendChild(Chem.el('span','math',value));
+  w.appendChild(top);
+  var t=Chem.el('div','track');t.style.height='14px';
+  var f=Chem.el('div','fill');
+  if(colour){f.style.background=colour;}
+  t.appendChild(f);w.appendChild(t);
+  setTimeout(function(){f.style.width=Math.max(frac*100,0.4)+'%';},40);
+  return w;
+}
+
+function run(animate){
+  Chem.clear(kv);Chem.clear(alerts);Chem.clear(flask);Chem.clear(plan);
+  var u=UC.options[UC.selectedIndex].text;
+  var c1=parseFloat(C1.value),c2=parseFloat(C2.value),v2=parseFloat(V2.value)*parseFloat(UV.value);
+  var pur=parseFloat(PUR.value);
+  if(!isFinite(pur)||pur<=0||pur>100){pur=100;PUR.value=100;}
+  var c1true=c1*pur/100;
+
+  function bad(msg){ro.classList.add('bad');big.textContent=msg;unit.textContent='';side.textContent='';
+    Chem.clear(steps);planHead.textContent='The plan';planNote.textContent='';}
+
+  if(!isFinite(c1)||c1<=0){return bad('Stock concentration C\u2081 must be above zero.');}
+  if(!isFinite(c2)||c2<=0){return bad('Target concentration C\u2082 must be above zero.');}
+  if(!isFinite(v2)||v2<=0){return bad('Final volume V\u2082 must be above zero.');}
+  if(c2>c1true){
+    return bad('C\u2082 ('+Chem.sig(c2,5)+' '+u+') is above the usable stock ('+Chem.sig(c1true,5)+' '+u+
+      '). That is concentrating, not diluting \u2014 check whether the two are swapped.');
+  }
+
+  ro.classList.remove('bad');
+  var DF=c1true/c2, v1=c2*v2/c1true, dil=v2-v1;
+
+  big.textContent=vol(v1).split(' ')[0];
+  unit.textContent=vol(v1).split(' ')[1]+' of stock';
+  side.textContent='+ '+vol(dil)+' diluent \u2192 '+vol(v2)+' at '+Chem.sig(c2,5)+' '+u;
+
+  kvAdd('Take stock (V\u2081)',vol(v1),true);
+  kvAdd('Add diluent',vol(dil));
+  kvAdd('Final volume (V\u2082)',vol(v2));
+  kvAdd('Dilution factor',Chem.sig(DF,5)+'\u00d7  (1 : '+Chem.sig(DF-1,4)+')');
+  if(pur<100){kvAdd('True stock after purity',Chem.sig(c1true,5)+' '+u+'  (label '+Chem.sig(c1,5)+')');}
+  kvAdd('Check: C\u2081V\u2081 \u00f7 V\u2082',Chem.sig(c1true*v1/v2,5)+' '+u);
+
+  var S=[];
+  if(pur<100){
+    S.push(['Correct the stock for purity',
+      Chem.sig(c1,5)+' '+u+' \u00d7 '+Chem.fx(pur/100,4)+' = '+Chem.sig(c1true,5)+' '+u]);
+  }
+  S.push(['Dilution factor',Chem.sig(c1true,5)+' \u00f7 '+Chem.sig(c2,5)+' = '+Chem.sig(DF,5)+'\u00d7']);
+  S.push(['Solve for V\u2081','V\u2081 = C\u2082V\u2082 \u00f7 C\u2081 = ('+Chem.sig(c2,5)+' \u00d7 '+
+    vol(v2)+') \u00f7 '+Chem.sig(c1true,5)+' = '+vol(v1)]);
+  S.push(['Diluent to add','V\u2082 \u2212 V\u2081 = '+vol(v2)+' \u2212 '+vol(v1)+' = '+vol(dil)]);
+  S.push(['Check backwards','('+Chem.sig(c1true,5)+' \u00d7 '+vol(v1)+') \u00f7 '+vol(v2)+' = '+
+    Chem.sig(c1true*v1/v2,5)+' '+u]);
+
+  Chem.clear(steps);
+  S.forEach(function(p,i){
+    var li=Chem.el('li'),d=Chem.el('div');
+    d.appendChild(Chem.el('span','what',p[0]));
+    d.appendChild(Chem.el('span','how'+(i===S.length-1?' sum':''),p[1]));
+    li.appendChild(d);Chem.stagger(li,'anim-rise',i,70);steps.appendChild(li);});
+
+  flask.appendChild(bar('Stock',v1/v2,null,vol(v1)+'  ('+Chem.fx(v1/v2*100,2)+'%)'));
+  flask.appendChild(bar('Diluent',dil/v2,'var(--ink-faint)',vol(dil)+'  ('+Chem.fx(dil/v2*100,2)+'%)'));
+
+  var tooSmall=v1<0.02, bigFactor=DF>1000;
+  var split=tooSmall||bigFactor;
+
+  var head=document.createElement('thead'),hr=document.createElement('tr');
+  ['Step','Make','Take','Diluent','Gives'].forEach(function(h){
+    var c=document.createElement('th');c.textContent=h;hr.appendChild(c);});
+  head.appendChild(hr);plan.appendChild(head);
+  var tb=document.createElement('tbody');
+  function prow(cells,i){
+    var tr=document.createElement('tr');
+    cells.forEach(function(t,j){var td=document.createElement('td');td.textContent=t;
+      if(j>0){td.className='mono';}tr.appendChild(td);});
+    if(animate){Chem.stagger(tr,'anim-rise',i,70);}
+    tb.appendChild(tr);
+  }
+
+  if(!split){
+    planHead.textContent='One step is enough';
+    prow(['1',vol(v2)+' at '+Chem.sig(c2,5)+' '+u,vol(v1)+' of stock',vol(dil),
+      Chem.sig(c2,5)+' '+u],0);
+    planNote.textContent='V\u2081 is large enough to pipette accurately and the factor is under 1,000\u00d7, so splitting would only add error.';
+  }else{
+    var n=Math.max(2,Math.ceil(Math.log(DF)/Math.log(100)));
+    var per=Math.pow(DF,1/n);
+    planHead.textContent='Split into '+n+' steps of '+Chem.sig(per,4)+'\u00d7';
+    var conc=c1true, interVol=Math.max(v2/10,1);
+    for(var i=0;i<n;i++){
+      var last=(i===n-1);
+      var makeVol=last?v2:interVol;
+      var next=conc/per;
+      var take=makeVol/per;
+      prow([String(i+1),
+        vol(makeVol)+' at '+Chem.sig(next,5)+' '+u,
+        vol(take)+(i===0?' of stock':' of step '+i),
+        vol(makeVol-take),
+        Chem.sig(next,5)+' '+u],i);
+      conc=next;
+    }
+    planNote.textContent='Cumulative factor '+Chem.sig(Math.pow(per,n),5)+
+      '\u00d7. Change tips at every step and mix each tube fully before transferring \u2014 errors compound down a series.';
+    var w=Chem.el('div','alert');
+    w.innerHTML=tooSmall
+      ? '<strong>One step would need '+vol(v1)+' of stock.</strong> That is below what most pipettes deliver reliably, so a small error there becomes a large error in the result. The split plan below keeps every volume comfortable.'
+      : '<strong>A '+Chem.sig(DF,5)+'\u00d7 factor in one step.</strong> Above about 1,000\u00d7 a single step is hard to do accurately. The split plan below is safer.';
+    alerts.appendChild(w);
+  }
+  plan.appendChild(tb);
+}
+document.getElementById('go').addEventListener('click',function(){run(true);});
+Array.prototype.forEach.call(document.querySelectorAll('.calc input'),function(n){
+  n.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run(true);}});});
+[UC,UV].forEach(function(s){s.addEventListener('change',function(){run(true);});});
+Array.prototype.forEach.call(document.querySelectorAll('.chip[data-set]'),function(c){
+  c.addEventListener('click',function(){
+    var p=c.getAttribute('data-set').split('|');
+    UC.value=p[0];C1.value=p[1];C2.value=p[2];V2.value=p[3];UV.value=p[4];PUR.value=p[5];
+    run(true);});});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body>
+</html>

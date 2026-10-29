@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gas Volume Calculator</title>
+<meta name="description" content="Convert moles of gas to litres at any standard condition, see why 22.414 and 22.711 L/mol are both right, and solve PV = nRT for a gas measured at real temperature and pressure.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; Gas Volume</p>
+    <h1>Gas Volume Calculator</h1>
+    <p class="standfirst">Moles to litres at the standard your question actually means &mdash; and the full gas law for a gas measured at real temperature and pressure.</p>
+    <div class="calc">
+      <div class="modes" role="group" aria-label="Mode">
+        <button type="button" id="mStd" aria-pressed="true">At a standard condition</button>
+        <button type="button" id="mReal" aria-pressed="false">At measured P and T</button>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <label for="f">Gas formula (optional)</label>
+          <input type="text" id="f" value="CO2" spellcheck="false" autocomplete="off" placeholder="O2, N2, CH4">
+          <p class="hint">Only needed for mass and density. Remember the diatomic pairs.</p>
+        </div>
+        <div class="field" id="wrapStd">
+          <label for="std">Standard condition</label>
+          <select id="std">
+            <option value="stp" selected>Textbook STP &mdash; 0 &deg;C, 1 atm</option>
+            <option value="iupac">IUPAC STP &mdash; 0 &deg;C, 1 bar</option>
+            <option value="satp">SATP &mdash; 25 &deg;C, 1 bar</option>
+            <option value="lab">25 &deg;C, 1 atm</option>
+            <option value="uk">20 &deg;C, 1 atm</option>
+          </select>
+        </div>
+        <div class="field" id="wrapP" hidden>
+          <label for="p">Pressure</label>
+          <div class="pair">
+            <input type="number" id="p" value="0.98" step="any" min="0">
+            <select id="pU"><option value="101325" selected>atm</option><option value="1000">kPa</option><option value="100000">bar</option><option value="133.322368">mmHg</option></select>
+          </div>
+        </div>
+        <div class="field" id="wrapT" hidden>
+          <label for="t">Temperature</label>
+          <div class="pair">
+            <input type="number" id="t" value="22" step="any">
+            <select id="tU"><option value="C" selected>&deg;C</option><option value="K">K</option><option value="F">&deg;F</option></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="known">What you have</label>
+          <select id="known">
+            <option value="n" selected>Moles</option>
+            <option value="v">Volume (L)</option>
+            <option value="g">Mass (g)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="val">Value</label>
+          <input type="number" id="val" value="2.5" step="any" min="0">
+        </div>
+      </div>
+      <div class="go-row">
+        <button class="go" id="go" type="button">Calculate</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-set="N2|stp|n|2.5">2.5 mol N2 at STP</button>
+        <button class="chip" type="button" data-set="N2|real|v|0.25">250 mL measured</button>
+        <button class="chip" type="button" data-set="CO2|stp|g|44">44 g CO2</button>
+        <button class="chip" type="button" data-set="O2|satp|n|1">1 mol at SATP</button>
+        <button class="chip" type="button" data-set="H2|stp|n|1">1 mol H2</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <div id="alerts"></div>
+      <p class="basis">&ldquo;STP&rdquo; has more than one definition, and they differ by 1.3%. If a question says STP without qualifying it, textbook STP is the usual intent.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">Temperature goes into the gas law in kelvin. Putting 25 in place of 298.15 shrinks the answer about twelvefold.</p>
+    </div>
+    <div class="panel">
+      <h2>If you weigh it instead</h2>
+      <ul class="kv" id="kv" style="margin-top:0;padding-top:0;border-top:0"></ul>
+      <p class="cap" id="massNote"></p>
+    </div>
+    <div class="panel span">
+      <h2>The same amount under every standard</h2>
+      <div class="scroll"><table id="stds"></table></div>
+      <p class="cap">All five molar volumes are calculated from V<sub>m</sub> = RT/P with R = 8.314462618 J/(mol&middot;K), so they stay consistent with each other.</p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">Which standard does your question mean?</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>Name</th><th>Temperature</th><th>Pressure</th><th>Molar volume</th><th>Use it when</th></tr></thead>
+      <tbody>
+        <tr><td>Textbook STP</td><td class="mono">0 &deg;C</td><td class="mono">1 atm</td><td class="mono"><strong>22.414 L/mol</strong></td><td>A question just says &ldquo;at STP&rdquo;</td></tr>
+        <tr><td>IUPAC STP (since 1982)</td><td class="mono">0 &deg;C</td><td class="mono">1 bar</td><td class="mono"><strong>22.711 L/mol</strong></td><td>The question states 100 kPa or 1 bar</td></tr>
+        <tr><td>SATP</td><td class="mono">25 &deg;C</td><td class="mono">1 bar</td><td class="mono"><strong>24.790 L/mol</strong></td><td>&ldquo;Standard ambient&rdquo;</td></tr>
+        <tr><td>25 &deg;C, 1 atm</td><td class="mono">25 &deg;C</td><td class="mono">1 atm</td><td class="mono"><strong>24.465 L/mol</strong></td><td>Room temperature, atmospheric</td></tr>
+        <tr><td>20 &deg;C, 1 atm</td><td class="mono">20 &deg;C</td><td class="mono">1 atm</td><td class="mono"><strong>24.055 L/mol</strong></td><td>UK &ldquo;normal&rdquo; conditions</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Worked by hand: 2.50 mol of N<sub>2</sub>, four answers</h3>
+    <p>Textbook STP: 2.50 &times; 22.414 = <strong>56.04 L</strong>. IUPAC STP: 2.50 &times; 22.711 = <strong>56.78 L</strong>. SATP: 2.50 &times; 24.790 = <strong>61.97 L</strong>. At 25 &deg;C and 1 atm: <strong>61.16 L</strong>. Every one is correct for its own definition, and the full gas law agrees with the shortcut: V = nRT/P = (2.50 &times; 0.082057 &times; 273.15) &divide; 1 = 56.04 L.</p>
+    <p>The last two rows are both at 25 &deg;C. The 0.81 L between them is only 1 atm against 1 bar &mdash; which is exactly why the standard has to be stated.</p>
+
+    <h3>Worked by hand: a measurement back to STP</h3>
+    <p>You collect 250 mL of N<sub>2</sub> at 22 &deg;C and 0.98 atm. Convert first: 0.250 L, 295.15 K. Then n = PV &divide; RT = (0.98 &times; 0.250) &divide; (0.082057 &times; 295.15) = <strong>0.01012 mol</strong>. At textbook STP that same gas occupies 0.01012 &times; 22.414 = 0.2267 L, about <strong>227 mL</strong>. It shrank, because cooling to 0 &deg;C outweighs the small pressure rise &mdash; a sanity check worth doing every time.</p>
+
+    <h3>Matching R to your units</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Pressure in</th><th>Volume in</th><th>R</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">atm</td><td class="mono">L</td><td class="mono">0.082057 L&middot;atm/(mol&middot;K)</td></tr>
+        <tr><td class="mono">kPa</td><td class="mono">L</td><td class="mono">8.314 L&middot;kPa/(mol&middot;K)</td></tr>
+        <tr><td class="mono">Pa</td><td class="mono">m&sup3;</td><td class="mono">8.314462618 J/(mol&middot;K)</td></tr>
+        <tr><td class="mono">mmHg</td><td class="mono">L</td><td class="mono">62.364 L&middot;mmHg/(mol&middot;K)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Traps worth knowing</h2>
+    <ul>
+      <li><strong>Using 22.414 away from 0 &deg;C.</strong> At 25 &deg;C and 1 atm it is 24.465 L/mol &mdash; the shortcut understates the volume by about 8%.</li>
+      <li><strong>Mixing the two STPs.</strong> 22.414 against 22.711 is 1.3%, enough to lose a mark.</li>
+      <li><strong>Calling 25 &deg;C and 100 kPa &ldquo;STP&rdquo;.</strong> That is SATP, 24.790 L/mol.</li>
+      <li><strong>Putting &deg;C into PV = nRT.</strong> Always kelvin.</li>
+      <li><strong>Atomic masses for diatomic gases.</strong> O<sub>2</sub> is 31.998 g/mol, N<sub>2</sub> is 28.014, H<sub>2</sub> is 2.016 &mdash; not the atomic values.</li>
+      <li><strong>Applying the gas shortcut to a solution.</strong> Dissolved moles do not occupy 22.414 L. Use litres = moles &divide; molarity.</li>
+      <li><strong>Assuming litres tell you mass.</strong> One mole of H<sub>2</sub> and one of CO<sub>2</sub> fill the same 22.414 L, but CO<sub>2</sub> is about 1.96 g/L against 0.09 g/L &mdash; roughly 22 times heavier.</li>
+      <li><strong>Treating the ideal gas law as exact.</strong> It is a good estimate at low pressure and well above the boiling point. For compressed gas, or vapours near condensation such as ammonia or water, treat the answer as an estimate.</li>
+    </ul>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>How many litres is one mole of gas at STP?</summary><div class="ans"><p>22.414 L at textbook STP (0 &deg;C, 1 atm); 22.711 L at IUPAC STP (0 &deg;C, 1 bar). Check which your question means.</p></div></details>
+    <details class="faq"><summary>Why is my textbook 22.4 L when this says 22.7 L?</summary><div class="ans"><p>Neither is wrong. 22.414 L uses 1 atm (101.325 kPa); 22.711 L uses 1 bar (100 kPa). Same temperature, different pressure.</p></div></details>
+    <details class="faq"><summary>Can I use 22.4 L/mol at room temperature?</summary><div class="ans"><p>No &mdash; only at 0 &deg;C. At 25 &deg;C and 1 atm use 24.465 L/mol, or the full gas law.</p></div></details>
+    <details class="faq"><summary>What is the difference between STP and SATP?</summary><div class="ans"><p>STP is at 0 &deg;C; SATP is at 25 &deg;C and 1 bar, giving 24.790 L/mol.</p></div></details>
+    <details class="faq"><summary>Is one mole of CO<sub>2</sub> the same volume as one mole of helium?</summary><div class="ans"><p>For an ideal gas at the same temperature and pressure, yes. They differ in mass and density: about 1.96 g/L against 0.18 g/L at STP.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="index.html">Back to the hub</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="index.html">Next: Back to the hub</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var R=8.314462618,AVO=6.02214076e23;
+var STD={
+  stp:{n:'Textbook STP',T:273.15,P:101325,lab:'0 \u00b0C, 1 atm'},
+  iupac:{n:'IUPAC STP',T:273.15,P:100000,lab:'0 \u00b0C, 1 bar'},
+  satp:{n:'SATP',T:298.15,P:100000,lab:'25 \u00b0C, 1 bar'},
+  lab:{n:'25 \u00b0C, 1 atm',T:298.15,P:101325,lab:'room temperature'},
+  uk:{n:'20 \u00b0C, 1 atm',T:293.15,P:101325,lab:'UK normal'}
+};
+var ORDER=['stp','iupac','satp','lab','uk'];
+function vm(T,P){return R*T/P*1000;}
+
+var mode='std';
+var F=document.getElementById('f'),SEL=document.getElementById('std'),
+    P=document.getElementById('p'),PU=document.getElementById('pU'),
+    T=document.getElementById('t'),TU=document.getElementById('tU'),
+    KNOWN=document.getElementById('known'),VAL=document.getElementById('val'),
+    wStd=document.getElementById('wrapStd'),wP=document.getElementById('wrapP'),wT=document.getElementById('wrapT'),
+    ro=document.getElementById('readout'),big=document.getElementById('big'),
+    unit=document.getElementById('unit'),side=document.getElementById('side'),
+    kv=document.getElementById('kv'),alerts=document.getElementById('alerts'),
+    steps=document.getElementById('steps'),stds=document.getElementById('stds'),
+    massNote=document.getElementById('massNote');
+
+function setMode(m){mode=m;
+  document.getElementById('mStd').setAttribute('aria-pressed',m==='std'?'true':'false');
+  document.getElementById('mReal').setAttribute('aria-pressed',m==='real'?'true':'false');
+  wStd.hidden=(m!=='std');wP.hidden=(m!=='real');wT.hidden=(m!=='real');
+  run(true);}
+document.getElementById('mStd').addEventListener('click',function(){setMode('std');});
+document.getElementById('mReal').addEventListener('click',function(){setMode('real');});
+
+function kvAdd(k,v,lead){
+  var li=Chem.el('li',lead?'lead':'');
+  li.appendChild(Chem.el('span','k',k));
+  li.appendChild(Chem.el('span','v',v));
+  kv.appendChild(li);}
+
+function run(animate){
+  Chem.clear(kv);Chem.clear(alerts);
+  function bad(msg){ro.classList.add('bad');big.textContent=msg;unit.textContent='';side.textContent='';
+    Chem.clear(steps);Chem.clear(stds);massNote.textContent='';}
+
+  var Tk,Pa,label;
+  if(mode==='std'){
+    var s=STD[SEL.value]||STD.stp;Tk=s.T;Pa=s.P;label=s.n;
+  }else{
+    var pv=parseFloat(P.value),tv=parseFloat(T.value);
+    if(!isFinite(pv)||pv<=0){return bad('Pressure must be above zero.');}
+    if(!isFinite(tv)){return bad('Enter a temperature.');}
+    Pa=pv*parseFloat(PU.value);
+    Tk=TU.value==='K'?tv:(TU.value==='F'?(tv-32)*5/9+273.15:tv+273.15);
+    if(Tk<=0){return bad('That temperature is at or below absolute zero ('+Chem.sig(Tk,5)+' K).');}
+    label='measured: '+Chem.sig(pv,5)+' '+PU.options[PU.selectedIndex].text+', '+Chem.sig(Tk,6)+' K';
+  }
+
+  var Vm=vm(Tk,Pa);
+  var val=parseFloat(VAL.value);
+  if(!isFinite(val)||val<0){return bad('Enter a value of zero or more.');}
+
+  var a=null;
+  var raw=F.value.trim();
+  if(raw){try{a=Chem.analyse(raw);}catch(e){a=null;}}
+
+  var n,V,grams=null;
+  if(KNOWN.value==='n'){n=val;V=n*Vm;}
+  else if(KNOWN.value==='v'){V=val;n=V/Vm;}
+  else{
+    if(!a){return bad('To start from a mass, enter a valid gas formula as well.');}
+    grams=val;n=grams/a.mw;V=n*Vm;
+  }
+  if(grams===null&&a){grams=n*a.mw;}
+
+  ro.classList.remove('bad');
+  if(KNOWN.value==='v'){
+    Chem.countTo(big,n,animate,n<1?5:4);unit.textContent='mol';
+    side.textContent=Chem.sig(V,5)+' L at '+label+' \u00b7 V\u2098 = '+Chem.fx(Vm,3)+' L/mol';
+  }else{
+    Chem.countTo(big,V,animate,V<1?4:2);unit.textContent='L';
+    side.textContent=Chem.sig(n,5)+' mol at '+label+' \u00b7 V\u2098 = '+Chem.fx(Vm,3)+' L/mol';
+  }
+
+  var S=[];
+  S.push(['Fix the condition',(mode==='std'?label+' \u2014 ':'')+Chem.sig(Tk,6)+' K, '+
+    Chem.sig(Pa,6)+' Pa']);
+  S.push(['Molar volume','V\u2098 = RT/P = (8.314462618 \u00d7 '+Chem.sig(Tk,6)+') \u00f7 '+
+    Chem.sig(Pa,6)+' = '+Chem.fx(Vm/1000,6)+' m\u00b3/mol = '+Chem.fx(Vm,3)+' L/mol']);
+  if(KNOWN.value==='g'){
+    S.push(['Mass to moles',Chem.sig(grams,5)+' g \u00f7 '+Chem.f3(a.mw)+' g/mol = '+
+      Chem.sig(n,5)+' mol']);
+  }
+  if(KNOWN.value==='v'){
+    S.push(['Volume to moles',Chem.sig(V,5)+' L \u00f7 '+Chem.fx(Vm,3)+' = '+Chem.sig(n,5)+' mol']);
+  }else{
+    S.push(['Moles to volume',Chem.sig(n,5)+' \u00d7 '+Chem.fx(Vm,3)+' = '+Chem.sig(V,5)+' L']);
+  }
+  S.push(['Cross-check with PV = nRT',
+    'n = PV/RT = ('+Chem.sig(Pa,6)+' \u00d7 '+Chem.sig(V/1000,5)+') \u00f7 (8.314462618 \u00d7 '+
+    Chem.sig(Tk,6)+') = '+Chem.sig(Pa*(V/1000)/(R*Tk),5)+' mol']);
+
+  Chem.clear(steps);
+  S.forEach(function(p,i){
+    var li=Chem.el('li'),d=Chem.el('div');
+    d.appendChild(Chem.el('span','what',p[0]));
+    d.appendChild(Chem.el('span','how'+(i===S.length-1?' sum':''),p[1]));
+    li.appendChild(d);Chem.stagger(li,'anim-rise',i,70);steps.appendChild(li);});
+
+  kvAdd('Amount',Chem.sig(n,5)+' mol',true);
+  kvAdd('Volume',Chem.sig(V,5)+' L  ('+Chem.sig(V*1000,5)+' mL)');
+  kvAdd('Molecules',Chem.sig(n*AVO,4));
+  if(a){
+    kvAdd('Molar mass of '+a.input,Chem.f3(a.mw)+' g/mol');
+    kvAdd('Mass',Chem.sig(grams,5)+' g');
+    kvAdd('Density at this condition',Chem.sig(a.mw/Vm,4)+' g/L');
+    massNote.textContent='Volume does not tell you mass: one mole of any ideal gas fills '+
+      Chem.fx(Vm,3)+' L here, but '+a.input+' weighs '+Chem.f3(a.mw)+' g of it.';
+  }else{
+    massNote.textContent=raw
+      ? 'That formula could not be read, so mass and density are not shown. Remember the diatomic pairs: O2, N2, H2.'
+      : 'Add a gas formula to get mass and density as well.';
+    if(raw){
+      var w=Chem.el('div','alert');
+      w.innerHTML='<strong>Formula not recognised.</strong> Volume and moles are still correct \u2014 they do not depend on which gas it is.';
+      alerts.appendChild(w);
+    }
+  }
+
+  var head=document.createElement('thead'),hr=document.createElement('tr');
+  ['Standard','Condition','V\u2098 (L/mol)','Volume of '+Chem.sig(n,4)+' mol','vs textbook STP']
+    .forEach(function(h){var c=document.createElement('th');c.textContent=h;hr.appendChild(c);});
+  head.appendChild(hr);Chem.clear(stds);stds.appendChild(head);
+  var tb=document.createElement('tbody'),base=vm(STD.stp.T,STD.stp.P)*n;
+  ORDER.forEach(function(k,i){
+    var s=STD[k],v=vm(s.T,s.P),tot=v*n;
+    var tr=document.createElement('tr');
+    [[s.n,0],[s.lab,1],[Chem.fx(v,3),1],[Chem.sig(tot,5)+' L',1],
+     [base?(tot>=base?'+':'')+Chem.fx((tot-base)/base*100,2)+'%':'\u2014',1]]
+      .forEach(function(p){var td=document.createElement('td');td.textContent=p[0];
+        if(p[1]){td.className='mono';}tr.appendChild(td);});
+    if(mode==='std'&&SEL.value===k){tr.style.background='var(--accent-wash)';}
+    if(animate){Chem.stagger(tr,'anim-rise',i,55);}
+    tb.appendChild(tr);});
+  stds.appendChild(tb);
+}
+document.getElementById('go').addEventListener('click',function(){run(true);});
+Array.prototype.forEach.call(document.querySelectorAll('.calc input'),function(n){
+  n.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run(true);}});});
+[SEL,PU,TU,KNOWN].forEach(function(s){s.addEventListener('change',function(){run(true);});});
+Array.prototype.forEach.call(document.querySelectorAll('.chip[data-set]'),function(c){
+  c.addEventListener('click',function(){
+    var p=c.getAttribute('data-set').split('|');
+    F.value=p[0];
+    if(p[1]==='real'){setMode('real');}else{if(mode!=='std'){setMode('std');}SEL.value=p[1];}
+    KNOWN.value=p[2];VAL.value=p[3];run(true);});});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body>
+</html>

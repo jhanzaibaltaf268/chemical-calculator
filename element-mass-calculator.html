@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Element Mass Calculator</title>
+<meta name="description" content="Grams of each element in a weighed sample of a compound, the reverse calculation for a target element mass, hydrate water, purity, and elemental against salt labelling.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; Element Mass</p>
+    <h1>Element Mass Calculator</h1>
+    <p class="standfirst">How much of each element is in the sample you weighed &mdash; and, in reverse, how much compound to weigh for a target amount of one element.</p>
+    <div class="calc">
+      <div class="modes" role="group" aria-label="Direction">
+        <button type="button" id="mFwd" aria-pressed="true">Sample &rarr; element grams</button>
+        <button type="button" id="mRev" aria-pressed="false">Target element &rarr; compound</button>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <label for="f">Chemical formula</label>
+          <input type="text" id="f" value="CaCO3" spellcheck="false" autocomplete="off" placeholder="CuSO4&middot;5H2O">
+        </div>
+        <div class="field" id="wrapSample">
+          <label for="m">Sample mass (g)</label>
+          <input type="number" id="m" value="250" step="any" min="0">
+        </div>
+        <div class="field" id="wrapEl" hidden>
+          <label for="tel">Target element</label>
+          <select id="tel"></select>
+        </div>
+        <div class="field" id="wrapTarget" hidden>
+          <label for="tm">Target mass of that element (g)</label>
+          <input type="number" id="tm" value="100" step="any" min="0">
+        </div>
+        <div class="field">
+          <label for="p">Purity (%)</label>
+          <input type="number" id="p" value="100" step="any" min="0" max="100">
+          <p class="hint">Scales every element mass by this fraction.</p>
+        </div>
+      </div>
+      <div class="go-row">
+        <button class="go" id="go" type="button">Calculate</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-f="CaCO3">CaCO3</button>
+        <button class="chip" type="button" data-f="CuSO4&middot;5H2O">CuSO4&middot;5H2O</button>
+        <button class="chip" type="button" data-f="Fe2O3">Fe2O3</button>
+        <button class="chip" type="button" data-f="Na2CO3">Na2CO3</button>
+        <button class="chip" type="button" data-f="H2SO4">H2SO4</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <ul class="kv" id="kv"></ul>
+      <p class="basis">This is percent composition multiplied by your sample mass. It is not the mass of a pure element from a mole count.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">The mass fraction is the part that does the work; the sample mass just scales it.</p>
+    </div>
+    <div class="panel">
+      <h2>Grams of each element</h2>
+      <div class="rows" id="rows"></div>
+      <div class="total"><span id="totName">Total</span><span id="totPct"></span></div>
+      <p class="cap">Element masses must add back to the sample mass. That sum is the built-in check.</p>
+    </div>
+    <div class="panel span">
+      <h2>Atoms in one formula unit</h2>
+      <div class="atoms" id="atoms"></div>
+      <div class="legend" id="legend"></div>
+      <p class="cap">One circle per atom, sized by atomic weight and coloured by the CPK convention used in molecular models. Hydrogen is often most of the atoms and very little of the mass.</p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">The method</h2>
+    <p><code>mass of element = sample mass &times; (atoms &times; atomic weight) &divide; molar mass</code>. Reverse it by dividing instead: <code>compound mass = target element mass &divide; mass fraction</code>.</p>
+
+    <h3>Worked by hand: 250 g of CaCO<sub>3</sub></h3>
+    <p>Atoms: Ca 1, C 1, O 3. Masses per mole: 40.078, 12.011, and 3 &times; 15.999 = 47.997. Molar mass 100.086 g/mol, so the fractions are Ca 40.04%, C 12.00%, O 47.96% &mdash; summing to exactly 100.00%.</p>
+    <p>In 250 g: calcium 100.10 g, carbon 30.00 g, oxygen 119.90 g. Those add to 250.00 g, which is the check.</p>
+
+    <div class="flagnote"><strong>Supplement labels.</strong> A 500 mg calcium carbonate tablet holds 500 &times; 0.40042 = about 200 mg of <em>elemental</em> calcium. The 500 mg is the weight of the salt. To get 200 mg of calcium you need 499.5 mg of the carbonate &mdash; which is why the two numbers on a label differ. The same trap applies to citrate and gluconate salts.</p></div>
+
+    <h3>Hydrates carry their water into every row</h3>
+    <p>CuSO<sub>4</sub>&middot;5H<sub>2</sub>O is 249.677 g/mol. In 100 g there are 36.08 g of water, and the element rows count the water&rsquo;s atoms too: Cu 25.45 g, S 12.84 g, H 4.04 g, O 57.67 g. Heating drives off the 36.08 g and leaves about 63.92 g of anhydrous salt.</p>
+
+    <h3>Reference: grams per 100 g of compound</h3>
+    <p>A 100 g sample makes grams and percent the same number, so this doubles as a composition table.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Compound</th><th>Molar mass</th><th>Grams per 100 g</th></tr></thead>
+      <tbody>
+        <tr><td>CaCO<sub>3</sub></td><td class="mono">100.086</td><td class="mono">Ca 40.04, C 12.00, O 47.96</td></tr>
+        <tr><td>Na<sub>2</sub>CO<sub>3</sub></td><td class="mono">105.988</td><td class="mono">Na 43.38, C 11.33, O 45.29</td></tr>
+        <tr><td>H<sub>2</sub>SO<sub>4</sub></td><td class="mono">98.072</td><td class="mono">H 2.06, S 32.69, O 65.25</td></tr>
+        <tr><td>Fe<sub>2</sub>O<sub>3</sub></td><td class="mono">159.687</td><td class="mono">Fe 69.94, O 30.06</td></tr>
+        <tr><td>CuSO<sub>4</sub>&middot;5H<sub>2</sub>O</td><td class="mono">249.677</td><td class="mono">Cu 25.45, S 12.84, H 4.04, O 57.67</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Traps worth knowing</h2>
+    <ul>
+      <li><strong>Confusing atom count with mass share.</strong> CaCO<sub>3</sub> is one fifth calcium by atom count and 40.04% by mass.</li>
+      <li><strong>Forgetting bracket multipliers.</strong> (NH<sub>4</sub>)<sub>2</sub> holds 2 N and 8 H.</li>
+      <li><strong>Dropping hydrate water.</strong> Using CuSO<sub>4</sub> for CuSO<sub>4</sub>&middot;5H<sub>2</sub>O understates the molar mass by 36% and changes every row.</li>
+      <li><strong>Reading a supplement label as salt mass.</strong> See the note above.</li>
+      <li><strong>Applying purity twice.</strong> Scale once, and follow the certificate&rsquo;s own definition.</li>
+      <li><strong>Mixing mg and g.</strong> Convert before multiplying, not after.</li>
+      <li><strong>An element that is not in the formula.</strong> Its mass is 0 g. That is an answer, not an error.</li>
+    </ul>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>How much calcium is in a 500 mg calcium carbonate tablet?</summary><div class="ans"><p>About 200 mg of elemental calcium. Supplement labels usually state the elemental amount, not the weight of the salt.</p></div></details>
+    <details class="faq"><summary>I need 100 g of calcium &mdash; how much CaCO<sub>3</sub> do I weigh?</summary><div class="ans"><p>Divide by the mass fraction: 100 &divide; 0.40042 = 249.7 g. Switch the calculator to reverse mode and it does this for any element.</p></div></details>
+    <details class="faq"><summary>How does a hydrate change the answer?</summary><div class="ans"><p>The water&rsquo;s atoms count. In CuSO<sub>4</sub>&middot;5H<sub>2</sub>O water is 36.08% of the mass, and the hydrogen and oxygen rows include it.</p></div></details>
+    <details class="faq"><summary>What if my sample is not pure?</summary><div class="ans"><p>Set the purity and every element mass scales by that fraction. A 90%-pure 250 g sample of CaCO<sub>3</sub> holds 90.09 g of calcium.</p></div></details>
+    <details class="faq"><summary>Why don&rsquo;t my element masses add up to the sample mass?</summary><div class="ans"><p>Rounding. The unrounded values add up exactly; keep full precision until the last step and say which figures are rounded.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="batch-molecular-weight-calculator.html">Batch Compare</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="batch-molecular-weight-calculator.html">Next: Batch Compare</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var mode='fwd';
+var F=document.getElementById('f'),M=document.getElementById('m'),P=document.getElementById('p'),
+    TEL=document.getElementById('tel'),TM=document.getElementById('tm'),
+    wSample=document.getElementById('wrapSample'),wEl=document.getElementById('wrapEl'),
+    wTarget=document.getElementById('wrapTarget'),
+    ro=document.getElementById('readout'),big=document.getElementById('big'),
+    unit=document.getElementById('unit'),side=document.getElementById('side'),
+    kv=document.getElementById('kv'),steps=document.getElementById('steps'),
+    rows=document.getElementById('rows'),atoms=document.getElementById('atoms'),
+    legend=document.getElementById('legend'),
+    totName=document.getElementById('totName'),totPct=document.getElementById('totPct'),
+    mFwd=document.getElementById('mFwd'),mRev=document.getElementById('mRev');
+
+function setMode(m){mode=m;
+  mFwd.setAttribute('aria-pressed',m==='fwd'?'true':'false');
+  mRev.setAttribute('aria-pressed',m==='rev'?'true':'false');
+  wSample.hidden=(m!=='fwd');wEl.hidden=(m!=='rev');wTarget.hidden=(m!=='rev');
+  run(true);}
+mFwd.addEventListener('click',function(){setMode('fwd');});
+mRev.addEventListener('click',function(){setMode('rev');});
+
+function syncElements(a){
+  var keep=TEL.value;
+  Chem.clear(TEL);
+  a.rows.forEach(function(r){
+    var o=document.createElement('option');
+    o.value=r.el;o.textContent=(Chem.ENAME[r.el]||r.el)+' ('+r.el+')';
+    TEL.appendChild(o);});
+  if(a.rows.some(function(r){return r.el===keep;})){TEL.value=keep;}
+}
+function kvAdd(k,v,lead){
+  var li=Chem.el('li',lead?'lead':'');
+  li.appendChild(Chem.el('span','k',k));
+  li.appendChild(Chem.el('span','v',v));
+  kv.appendChild(li);
+}
+
+function run(animate){
+  Chem.clear(kv);
+  var a;
+  try{a=Chem.analyse(F.value);}
+  catch(e){
+    ro.classList.add('bad');big.textContent=e.message;unit.textContent='';side.textContent='';
+    Chem.clear(steps);Chem.clear(rows);Chem.clear(atoms);Chem.clear(legend);
+    totName.textContent='Total';totPct.textContent='';return;
+  }
+  ro.classList.remove('bad');
+  syncElements(a);
+
+  var pur=parseFloat(P.value);
+  if(!isFinite(pur)||pur<=0||pur>100){pur=100;P.value=100;}
+  var pf=pur/100;
+
+  var sample;
+  if(mode==='fwd'){
+    sample=parseFloat(M.value);
+    if(!isFinite(sample)||sample<0){sample=100;M.value=100;}
+    Chem.countTo(big,a.mw,animate);
+    unit.textContent='g/mol';
+    side.textContent='sample '+Chem.sig(sample,6)+' g'+(pur<100?' at '+Chem.sig(pur,4)+'% purity':'');
+    var target=a.rows.filter(function(r){return r.el===TEL.value;})[0]||a.rows[0];
+    a.rows.forEach(function(r){
+      kvAdd((Chem.ENAME[r.el]||r.el)+' in sample',
+        Chem.sig(r.pct/100*sample*pf,5)+' g',r.el===target.el);});
+    kvAdd('Sum of the element masses',Chem.sig(sample*pf,6)+' g'+(pur<100?' (pure fraction)':''));
+  }else{
+    var tm=parseFloat(TM.value);
+    if(!isFinite(tm)||tm<0){tm=100;TM.value=100;}
+    var sel=a.rows.filter(function(r){return r.el===TEL.value;})[0]||a.rows[0];
+    var frac=sel.pct/100*pf;
+    var need=frac>0?tm/frac:Infinity;
+    sample=need;
+    Chem.countTo(big,need,animate);
+    unit.textContent='g of '+a.input;
+    side.textContent='for '+Chem.sig(tm,5)+' g of '+(Chem.ENAME[sel.el]||sel.el)+
+      ' \u00b7 '+Chem.f2(sel.pct)+'% by mass'+(pur<100?' \u00b7 '+Chem.sig(pur,4)+'% pure':'');
+    kvAdd('Mass fraction of '+sel.el,Chem.f2(sel.pct)+'%'+(pur<100?' \u00d7 '+Chem.fx(pf,3):''),true);
+    kvAdd('Compound to weigh',Chem.sig(need,6)+' g');
+    kvAdd('Molar mass',Chem.f3(a.mw)+' g/mol');
+    a.rows.forEach(function(r){
+      if(r.el!==sel.el){
+        kvAdd('Also brings '+(Chem.ENAME[r.el]||r.el),Chem.sig(r.pct/100*need*pf,5)+' g');}});
+  }
+
+  Chem.renderSteps(steps,a,animate);
+  Chem.renderRows(rows,a,animate,{sample:sample*pf,totalNode:totName,pctNode:totPct});
+  Chem.renderAtoms(atoms,legend,a,animate);
+}
+document.getElementById('go').addEventListener('click',function(){run(true);});
+Array.prototype.forEach.call(document.querySelectorAll('.calc input'),function(n){
+  n.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run(true);}});});
+TEL.addEventListener('change',function(){run(true);});
+Array.prototype.forEach.call(document.querySelectorAll('.chip[data-f]'),function(c){
+  c.addEventListener('click',function(){F.value=c.getAttribute('data-f');run(true);});});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Molecular Weight Finder</title>
+<meta name="description" content="Find a compound's molecular weight by name, trade name or synonym. Ambiguous names such as copper sulfate return every form, so you weigh the one on your label.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; Molecular Weight Finder</p>
+    <h1>Molecular Weight Finder</h1>
+    <p class="standfirst">Search by the name you know &mdash; common, trade or lab shorthand. Every match is resolved to a formula and a specific form before any arithmetic happens.</p>
+    <div class="calc">
+      <label for="q">Compound name</label>
+      <div class="entry">
+        <input type="text" id="q" value="copper sulfate" spellcheck="false" autocomplete="off" placeholder="glucose, aspirin, epsom salt, blue vitriol">
+        <button class="go" id="go" type="button">Find</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-q="glucose">glucose</button>
+        <button class="chip" type="button" data-q="aspirin">aspirin</button>
+        <button class="chip" type="button" data-q="epsom salt">epsom salt</button>
+        <button class="chip" type="button" data-q="washing soda">washing soda</button>
+        <button class="chip" type="button" data-q="baking soda">baking soda</button>
+        <button class="chip" type="button" data-q="sugar">sugar</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <div id="choices"></div>
+      <p class="basis">A name is less precise than a formula. One name can cover several forms, and one formula can cover several compounds &mdash; so the match and its form are always shown before the number.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">The formula behind the name, worked the same way as on the hub page.</p>
+    </div>
+    <div class="panel">
+      <h2>Composition by mass</h2>
+      <div class="rows" id="rows"></div>
+      <div class="total"><span id="totName">Total</span><span id="totPct"></span></div>
+      <p class="cap">Tiles carry the atomic number and the standard atomic weight used here.</p>
+    </div>
+    <div class="panel span">
+      <h2>Atoms in one formula unit</h2>
+      <div class="atoms" id="atoms"></div>
+      <div class="legend" id="legend"></div>
+      <p class="cap">One circle per atom, sized by atomic weight and coloured by the CPK convention used in molecular models. Hydrogen is often most of the atoms and very little of the mass.</p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">Why the name is the hard part</h2>
+    <p>Most people know a compound by a name, not a formula. Names are looser. One name can point to several forms: <em>copper sulfate</em> is the anhydrous salt CuSO<sub>4</sub> in one bottle and the pentahydrate CuSO<sub>4</sub>&middot;5H<sub>2</sub>O in another. One formula can point to several compounds: glucose and fructose are both C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>. So two questions have to be settled before any arithmetic: which compound, and which form.</p>
+
+    <h3>Copper sulfate has two correct answers</h3>
+    <ul>
+      <li><strong>Anhydrous, CuSO<sub>4</sub>:</strong> 63.546 + 32.06 + 4 &times; 15.999 = <strong>159.602 g/mol</strong>.</li>
+      <li><strong>Pentahydrate, CuSO<sub>4</sub>&middot;5H<sub>2</sub>O:</strong> 159.602 + 5 &times; 18.015 = <strong>249.677 g/mol</strong>. The five waters are 90.075 g/mol, about 36% of the total.</li>
+    </ul>
+    <p>Weigh a pentahydrate using the anhydrous weight and you hold 159.602 &divide; 249.677 = 0.639 of the moles you think you have. Check the bottle before you calculate.</p>
+
+    <h3>Aspirin, resolved by name</h3>
+    <p>Aspirin is the trade name for acetylsalicylic acid, C<sub>9</sub>H<sub>8</sub>O<sub>4</sub>. Both names mean the same compound in the same form, so there is one answer: 9 &times; 12.011 + 8 &times; 1.008 + 4 &times; 15.999 = <strong>180.159 g/mol</strong>. A 500 mg tablet of pure aspirin is 0.500 &divide; 180.159 = 2.78 mmol.</p>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Five questions before you accept a match</h2>
+    <ol>
+      <li><strong>Common, systematic or trade name?</strong> Aspirin and acetylsalicylic acid are one compound. Check the systematic name when a trade name is ambiguous.</li>
+      <li><strong>Which form &mdash; hydrate, salt, acid or base?</strong> Copper sulfate, washing soda and drug hydrochlorides all change the weight.</li>
+      <li><strong>Could the same formula be a different compound?</strong> Glucose and fructose are both 180.156 g/mol. The name separates them; the formula cannot.</li>
+      <li><strong>Is it a mixture or a polymer?</strong> Gasoline, starch, steel and milk have no single molecular weight. &ldquo;No single value&rdquo; is the correct answer, not a number.</li>
+      <li><strong>Element, compound or ion?</strong> Iron is 55.845; iron(III) oxide is 159.687. Roman numerals are oxidation states, not atom counts.</li>
+    </ol>
+    <div class="flagnote"><strong>Forgetting the counterion.</strong> A hydrochloride adds HCl, 36.458 g/mol, to the free base. Weighing by the base weight understates the moles of salt you actually have &mdash; roughly 15% for many drugs.</div>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>Can I search by name instead of formula?</summary><div class="ans"><p>Yes. The match, its formula and its form are shown before the number, so you can confirm it is the compound in your hand.</p></div></details>
+    <details class="faq"><summary>What if a compound has several names?</summary><div class="ans"><p>Aliases of one compound give one weight. Aspirin and acetylsalicylic acid are both C<sub>9</sub>H<sub>8</sub>O<sub>4</sub> = 180.159 g/mol; baking soda and sodium bicarbonate are both NaHCO<sub>3</sub> = 84.006 g/mol.</p></div></details>
+    <details class="faq"><summary>Why does copper sulfate return two weights?</summary><div class="ans"><p>The name covers the anhydrous salt at 159.602 g/mol and the pentahydrate at 249.677 g/mol. Use the form printed on your label.</p></div></details>
+    <details class="faq"><summary>What if two compounds share a formula?</summary><div class="ans"><p>They weigh the same. Glucose and fructose are both 180.156 g/mol. The name tells them apart; the weight cannot.</p></div></details>
+    <details class="faq"><summary>Can I look up a brand-name drug?</summary><div class="ans"><p>Only when the name maps to an active ingredient and a salt form. If the result does not state the salt, such as a hydrochloride, do not use it for dosing.</p></div></details>
+    <details class="faq"><summary>What happens when the name is not found?</summary><div class="ans"><p>You get near matches or a request for the formula. Returning the wrong compound silently is worse than returning nothing.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="percent-composition-calculator.html">Percent Composition</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="percent-composition-calculator.html">Next: Percent Composition</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var Q=document.getElementById('q'),ro=document.getElementById('readout'),
+    big=document.getElementById('big'),unit=document.getElementById('unit'),
+    side=document.getElementById('side'),choices=document.getElementById('choices'),
+    steps=document.getElementById('steps'),rows=document.getElementById('rows'),
+    atoms=document.getElementById('atoms'),legend=document.getElementById('legend'),
+    totName=document.getElementById('totName'),totPct=document.getElementById('totPct');
+
+function blankViz(){Chem.clear(steps);Chem.clear(rows);Chem.clear(atoms);Chem.clear(legend);
+  totName.textContent='Total';totPct.textContent='';}
+
+function bad(msg,extra){ro.classList.add('bad');big.textContent=msg;unit.textContent='';side.textContent='';
+  Chem.clear(choices);blankViz();
+  if(extra){var d=Chem.el('div','alert');d.innerHTML=extra;choices.appendChild(d);}}
+
+function draw(entry,animate,note){
+  var a;
+  try{a=Chem.analyse(entry.f);}catch(e){return bad(e.message);}
+  ro.classList.remove('bad');
+  big.textContent=Chem.f3(a.mw);unit.textContent='g/mol';
+  side.textContent=entry.n+(entry.form?' \u00b7 '+entry.form:'')+' \u00b7 '+entry.f;
+  Chem.countTo(big,a.mw,animate);
+  Chem.renderSteps(steps,a,animate);
+  Chem.renderRows(rows,a,animate,{totalNode:totName,pctNode:totPct});
+  Chem.renderAtoms(atoms,legend,a,animate);
+  if(note){var d=Chem.el('div','alert');d.innerHTML=note;choices.insertBefore(d,choices.firstChild);}
+}
+
+function find(animate){
+  var raw=Q.value.trim();
+  Chem.clear(choices);
+  if(!raw){return bad('Enter a compound name to search.');}
+  var low=raw.toLowerCase().replace(/\s+/g,' ');
+
+  if(Chem.MIXTURES[low]){
+    return bad('"'+raw+'" has no single molecular weight \u2014 it is '+Chem.MIXTURES[low]+'.');
+  }
+  var hits=Chem.lookupName(raw);
+
+  if(!hits.length){
+    var asFormula=null;
+    try{asFormula=Chem.analyse(raw);}catch(e){asFormula=null;}
+    if(asFormula){
+      return draw({n:'Read as a formula',f:raw,form:''},animate,
+        '<strong>Not in the name library.</strong> It parsed as a chemical formula, so that is what was calculated.');
+    }
+    var near=Chem.LIB.filter(function(e){
+      return e.q.some(function(s){return s.indexOf(low)!==-1||low.indexOf(s)!==-1;});
+    }).slice(0,5);
+    var tip=near.length
+      ? 'Did you mean: '+near.map(function(e){return '<strong>'+e.n+'</strong>';}).join(', ')+'?'
+      : 'Try a systematic name, or type the formula instead.';
+    return bad('"'+raw+'" is not in the name library.',tip);
+  }
+
+  draw(hits[0],animate);
+
+  if(hits.length>1){
+    var box=Chem.el('div','alert');
+    box.appendChild(Chem.el('strong','', '"'+raw+'" matches '+hits.length+' forms.'));
+    box.appendChild(document.createTextNode(' Showing the first. Pick the one on your label:'));
+    var wrapb=Chem.el('div','chips');wrapb.style.marginTop='0.5rem';
+    hits.forEach(function(h){
+      var b=Chem.el('button','chip',h.n+(h.form?' ('+h.form+')':''));
+      b.type='button';
+      b.addEventListener('click',function(){Chem.clear(choices);draw(h,true);});
+      wrapb.appendChild(b);
+    });
+    box.appendChild(wrapb);
+    choices.appendChild(box);
+  }
+}
+
+document.getElementById('go').addEventListener('click',function(){find(true);});
+Q.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();find(true);}});
+Array.prototype.forEach.call(document.querySelectorAll('.chip[data-q]'),function(c){
+  c.addEventListener('click',function(){Q.value=c.getAttribute('data-q');find(true);});
+});
+find(false);
+if(!Chem.reduced){setTimeout(function(){find(true);},140);}
+</script>
+</body>
+</html>

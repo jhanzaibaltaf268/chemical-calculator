@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Empirical Formula Calculator</title>
+<meta name="description" content="Turn percent composition or measured grams into the simplest whole-number formula, with ratio triage that says when to multiply and when to stop, plus the molecular formula from a measured molar mass.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; Empirical Formula</p>
+    <h1>Empirical Formula Calculator</h1>
+    <p class="standfirst">Composition back to the simplest whole-number ratio of atoms &mdash; and, with a measured molar mass, on to the molecular formula.</p>
+    <div class="calc">
+      <div class="modes" role="group" aria-label="Basis">
+        <button type="button" id="mPct" aria-pressed="true">Percent by mass</button>
+        <button type="button" id="mG" aria-pressed="false">Grams measured</button>
+      </div>
+      <p class="lbl">Composition &mdash; one basis only, never a mix</p>
+      <div class="fields">
+        <div class="field" id="row1"><label for="e1">Element 1</label><div class="pair"><input type="text" id="e1" value="C" spellcheck="false" autocomplete="off" style="flex:0 0 4.5rem" aria-label="Element 1 symbol"><input type="number" id="v1" value="40.00" step="any" min="0" aria-label="Element 1 value"></div></div>
+        <div class="field" id="row2"><label for="e2">Element 2</label><div class="pair"><input type="text" id="e2" value="H" spellcheck="false" autocomplete="off" style="flex:0 0 4.5rem" aria-label="Element 2 symbol"><input type="number" id="v2" value="6.71" step="any" min="0" aria-label="Element 2 value"></div></div>
+        <div class="field" id="row3"><label for="e3">Element 3</label><div class="pair"><input type="text" id="e3" value="O" spellcheck="false" autocomplete="off" style="flex:0 0 4.5rem" aria-label="Element 3 symbol"><input type="number" id="v3" value="53.28" step="any" min="0" aria-label="Element 3 value"></div></div>
+        <div class="field" id="row4" hidden><label for="e4">Element 4</label><div class="pair"><input type="text" id="e4" value="" spellcheck="false" autocomplete="off" style="flex:0 0 4.5rem" aria-label="Element 4 symbol"><input type="number" id="v4" value="" step="any" min="0" aria-label="Element 4 value"></div></div>
+        <div class="field" id="row5" hidden><label for="e5">Element 5</label><div class="pair"><input type="text" id="e5" value="" spellcheck="false" autocomplete="off" style="flex:0 0 4.5rem" aria-label="Element 5 symbol"><input type="number" id="v5" value="" step="any" min="0" aria-label="Element 5 value"></div></div>
+      </div>
+      <div class="fields" style="margin-top:0.9rem">
+        <div class="field">
+          <label for="mm">Measured molar mass (g/mol, optional)</label>
+          <input type="number" id="mm" value="180.16" step="any" min="0" placeholder="leave blank for the ratio only">
+          <p class="hint">Only this turns an empirical formula into a molecular one.</p>
+        </div>
+      </div>
+      <div class="go-row">
+        <button class="go" id="go" type="button">Calculate</button>
+        <button class="chip" type="button" id="addRow">+ Add element</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-set="C,40.00;H,6.71;O,53.28" data-mm="180.16">glucose</button>
+        <button class="chip" type="button" data-set="Fe,69.94;O,30.06" data-mm="">iron oxide</button>
+        <button class="chip" type="button" data-set="C,49.48;H,5.19;N,28.85;O,16.48" data-mm="194.19">caffeine</button>
+        <button class="chip" type="button" data-set="N,30.45;O,69.55" data-mm="">halves</button>
+        <button class="chip" type="button" data-set="C,41.80;H,5.90;O,52.30" data-mm="">not clean</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <div id="alerts"></div>
+      <p class="basis">Every row must be percent, or every row must be grams. Mixing the two silently produces a formula that looks fine and is wrong.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">Round once, at the end. Rounding 1.50 to 2 before clearing the fraction is what turns N<sub>2</sub>O<sub>3</sub> into NO<sub>2</sub>.</p>
+    </div>
+    <div class="panel">
+      <h2>Ratio working</h2>
+      <div class="scroll"><table id="ratio"></table></div>
+      <p class="cap" id="triageNote"></p>
+    </div>
+    <div class="panel span">
+      <h2>Check: composition of the result</h2>
+      <div class="rows" id="rows"></div>
+      <div class="total"><span id="totName">Total</span><span id="totPct"></span></div>
+      <p class="cap" id="checkNote">Calculating the composition back from the formula and comparing it with your data is the check that the ratio is real.</p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">Ratio triage: snap, multiply, or stop</h2>
+    <p>Read the ratios after dividing by the smallest. What you do next depends on what you see &mdash; and one of the options is to stop.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Ratio</th><th>Meaning</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1.00, 2.00, 3.00 (&plusmn;0.03)</td><td>Rounding noise</td><td>Round to the whole number.</td></tr>
+        <tr><td class="mono">near .50</td><td>Halves</td><td>Multiply every ratio by 2.</td></tr>
+        <tr><td class="mono">near .33 or .67</td><td>Thirds</td><td>Multiply every ratio by 3.</td></tr>
+        <tr><td class="mono">near .25 or .75</td><td>Quarters</td><td>Multiply every ratio by 4.</td></tr>
+        <tr><td class="mono">near .20, .40, .60, .80</td><td>Fifths</td><td>Multiply by 5, but check the data first.</td></tr>
+        <tr><td class="mono">1.42, 2.71 &hellip;</td><td><strong>Not a clean ratio</strong></td><td><strong>Stop.</strong> A bigger multiplier does not rescue it &mdash; recheck the data, the atomic weights, a missing element, and purity.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Worked by hand: Fe<sub>2</sub>O<sub>3</sub></h3>
+    <p>A compound is 69.94% Fe and 30.06% O. Assume 100 g. Fe: 69.94 &divide; 55.845 = 1.2524 mol. O: 30.06 &divide; 15.999 = 1.8789 mol. Divide by 1.2524: Fe = 1.00, O = <strong>1.5002</strong>.</p>
+    <p>Rounding that 1.50 up gives FeO<sub>2</sub>, which is not the compound. Clear the fraction first &mdash; multiply both by 2 &mdash; and you get Fe<sub>2</sub>O<sub>3</sub>, 159.687 g/mol, which checks back at 69.94% Fe.</p>
+
+    <h3>Empirical to molecular: caffeine</h3>
+    <p>C 49.48%, H 5.19%, N 28.85%, O 16.48% gives whole-number ratios straight away: C 4, H 5, N 2, O 1. The empirical formula is <strong>C<sub>4</sub>H<sub>5</sub>N<sub>2</sub>O</strong> at 97.097 g/mol. Only the measured molar mass of 194.19 g/mol finishes the job: <em>n</em> = 194.19 &divide; 97.097 = 2.00, so the molecular formula is C<sub>8</sub>H<sub>10</sub>N<sub>4</sub>O<sub>2</sub>.</p>
+    <div class="flagnote">C<sub>8</sub>H<sub>10</sub>N<sub>4</sub>O<sub>2</sub> is the <em>molecular</em> formula, not the empirical one. Composition data alone can never reach it; if <em>n</em> is not close to a whole number, the molecular formula is undetermined and must be left that way.</div>
+
+    <h3>Hydrates and combustion</h3>
+    <p><strong>Hydrate.</strong> Heat 2.50 g of CuSO<sub>4</sub>&middot;xH<sub>2</sub>O to constant mass and 1.60 g of anhydrous salt remains, so 0.90 g of water left. Water: 0.90 &divide; 18.015 = 0.0500 mol. Salt: 1.60 &divide; 159.602 = 0.0100 mol. The ratio is 5.0, so x = 5. Treat H<sub>2</sub>O as one unit here &mdash; splitting it into H and O double-counts the oxygen.</p>
+    <p><strong>Combustion.</strong> 4.40 g CO<sub>2</sub> gives 0.1000 mol C; 1.80 g H<sub>2</sub>O gives 2 &times; 0.0999 = 0.1998 mol H, because each water carries two hydrogens. The C:H part is CH<sub>2</sub>. Oxygen can only come from the mass difference against the original sample &mdash; never assume it.</p>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Traps worth knowing</h2>
+    <ul>
+      <li><strong>Rounding 1.50 to 2 before multiplying.</strong> Clear fractions first, round last.</li>
+      <li><strong>Rounding each ratio on its own.</strong> 1.33 and 2.67 become 1 and 3, destroying the ratio. Multiply both by 3 instead: 4 and 8.</li>
+      <li><strong>Using percent directly as moles.</strong> Percent is mass. Divide by the atomic weight first.</li>
+      <li><strong>Mixing percent rows with gram rows.</strong></li>
+      <li><strong>Assuming the missing percent is oxygen.</strong> If the rows total 85%, the rest could be an unmeasured element, water or an impurity. Say so rather than assigning it silently.</li>
+      <li><strong>Forcing a non-integer <em>n</em>.</strong> If molar mass &divide; empirical mass is 5.4, something upstream is wrong.</li>
+      <li><strong>Treating the empirical formula as an identification.</strong> CH<sub>2</sub>O is formaldehyde, acetic acid and glucose alike.</li>
+    </ul>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>What do I do if a ratio comes out as 1.5 or 1.33?</summary><div class="ans"><p>Multiply every ratio by the same number: &times;2 for halves, &times;3 for thirds, &times;4 for quarters. Never round one ratio on its own.</p></div></details>
+    <details class="faq"><summary>What if the ratio is 1.42 or 2.71?</summary><div class="ans"><p>Stop and recheck. Usual causes are a data error, a missing element, wrong atomic weights or an impure sample. A larger multiplier that forces whole numbers invents a formula.</p></div></details>
+    <details class="faq"><summary>What if the percentages do not add to 100?</summary><div class="ans"><p>The ratio can still be computed, but the analysis is incomplete. Oxygen is the usual missing element &mdash; say so explicitly rather than assigning the remainder silently.</p></div></details>
+    <details class="faq"><summary>How do I get the molecular formula?</summary><div class="ans"><p><em>n</em> = molar mass &divide; empirical formula mass, then multiply every subscript by <em>n</em>. For CH<sub>2</sub>O at 30.026 g/mol with a measured 180 g/mol, <em>n</em> = 6 and the formula is C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>.</p></div></details>
+    <details class="faq"><summary>Can the empirical and molecular formulas be the same?</summary><div class="ans"><p>Yes, when <em>n</em> = 1 &mdash; water, carbon dioxide, formaldehyde. For ionic compounds such as NaCl or Fe<sub>2</sub>O<sub>3</sub>, the empirical formula <em>is</em> the formula; there is no separate molecular one.</p></div></details>
+    <details class="faq"><summary>Why do different compounds share one empirical formula?</summary><div class="ans"><p>Empirical means ratio only. CH<sub>2</sub>O fits formaldehyde, acetic acid and glucose equally well. Molar mass and structure data are what separate them.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="element-mass-calculator.html">Element Mass</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="element-mass-calculator.html">Next: Element Mass</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var basis='pct';
+var ro=document.getElementById('readout'),big=document.getElementById('big'),
+    unit=document.getElementById('unit'),side=document.getElementById('side'),
+    alerts=document.getElementById('alerts'),steps=document.getElementById('steps'),
+    ratio=document.getElementById('ratio'),rows=document.getElementById('rows'),
+    triageNote=document.getElementById('triageNote'),checkNote=document.getElementById('checkNote'),
+    totName=document.getElementById('totName'),totPct=document.getElementById('totPct'),
+    mPct=document.getElementById('mPct'),mG=document.getElementById('mG');
+
+function setBasis(b){basis=b;
+  mPct.setAttribute('aria-pressed',b==='pct'?'true':'false');
+  mG.setAttribute('aria-pressed',b==='g'?'true':'false');
+  run(true);}
+mPct.addEventListener('click',function(){setBasis('pct');});
+mG.addEventListener('click',function(){setBasis('g');});
+
+function gather(){
+  var out=[],seen={};
+  for(var i=1;i<=5;i++){
+    var sym=document.getElementById('e'+i).value.trim();
+    var raw=document.getElementById('v'+i).value.trim();
+    if(!sym&&!raw){continue;}
+    if(!sym){throw new Error('Row '+i+' has a value but no element symbol.');}
+    if(Chem.NO_WEIGHT[sym]){throw new Error(sym+' has no standard atomic weight, so it cannot be used here.');}
+    if(!Chem.AW[sym]){throw new Error('"'+sym+'" is not an element symbol (row '+i+'). A capital starts the symbol.');}
+    if(seen[sym]){throw new Error(sym+' appears twice. Combine it into one row.');}
+    seen[sym]=1;
+    var v=parseFloat(raw);
+    if(!isFinite(v)||v<=0){throw new Error('Row '+i+' ('+sym+') needs a value above zero.');}
+    out.push({el:sym,val:v,aw:Chem.AW[sym][1]});
+  }
+  if(out.length<2){throw new Error('Enter at least two elements.');}
+  return out;
+}
+
+function triage(ratios){
+  for(var k=1;k<=6;k++){
+    var ok=true;
+    for(var i=0;i<ratios.length;i++){
+      var v=ratios[i]*k;
+      if(Math.round(v)<1||Math.abs(v-Math.round(v))>0.06){ok=false;break;}
+    }
+    if(ok){return k;}
+  }
+  return 0;
+}
+
+function hillString(counts){
+  return Chem.hillOrder(counts).map(function(el){
+    return el+(counts[el]>1?counts[el]:'');
+  }).join('');
+}
+
+function ratioTable(items,ratios,k,subs){
+  Chem.clear(ratio);
+  var th=document.createElement('thead'),tr=document.createElement('tr');
+  ['El',basis==='pct'?'%':'g','Moles','\u00f7 smallest',(k>1?'\u00d7 '+k:'Rounded')]
+    .forEach(function(h){var c=document.createElement('th');c.textContent=h;tr.appendChild(c);});
+  th.appendChild(tr);ratio.appendChild(th);
+  var tb=document.createElement('tbody');
+  items.forEach(function(it,i){
+    var t=document.createElement('tr');
+    [it.el,Chem.sig(it.val,5),Chem.sig(it.moles,5),Chem.fx(ratios[i],4),
+     subs?String(subs[i]):Chem.fx(ratios[i]*k,3)].forEach(function(txt,j){
+      var c=document.createElement('td');c.textContent=txt;
+      if(j>0){c.className='mono';}t.appendChild(c);});
+    tb.appendChild(t);
+  });
+  ratio.appendChild(tb);
+}
+
+function run(animate){
+  Chem.clear(alerts);
+  var items;
+  try{items=gather();}
+  catch(e){
+    ro.classList.add('bad');big.textContent=e.message;unit.textContent='';side.textContent='';
+    Chem.clear(steps);Chem.clear(ratio);Chem.clear(rows);
+    totName.textContent='Total';totPct.textContent='';triageNote.textContent='';return;
+  }
+  ro.classList.remove('bad');
+
+  var sum=items.reduce(function(s,it){return s+it.val;},0);
+  items.forEach(function(it){it.moles=it.val/it.aw;});
+  var min=Math.min.apply(null,items.map(function(it){return it.moles;}));
+  var ratios=items.map(function(it){return it.moles/min;});
+  var k=triage(ratios);
+
+  var S=[];
+  S.push(['Set the basis', basis==='pct'
+    ? 'Percent by mass \u2192 assume a 100 g sample, so each % becomes grams.  Rows total '+Chem.fx(sum,2)+'%'
+    : 'Grams as measured.  Rows total '+Chem.sig(sum,5)+' g']);
+  S.push(['Convert to moles',items.map(function(it){
+    return it.el+': '+Chem.sig(it.val,5)+' \u00f7 '+it.aw+' = '+Chem.sig(it.moles,5)+' mol';}).join('\n')]);
+  S.push(['Divide by the smallest ('+Chem.sig(min,5)+')',items.map(function(it,i){
+    return it.el+' = '+Chem.fx(ratios[i],4);}).join('\n')]);
+
+  if(!k){
+    S.push(['Stop \u2014 not a clean ratio',
+      'No multiplier from 1 to 6 brings every ratio to a whole number.\nRecheck the data, the atomic weights, a missing element, and purity.']);
+    Chem.renderSteps(steps,{rows:[],input:'',expanded:'',expandedNeeded:false,atoms:0,mw:0},false);
+    Chem.clear(steps);
+    S.forEach(function(p,i){
+      var li=Chem.el('li'),d=Chem.el('div');
+      d.appendChild(Chem.el('span','what',p[0]));
+      d.appendChild(Chem.el('span','how'+(i===S.length-1?' sum':''),p[1]));
+      li.appendChild(d);Chem.stagger(li,'anim-rise',i,70);steps.appendChild(li);});
+    big.textContent='No clean ratio';unit.textContent='';
+    side.textContent='ratios: '+ratios.map(function(r){return Chem.fx(r,3);}).join(', ');
+    ratioTable(items,ratios,1,null);
+    triageNote.textContent='The last column is the raw ratio. None of the multipliers 1 to 6 lands every value on a whole number.';
+    Chem.clear(rows);totName.textContent='\u2014';totPct.textContent='';
+    checkNote.textContent='No formula to check until the data gives a clean ratio.';
+    var w=Chem.el('div','alert');
+    w.innerHTML='<strong>Stopped on purpose.</strong> Forcing whole numbers with a larger multiplier would invent a formula rather than find one.';
+    alerts.appendChild(w);
+    return;
+  }
+
+  var subs=ratios.map(function(r){return Math.round(r*k);});
+  var g=subs.reduce(function(a,b){return Chem.gcd(a,b);});
+  if(g>1){subs=subs.map(function(s){return s/g;});}
+
+  S.push([k>1?'Clear the fraction \u2014 multiply every ratio by '+k:'Already whole numbers',
+    items.map(function(it,i){
+      return it.el+': '+Chem.fx(ratios[i],4)+(k>1?' \u00d7 '+k+' = '+Chem.fx(ratios[i]*k,3):'')+
+        ' \u2192 '+subs[i];}).join('\n')+(g>1?'\nCommon factor '+g+' removed.':'')]);
+
+  var counts={};items.forEach(function(it,i){counts[it.el]=subs[i];});
+  var formula=hillString(counts);
+
+  var emp=Chem.analyse(formula);
+  S.push(['Empirical formula',formula+'   \u2014 '+Chem.f3(emp.mw)+' g/mol']);
+
+  var mmRaw=document.getElementById('mm').value.trim();
+  var mm=parseFloat(mmRaw),molecular=null,n=null;
+  if(mmRaw!==''&&isFinite(mm)&&mm>0){
+    n=mm/emp.mw;
+    var nr=Math.round(n);
+    if(nr>=1&&Math.abs(n-nr)<=0.05){
+      var mc={};Object.keys(counts).forEach(function(el){mc[el]=counts[el]*nr;});
+      molecular=hillString(mc);
+      S.push(['Molecular formula','n = '+Chem.sig(mm,6)+' \u00f7 '+Chem.f3(emp.mw)+' = '+Chem.fx(n,3)+
+        ' \u2248 '+nr+'   \u2192  '+molecular]);
+    }else{
+      S.push(['Molecular formula undetermined','n = '+Chem.sig(mm,6)+' \u00f7 '+Chem.f3(emp.mw)+' = '+
+        Chem.fx(n,3)+', which is not close enough to a whole number.']);
+    }
+  }
+
+  Chem.clear(steps);
+  S.forEach(function(p,i){
+    var li=Chem.el('li'),d=Chem.el('div');
+    d.appendChild(Chem.el('span','what',p[0]));
+    d.appendChild(Chem.el('span','how'+(i===S.length-1?' sum':''),p[1]));
+    li.appendChild(d);Chem.stagger(li,'anim-rise',i,70);steps.appendChild(li);});
+
+  big.textContent=molecular||formula;
+  unit.textContent='';
+  side.textContent=molecular
+    ? 'empirical '+formula+' \u00b7 '+Chem.f3(emp.mw)+' g/mol \u00b7 n = '+Math.round(n)
+    : 'empirical formula \u00b7 '+Chem.f3(emp.mw)+' g/mol';
+
+  ratioTable(items,ratios,k,subs);
+  triageNote.textContent=k===1
+    ? 'The ratios were already whole numbers, so no multiplier was needed.'
+    : 'Every ratio was multiplied by '+k+' together \u2014 never one at a time.';
+
+  var shown=molecular?Chem.analyse(molecular):emp;
+  Chem.renderRows(rows,shown,animate,{totalNode:totName,pctNode:totPct});
+
+  if(basis==='pct'){
+    var worst=0;
+    emp.rows.forEach(function(r){
+      var given=items.filter(function(it){return it.el===r.el;})[0];
+      if(given){worst=Math.max(worst,Math.abs(r.pct-given.val/sum*100));}
+    });
+    checkNote.textContent='Calculated back from '+(molecular||formula)+
+      ', the largest gap against your data is '+Chem.fx(worst,2)+
+      ' percentage points. Under about 0.5 is a good match.';
+  }else{
+    checkNote.textContent='Composition calculated back from '+(molecular||formula)+'.';
+  }
+
+  if(basis==='pct'&&Math.abs(sum-100)>0.5){
+    var a2=Chem.el('div','alert');
+    a2.innerHTML='<strong>Rows total '+Chem.fx(sum,2)+'%, not 100%.</strong> The ratio is still computed, '+
+      'but the analysis looks incomplete \u2014 the missing share is often oxygen. Do not assign it silently.';
+    alerts.appendChild(a2);
+  }
+  if(k>=5){
+    var a3=Chem.el('div','alert');
+    a3.innerHTML='<strong>Multiplier of '+k+'.</strong> That is a large one. Check the data before trusting the formula.';
+    alerts.appendChild(a3);
+  }
+}
+
+var addRow=document.getElementById('addRow');
+function showRows(n){
+  n=Math.max(3,Math.min(5,n));
+  for(var i=1;i<=5;i++){document.getElementById('row'+i).hidden=(i>n);}
+  addRow.hidden=(n>=5);
+}
+addRow.addEventListener('click',function(){
+  var shown=0;
+  for(var i=1;i<=5;i++){if(!document.getElementById('row'+i).hidden){shown=i;}}
+  showRows(shown+1);
+  document.getElementById('e'+Math.min(shown+1,5)).focus();
+});
+showRows(3);
+
+document.getElementById('go').addEventListener('click',function(){run(true);});
+Array.prototype.forEach.call(document.querySelectorAll('.calc input'),function(n){
+  n.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run(true);}});});
+Array.prototype.forEach.call(document.querySelectorAll('.chip[data-set]'),function(c){
+  c.addEventListener('click',function(){
+    for(var i=1;i<=5;i++){document.getElementById('e'+i).value='';document.getElementById('v'+i).value='';}
+    var parts=c.getAttribute('data-set').split(';');
+    showRows(parts.length);
+    parts.forEach(function(pair,i){
+      var p=pair.split(',');
+      document.getElementById('e'+(i+1)).value=p[0];
+      document.getElementById('v'+(i+1)).value=p[1];});
+    document.getElementById('mm').value=c.getAttribute('data-mm')||'';
+    if(basis!=='pct'){basis='pct';mPct.setAttribute('aria-pressed','true');mG.setAttribute('aria-pressed','false');}
+    run(true);});
+});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body>
+</html>

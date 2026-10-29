@@ -1,0 +1,251 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Chemical Weight Calculator</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Working</a>
+      <a href="#method">Method</a>
+      <a href="#labels">Labels</a>
+      <a href="#traps">Traps</a>
+      <a href="#hub">Calculators</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===== hero: calculator above the fold ===== -->
+  <div class="wrap hero">
+    <h1>Chemical Weight Calculator</h1>
+    <p class="standfirst">Type a formula, get its weight in grams per mole &mdash; with every step of the arithmetic shown underneath, including brackets and hydrate water.</p>
+
+    <div class="calc">
+      <label for="formula">Chemical formula</label>
+      <div class="entry">
+        <input id="formula" value="CuSO4&middot;5H2O" spellcheck="false" autocomplete="off"
+               aria-describedby="basis" placeholder="H2O, Ca(OH)2, K4[Fe(CN)6]">
+        <button class="go" id="go" type="button">Calculate</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-f="H2O">H2O</button>
+        <button class="chip" type="button" data-f="C6H12O6">C6H12O6</button>
+        <button class="chip" type="button" data-f="Ca(OH)2">Ca(OH)2</button>
+        <button class="chip" type="button" data-f="(NH4)2SO4">(NH4)2SO4</button>
+        <button class="chip" type="button" data-f="K4[Fe(CN)6]">K4[Fe(CN)6]</button>
+        <button class="chip" type="button" data-f="CuSO4&middot;5H2O">CuSO4&middot;5H2O</button>
+        <button class="chip" type="button" data-f="glucose">glucose</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <p class="basis" id="basis">Brackets, nested groups and hydrate dots (<span class="mono">&middot; . *</span>) are read in full. Case matters: <span class="mono">Co</span> is cobalt, <span class="mono">CO</span> is carbon monoxide.</p>
+    </div>
+  </div>
+
+  <!-- ===== animated working, directly under the calculator ===== -->
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">Each step is the one you would write by hand. The expansion line is where most wrong answers start.</p>
+    </div>
+
+    <div class="panel">
+      <h2>Composition by mass</h2>
+      <div class="rows" id="rows"></div>
+      <div class="total"><span id="totName">Total</span><span id="totPct"></span></div>
+      <p class="cap">Tiles carry the atomic number and the standard atomic weight used here. Percentages are by mass, not by atom count.</p>
+    </div>
+
+    <div class="panel span">
+      <h2>Atoms in one formula unit</h2>
+      <div class="atoms" id="atoms"></div>
+      <div class="legend" id="legend"></div>
+      <p class="cap">One circle per atom, sized by atomic weight and coloured by the CPK convention used in molecular models. Hydrogen is often most of the atoms and very little of the mass.</p>
+    </div>
+  </div>
+
+  <!-- ===== method ===== -->
+  <section class="block wrap" id="method">
+    <h2 class="head">How the number is worked out</h2>
+    <p>Chemical weight is the mass of one mole of a formula unit, in grams per mole. Most textbooks call it molar mass; for ionic salts such as <span class="mono">NaCl</span> the exact term is formula weight. The arithmetic is the same in every case, and so is the number.</p>
+    <ol>
+      <li><strong>Expand the formula.</strong> A subscript after a closing bracket multiplies everything inside it. A hydrate dot starts a second part, multiplied by its leading number.</li>
+      <li><strong>Count the atoms of each element.</strong></li>
+      <li><strong>Multiply each count by that element&rsquo;s standard atomic weight.</strong></li>
+      <li><strong>Add the subtotals.</strong> Round once, at the end.</li>
+    </ol>
+
+    <h3>Worked by hand: potassium ferrocyanide, K<sub>4</sub>[Fe(CN)<sub>6</sub>]</h3>
+    <p>The nested bracket is what makes this one worth doing on paper. The <span class="mono">6</span> multiplies the whole <span class="mono">CN</span> group; the <span class="mono">4</span> outside the square bracket applies to potassium only.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Element</th><th>Atoms</th><th>Atomic weight</th><th>Subtotal</th><th>Mass %</th></tr></thead>
+        <tbody>
+          <tr><td>K</td><td class="mono">4</td><td class="mono">39.098</td><td class="mono">156.392</td><td class="mono">42.46%</td></tr>
+          <tr><td>Fe</td><td class="mono">1</td><td class="mono">55.845</td><td class="mono">55.845</td><td class="mono">15.16%</td></tr>
+          <tr><td>C</td><td class="mono">6</td><td class="mono">12.011</td><td class="mono">72.066</td><td class="mono">19.56%</td></tr>
+          <tr><td>N</td><td class="mono">6</td><td class="mono">14.007</td><td class="mono">84.042</td><td class="mono">22.82%</td></tr>
+          <tr><td><strong>Total</strong></td><td class="mono">17</td><td></td><td class="mono"><strong>368.345</strong></td><td class="mono">100.00%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>So 0.100 mol weighs <span class="mono">36.83 g</span>, and a 100 g sample holds 42.46 g of potassium. The four percentages adding to exactly 100.00% is the check that no atom was missed.</p>
+  </section>
+
+  <!-- ===== bottle labels ===== -->
+  <section class="block wrap" id="labels">
+    <h2 class="head">Which formula to type, by what the bottle says</h2>
+    <p>Typing the wrong form of the right compound is the most common error in lab work, and the calculator cannot catch it. The label decides.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Label</th><th>Type</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td>Anhydrous salt (CuSO<sub>4</sub>)</td><td class="mono">CuSO4</td><td>159.602 g/mol. Typing the hydrate instead overstates it by 56%.</td></tr>
+          <tr><td>Hydrate (CuSO<sub>4</sub>&middot;5H<sub>2</sub>O)</td><td class="mono">CuSO4&middot;5H2O</td><td>249.677 g/mol. The five waters are 90.075 g/mol, about 36% of the total.</td></tr>
+          <tr><td>Salt form (drug&middot;HCl)</td><td>The salt, not the free base</td><td>HCl adds 36.458 g/mol &mdash; roughly a 15% shift for many drugs.</td></tr>
+          <tr><td>Gas (O<sub>2</sub>, N<sub>2</sub>)</td><td class="mono">O2</td><td>31.998 g/mol. A single O is half that.</td></tr>
+          <tr><td>Reaction coefficient (2H<sub>2</sub>O)</td><td class="mono">H2O</td><td>Coefficients count moles, not atoms inside one molecule. They never enter the weight.</td></tr>
+          <tr><td>Ion (SO<sub>4</sub><sup>2&minus;</sup>)</td><td class="mono">SO4</td><td>The charge changes neither the atom count nor the weight.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flagnote"><strong>Why another calculator may disagree with this one.</strong> Almost always the atomic-weight table or the rounding rule. Water is 18.015 g/mol here and 18.016 with O = 16.00; sulfuric acid is 98.072 against 98.086. A gap of 0.01 to 0.07 g/mol is an edition effect, not chemistry. For mass spectrometry, use monoisotopic mass instead of standard average weight.</div>
+  </section>
+
+  <!-- ===== traps ===== -->
+  <section class="block wrap" id="traps">
+    <h2 class="head">Traps worth knowing</h2>
+    <ul>
+      <li><strong>Co is not CO.</strong> Cobalt is 58.933 g/mol; carbon monoxide is 28.010. A capital starts a new element, and a lowercase letter belongs to the element before it.</li>
+      <li><strong>A bracket subscript multiplies everything inside.</strong> Al<sub>2</sub>(SO<sub>4</sub>)<sub>3</sub> holds 2 Al, 3 S and 12 O.</li>
+      <li><strong>The hydrate dot is not a decimal point.</strong> Leaving the waters out of CuSO<sub>4</sub>&middot;5H<sub>2</sub>O loses 90.075 g/mol.</li>
+      <li><strong>Atomic number is not atomic weight.</strong> Sodium is element 11 and weighs 22.990 g/mol.</li>
+      <li><strong>Diatomic gases are written as pairs.</strong> H<sub>2</sub>, N<sub>2</sub>, O<sub>2</sub>, F<sub>2</sub>, Cl<sub>2</sub>, Br<sub>2</sub>, I<sub>2</sub>.</li>
+      <li><strong>Average is not monoisotopic.</strong> Chlorine&rsquo;s 35.45 g/mol averages about 76% Cl-35 with 24% Cl-37.</li>
+      <li><strong>Round once.</strong> Keep full precision until the final line.</li>
+      <li><strong>Millilitres are not litres.</strong> 250 mL of 0.500 M NaOH needs 0.125 mol &times; 39.997 = 5.00 g, dissolved and made up <em>to</em> 250 mL.</li>
+      <li><strong>Some elements have no standard atomic weight.</strong> Many radioactive and synthetic ones do not; this calculator says so rather than inventing a value.</li>
+    </ul>
+  </section>
+
+  <!-- ===== hub ===== -->
+  <section class="block wrap" id="hub">
+    <h2 class="head">The rest of the calculators</h2>
+    <p>This page is the hub. Each calculator below is a spoke with its own page: the hub links to all of them, and every spoke links back here and on to the next useful step. Spokes do not cross-link to each other, which keeps the paths clean.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C&#8321;V&#8321; = C&#8322;V&#8322;, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means &mdash; 22.414 or 22.711 L/mol.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to &micro;M, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+    </div>
+    <p style="margin-top:1rem;font-size:0.9rem;color:var(--ink-faint)">Order of work: formula &rarr; chemical weight &rarr; percent composition &rarr; element mass &rarr; dilution. For a sequence instead of a formula, start at protein molarity.</p>
+  </section>
+
+  <!-- ===== faq ===== -->
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+
+    <details class="faq" open>
+      <summary>How do you calculate chemical weight from a formula?</summary>
+      <div class="ans"><p>Multiply each element&rsquo;s atomic weight by its atom count, counting atoms inside brackets and hydrate water, then add the results. The unit is g/mol.</p></div>
+    </details>
+    <details class="faq">
+      <summary>Is chemical weight the same as molar mass and molecular weight?</summary>
+      <div class="ans"><p>The numbers are identical for the same formula and the same atomic weights. Strictly, molecular weight is a dimensionless ratio, molar mass is in g/mol, and formula weight is the term for ionic salts such as NaCl.</p></div>
+    </details>
+    <details class="faq">
+      <summary>Why does my answer differ by 0.01 to 0.07 g/mol from another source?</summary>
+      <div class="ans"><p>The atomic-weight table or the rounding rule, nearly every time. Check which values the other source uses before assuming either is wrong.</p></div>
+    </details>
+    <details class="faq">
+      <summary>How do I enter CuSO&#8324;&middot;5H&#8322;O?</summary>
+      <div class="ans"><p>Type the full formula with the dot, or an asterisk or full stop if that is easier. The answer is 249.677 g/mol, not the anhydrous 159.602.</p></div>
+    </details>
+    <details class="faq">
+      <summary>Do parentheses and brackets change the answer?</summary>
+      <div class="ans"><p>Yes. A subscript after a closing bracket multiplies every atom inside it. K&#8324;[Fe(CN)&#8326;] holds 6 C and 6 N, and weighs 368.345 g/mol.</p></div>
+    </details>
+    <details class="faq">
+      <summary>Does capitalisation matter?</summary>
+      <div class="ans"><p>Yes. Co is cobalt and CO is carbon monoxide. Entering one for the other gives a completely different answer, so the calculator never silently fixes case.</p></div>
+    </details>
+    <details class="faq">
+      <summary>How many grams do I weigh for a solution?</summary>
+      <div class="ans"><p>Grams = molarity &times; volume in litres &times; molar mass. For 250 mL of 0.500 M NaOH: 0.500 &times; 0.250 &times; 39.997 = 5.00 g, dissolved and made up to 250 mL.</p></div>
+    </details>
+    <details class="faq">
+      <summary>What is percent composition for?</summary>
+      <div class="ans"><p>Each element&rsquo;s subtotal divided by the total, times 100. It checks a compound&rsquo;s identity against elemental analysis, and gives the element masses in any sample.</p></div>
+    </details>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="#working">Working</a>
+      <a href="#method">Method</a>
+      <a href="#labels">Labels</a>
+      <a href="#traps">Traps</a>
+      <a href="#hub">Calculators</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var elFormula=document.getElementById('formula'),elBig=document.getElementById('big'),
+    elUnit=document.getElementById('unit'),elSide=document.getElementById('side'),
+    elReadout=document.getElementById('readout'),elSteps=document.getElementById('steps'),
+    elRows=document.getElementById('rows'),elAtoms=document.getElementById('atoms'),
+    elLegend=document.getElementById('legend'),elTotName=document.getElementById('totName'),
+    elTotPct=document.getElementById('totPct');
+
+function run(animate){
+  var a;
+  try{a=Chem.analyse(elFormula.value);}
+  catch(err){
+    elReadout.classList.add('bad');
+    elBig.textContent=err.message;
+    elUnit.textContent='';elSide.textContent='';
+    Chem.clear(elSteps);Chem.clear(elRows);Chem.clear(elAtoms);Chem.clear(elLegend);
+    elTotName.textContent='Total';elTotPct.textContent='';
+    return;
+  }
+  elReadout.classList.remove('bad');
+  elUnit.textContent='g/mol';
+  var side=a.atoms+' atoms \u00b7 '+a.rows.length+' element'+(a.rows.length===1?'':'s');
+  if(a.lookedUp){side=a.lookedUp+' = '+a.input+' \u00b7 '+side;}
+  elSide.textContent=side;
+  Chem.countTo(elBig,a.mw,animate);
+  Chem.renderSteps(elSteps,a,animate);
+  Chem.renderRows(elRows,a,animate,{totalNode:elTotName,pctNode:elTotPct});
+  Chem.renderAtoms(elAtoms,elLegend,a,animate);
+}
+document.getElementById('go').addEventListener('click',function(){run(true);});
+elFormula.addEventListener('keydown',function(e){
+  if(e.key==='Enter'){e.preventDefault();run(true);}});
+Array.prototype.forEach.call(document.querySelectorAll('.chip[data-f]'),function(c){
+  c.addEventListener('click',function(){elFormula.value=c.getAttribute('data-f');run(true);});});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body></html>

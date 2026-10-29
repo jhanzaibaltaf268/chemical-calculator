@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Percent Composition Calculator</title>
+<meta name="description" content="Mass percent of every element in a compound, the grams of each in a weighed sample, and how mass percent differs from atom percent.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; Percent Composition</p>
+    <h1>Percent Composition Calculator</h1>
+    <p class="standfirst">The mass share of every element in a compound, the grams of each one in the sample you actually weigh, and why mass percent is not atom percent.</p>
+    <div class="calc">
+      <div class="fields">
+        <div class="field">
+          <label for="f">Chemical formula</label>
+          <input type="text" id="f" value="(NH4)2SO4" spellcheck="false" autocomplete="off" placeholder="CuSO4&middot;5H2O">
+        </div>
+        <div class="field">
+          <label for="m">Sample mass (g)</label>
+          <input type="number" id="m" value="250" step="any" min="0">
+          <p class="hint">Use 100 g to read grams and percent as the same number.</p>
+        </div>
+      </div>
+      <div class="go-row">
+        <button class="go" id="go" type="button">Calculate</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-f="(NH4)2SO4">(NH4)2SO4</button>
+        <button class="chip" type="button" data-f="CaCO3">CaCO3</button>
+        <button class="chip" type="button" data-f="CuSO4&middot;5H2O">CuSO4&middot;5H2O</button>
+        <button class="chip" type="button" data-f="Fe2O3">Fe2O3</button>
+        <button class="chip" type="button" data-f="H2SO4">H2SO4</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <p class="basis">Percent composition does not depend on sample size: pure water is 11.19% hydrogen whether you weigh 1 g or 1 tonne. Only the grams change.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">The expansion line is where most wrong percentages start.</p>
+    </div>
+    <div class="panel">
+      <h2>Mass share and grams in your sample</h2>
+      <div class="rows" id="rows"></div>
+      <div class="total"><span id="totName">Total</span><span id="totPct"></span></div>
+      <p class="cap">The grams must add back to the sample mass. That sum is the built-in check.</p>
+    </div>
+    <div class="panel">
+      <h2>Mass percent against atom percent</h2>
+      <div class="scroll"><table id="mvat"></table></div>
+      <p class="cap">Atom count is not mass share. A hydrogen atom weighs about a sixteenth of an oxygen atom.</p>
+    </div>
+    <div class="panel">
+      <h2>Atoms in one formula unit</h2>
+      <div class="atoms" id="atoms"></div>
+      <div class="legend" id="legend"></div>
+      <p class="cap">Sized by atomic weight, coloured by the CPK convention used in molecular models.</p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">What percent composition means</h2>
+    <p>Each element&rsquo;s share of a compound&rsquo;s total mass: <code>% element = (mass of that element in one mole &divide; molar mass) &times; 100</code>. It always means mass unless something says otherwise.</p>
+
+    <h3>Worked by hand: ammonium sulfate, (NH<sub>4</sub>)<sub>2</sub>SO<sub>4</sub></h3>
+    <p>The bracket is the step most often skipped. <span class="mono">(NH<sub>4</sub>)<sub>2</sub></span> holds 2 N and 8 H &mdash; not 4 H. With the sulfate group the formula is 15 atoms: N 2, H 8, S 1, O 4.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Element</th><th>Mass in one mole</th><th>Mass %</th><th>Atom %</th><th>Grams in 250 g</th></tr></thead>
+      <tbody>
+        <tr><td>N</td><td class="mono">28.014</td><td class="mono">21.20%</td><td class="mono">13.33%</td><td class="mono">53.00 g</td></tr>
+        <tr><td>H</td><td class="mono">8.064</td><td class="mono">6.10%</td><td class="mono">53.33%</td><td class="mono">15.26 g</td></tr>
+        <tr><td>S</td><td class="mono">32.06</td><td class="mono">24.26%</td><td class="mono">6.67%</td><td class="mono">60.66 g</td></tr>
+        <tr><td>O</td><td class="mono">63.996</td><td class="mono">48.43%</td><td class="mono">26.67%</td><td class="mono">121.08 g</td></tr>
+        <tr><td><strong>Total</strong></td><td class="mono"><strong>132.134</strong></td><td class="mono">100.00%</td><td class="mono">100.00%</td><td class="mono"><strong>250.00 g</strong></td></tr>
+      </tbody>
+    </table></div>
+    <p>Hydrogen is more than half the atoms in ammonium sulfate and only 6.10% of its mass. That gap is the whole reason the two columns exist.</p>
+
+    <h3>Hydrates count their water</h3>
+    <p>In CuSO<sub>4</sub>&middot;5H<sub>2</sub>O the dot is a separator, not a decimal point, and the 5 multiplies the whole water unit: 9 O and 10 H in total. The compound is 249.677 g/mol, of which water is 90.075 &mdash; 36.08%. Heating 100 g drives off about 36.08 g of water and leaves about 63.92 g of anhydrous salt.</p>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Traps worth knowing</h2>
+    <ul>
+      <li><strong>Forgetting the bracket multiplier.</strong> (NH<sub>4</sub>)<sub>2</sub>SO<sub>4</sub> expands to N<sub>2</sub>H<sub>8</sub>SO<sub>4</sub>.</li>
+      <li><strong>Dropping the water of hydration.</strong> Using 159.602 for CuSO<sub>4</sub>&middot;5H<sub>2</sub>O understates the molar mass by 36% and changes every percentage.</li>
+      <li><strong>Reading atom percent as mass percent.</strong> See the table above.</li>
+      <li><strong>Mixing atomic-weight tables partway through.</strong> O = 16.00 for one element and 15.999 for another breaks the 100% check.</li>
+      <li><strong>Panicking over rounding.</strong> A rounded sum of 99.99% or 100.01% is normal. More than about 0.1% off means an atom count or an atomic weight is wrong.</li>
+      <li><strong>Confusing it with the empirical formula.</strong> The same percentages fit several molecular formulas; molar mass is what separates them.</li>
+    </ul>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>Should the percentages add up to 100%?</summary><div class="ans"><p>Yes, within rounding. 99.99% or 100.01% from rounded values is fine; more than about 0.1% off means something is wrong.</p></div></details>
+    <details class="faq"><summary>What is the difference between mass percent and atom percent?</summary><div class="ans"><p>Mass percent is the share of total mass; atom percent is the share of atoms. In (NH<sub>4</sub>)<sub>2</sub>SO<sub>4</sub> hydrogen is 53.33% of the atoms and 6.10% of the mass.</p></div></details>
+    <details class="faq"><summary>How do I enter a hydrate?</summary><div class="ans"><p>Type the full formula with the dot, an asterisk or a full stop. All the water&rsquo;s atoms are counted: CuSO<sub>4</sub>&middot;5H<sub>2</sub>O has 9 O and 10 H, and water is 36.08% of its mass.</p></div></details>
+    <details class="faq"><summary>How do I go backwards to a formula?</summary><div class="ans"><p>Assume 100 g so each percentage becomes grams, then divide by atomic weights and reduce the ratio. The empirical formula calculator does exactly that.</p></div></details>
+    <details class="faq"><summary>Can I use it for mixtures or alloys?</summary><div class="ans"><p>Not directly. This works on a pure compound&rsquo;s formula unit. For a mixture, work out each component separately.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="empirical-formula-calculator.html">Empirical Formula</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="empirical-formula-calculator.html">Next: Empirical Formula</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var F=document.getElementById('f'),M=document.getElementById('m'),
+    ro=document.getElementById('readout'),big=document.getElementById('big'),
+    unit=document.getElementById('unit'),side=document.getElementById('side'),
+    steps=document.getElementById('steps'),rows=document.getElementById('rows'),
+    atoms=document.getElementById('atoms'),legend=document.getElementById('legend'),
+    mvat=document.getElementById('mvat'),
+    totName=document.getElementById('totName'),totPct=document.getElementById('totPct');
+
+function mvatTable(a){
+  Chem.clear(mvat);
+  var th=document.createElement('thead');
+  var tr=document.createElement('tr');
+  ['Element','Atoms','Mass %','Atom %'].forEach(function(h){
+    var c=document.createElement('th');c.textContent=h;tr.appendChild(c);});
+  th.appendChild(tr);mvat.appendChild(th);
+  var tb=document.createElement('tbody');
+  a.rows.forEach(function(r){
+    var t=document.createElement('tr');
+    [[r.el,0],[String(r.n),1],[Chem.f2(r.pct)+'%',1],[Chem.f2(r.n/a.atoms*100)+'%',1]]
+      .forEach(function(p){
+        var c=document.createElement('td');c.textContent=p[0];
+        if(p[1]){c.className='mono';}t.appendChild(c);});
+    tb.appendChild(t);
+  });
+  var tot=document.createElement('tr');
+  [['Total',0],[String(a.atoms),1],['100.00%',1],['100.00%',1]].forEach(function(p){
+    var c=document.createElement('td');c.innerHTML='<strong>'+p[0]+'</strong>';
+    if(p[1]){c.className='mono';}tot.appendChild(c);});
+  tb.appendChild(tot);mvat.appendChild(tb);
+}
+
+function run(animate){
+  var a;
+  try{a=Chem.analyse(F.value);}
+  catch(e){
+    ro.classList.add('bad');big.textContent=e.message;unit.textContent='';side.textContent='';
+    Chem.clear(steps);Chem.clear(rows);Chem.clear(atoms);Chem.clear(legend);Chem.clear(mvat);
+    totName.textContent='Total';totPct.textContent='';return;
+  }
+  var mass=parseFloat(M.value);
+  if(!isFinite(mass)||mass<0){mass=100;M.value=100;}
+  ro.classList.remove('bad');
+  unit.textContent='g/mol';
+  side.textContent=a.atoms+' atoms \u00b7 '+a.rows.length+' element'+(a.rows.length===1?'':'s')+
+    ' \u00b7 sample '+Chem.sig(mass,6)+' g';
+  Chem.countTo(big,a.mw,animate);
+  Chem.renderSteps(steps,a,animate);
+  Chem.renderRows(rows,a,animate,{sample:mass,totalNode:totName,pctNode:totPct});
+  mvatTable(a);
+  Chem.renderAtoms(atoms,legend,a,animate);
+}
+document.getElementById('go').addEventListener('click',function(){run(true);});
+[F,M].forEach(function(n){n.addEventListener('keydown',function(e){
+  if(e.key==='Enter'){e.preventDefault();run(true);}});});
+Array.prototype.forEach.call(document.querySelectorAll('.chip[data-f]'),function(c){
+  c.addEventListener('click',function(){F.value=c.getAttribute('data-f');run(true);});
+});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body>
+</html>

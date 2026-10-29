@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Protein Molarity Calculator</title>
+<meta name="description" content="Convert a protein between mg/mL and micromolar, reconstitute a lyophilised vial with a purity correction, and dilute the stock to a working concentration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; Protein Molarity</p>
+    <h1>Protein Molarity Calculator</h1>
+    <p class="standfirst">Mass concentration to molar concentration and back &mdash; with the purity correction that most vial calculations quietly skip.</p>
+    <div class="calc">
+      <div class="modes" role="group" aria-label="Mode">
+        <button type="button" id="mVial" aria-pressed="true">Vial &rarr; stock</button>
+        <button type="button" id="mMass" aria-pressed="false">mg/mL &rarr; &micro;M</button>
+        <button type="button" id="mMol" aria-pressed="false">&micro;M &rarr; mg/mL</button>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <label for="mw">Molecular weight</label>
+          <div class="pair">
+            <input type="number" id="mw" value="45" step="any" min="0">
+            <select id="mwU"><option value="1000" selected>kDa</option><option value="1">Da</option></select>
+          </div>
+          <p class="hint">Use the value for your exact construct, tags included.</p>
+        </div>
+        <div class="field">
+          <label for="pur">Purity (%)</label>
+          <input type="number" id="pur" value="90" step="any" min="0" max="100">
+        </div>
+        <div class="field" id="wrapGross">
+          <label for="gross">Powder in the vial (mg)</label>
+          <input type="number" id="gross" value="10" step="any" min="0">
+        </div>
+        <div class="field" id="wrapVol">
+          <label for="vol">Make up to (mL)</label>
+          <input type="number" id="vol" value="2" step="any" min="0">
+        </div>
+        <div class="field" id="wrapConc" hidden>
+          <label for="conc">Concentration</label>
+          <div class="pair">
+            <input type="number" id="conc" value="2" step="any" min="0">
+            <select id="concU"><option value="1" selected>mg/mL</option><option value="0.001">&micro;g/mL</option></select>
+          </div>
+        </div>
+        <div class="field" id="wrapUM" hidden>
+          <label for="um">Molarity (&micro;M)</label>
+          <input type="number" id="um" value="100" step="any" min="0">
+        </div>
+      </div>
+      <p class="lbl" style="margin-top:1rem">Working dilution from that stock</p>
+      <div class="fields">
+        <div class="field">
+          <label for="tc">Target concentration (&micro;M)</label>
+          <input type="number" id="tc" value="10" step="any" min="0">
+        </div>
+        <div class="field">
+          <label for="tv">Final volume (&micro;L)</label>
+          <input type="number" id="tv" value="500" step="any" min="0">
+        </div>
+      </div>
+      <div class="go-row">
+        <button class="go" id="go" type="button">Calculate</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-mw="66.5">BSA 66.5 kDa</button>
+        <button class="chip" type="button" data-mw="14.31">lysozyme</button>
+        <button class="chip" type="button" data-mw="8.56">ubiquitin</button>
+        <button class="chip" type="button" data-mw="26.9">GFP</button>
+        <button class="chip" type="button" data-mw="150">IgG</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <ul class="kv" id="kv"></ul>
+      <div id="alerts"></div>
+      <p class="basis">&micro;M = (&micro;g/mL) &divide; (MW in kDa). The shortcut works because 1 mg/mL is numerically 1 g/L, so dividing by g/mol gives mol/L.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">Correct for purity first. Every number after it inherits the error otherwise.</p>
+    </div>
+    <div class="panel">
+      <h2>This protein, at a glance</h2>
+      <div class="scroll"><table id="ladder"></table></div>
+      <p class="cap" id="ladderNote"></p>
+    </div>
+    <div class="panel span">
+      <h2>Working dilution</h2>
+      <div class="scroll"><table id="plan"></table></div>
+      <p class="cap" id="planNote"></p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">The two conversions</h2>
+    <p><code>&micro;M = (&micro;g/mL) &divide; (MW in kDa)</code> and <code>mg/mL = &micro;M &times; MW(kDa) &divide; 1000</code>. Check against a known case: 2 mg/mL of BSA at 66.5 kDa is 2000 &divide; 66.5 = 30.1 &micro;M.</p>
+
+    <h3>Worked by hand: a lyophilised vial to a 10 &micro;M working solution</h3>
+    <p>A vial holds 10 mg of powder at 90% protein by certificate, and the protein is 45 kDa.</p>
+    <ol>
+      <li><strong>Correct for purity.</strong> 10 mg &times; 0.90 = <strong>9.0 mg</strong> of actual protein. Skipping this makes everything downstream about 11% too high.</li>
+      <li><strong>Make the stock.</strong> Dissolve and make up <em>to</em> 2.0 mL &mdash; not add 2.0 mL. That is 9.0 &divide; 2.0 = <strong>4.5 mg/mL</strong>.</li>
+      <li><strong>Convert.</strong> 4500 &micro;g/mL &divide; 45 kDa = <strong>100 &micro;M</strong>. The long way agrees: 4.5 g/L &divide; 45,000 g/mol = 1.0 &times; 10<sup>&minus;4</sup> mol/L.</li>
+      <li><strong>Dilute.</strong> For 500 &micro;L at 10 &micro;M: take (10 &times; 500) &divide; 100 = <strong>50 &micro;L</strong> of stock and <strong>450 &micro;L</strong> of buffer. Adding 500 &micro;L of buffer instead gives 550 &micro;L at 9.09 &micro;M.</li>
+    </ol>
+
+    <h3>What 1 mg/mL comes to</h3>
+    <p>For any protein, 1 mg/mL = 1,000,000 &divide; MW in &micro;M.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Protein</th><th>MW (g/mol)</th><th>1 mg/mL is</th></tr></thead>
+      <tbody>
+        <tr><td>Ubiquitin</td><td class="mono">8,560</td><td class="mono">116.82 &micro;M</td></tr>
+        <tr><td>Lysozyme (hen egg white)</td><td class="mono">14,310</td><td class="mono">69.88 &micro;M</td></tr>
+        <tr><td>GFP (avGFP)</td><td class="mono">26,900</td><td class="mono">37.17 &micro;M</td></tr>
+        <tr><td>Generic 50 kDa protein</td><td class="mono">50,000</td><td class="mono">20.00 &micro;M</td></tr>
+        <tr><td>BSA (mature)</td><td class="mono">66,500</td><td class="mono">15.04 &micro;M</td></tr>
+        <tr><td>IgG (typical)</td><td class="mono">150,000</td><td class="mono">6.67 &micro;M</td></tr>
+      </tbody>
+    </table></div>
+    <p class="mono" style="font-size:0.85rem;color:var(--ink-faint)">BSA is quoted between 66,430 and 66,500 Da depending on the source. The effect here is under 0.2%, but for other proteins a datasheet weight and a sequence prediction can differ enough to matter.</p>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Before you trust the molecular weight</h2>
+    <ol>
+      <li><strong>Which weight?</strong> The certificate value for the lot in hand, or the sequence weight of your exact construct.</li>
+      <li><strong>Mature or precursor?</strong> Check whether the signal peptide is removed.</li>
+      <li><strong>Tags counted?</strong> A His-tag is small; a GFP fusion adds about 27 kDa.</li>
+      <li><strong>Glycosylated?</strong> Sequence predictions understate glycoproteins. Use the measured value when the assay counts whole molecules.</li>
+      <li><strong>Monomer or oligomer?</strong> State the basis. Dimer &micro;M is monomer &micro;M divided by two.</li>
+      <li><strong>Salt or hydrate form?</strong> Divide by the salt molar mass, not the free base &mdash; typically a 10% difference.</li>
+      <li><strong>Purity applied once?</strong> Follow the certificate&rsquo;s own definition and do not count it twice.</li>
+    </ol>
+    <div class="flagnote"><strong>Da against kDa is the expensive one.</strong> Entering 66.5 where daltons are expected gives a molarity 1,000&times; too high. No amount of careful rounding fixes a unit error &mdash; check the unit first. Likewise, 1 &micro;g/&micro;L <em>is</em> 1 mg/mL, not a thousandth of it, and &micro;M means &micro;mol/L, never &micro;mol/mL.</div>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>How do I convert mg/mL to &micro;M?</summary><div class="ans"><p>Divide &micro;g/mL by the molecular weight in kDa. For 2 mg/mL BSA at 66.5 kDa: 2000 &divide; 66.5 = 30.1 &micro;M.</p></div></details>
+    <details class="faq"><summary>How does purity change the result?</summary><div class="ans"><p>Multiply the weighed mass by the purity fraction first. 10 mg at 90% is 9.0 mg of protein; uncorrected results run about 11% high.</p></div></details>
+    <details class="faq"><summary>Monomer or dimer molecular weight?</summary><div class="ans"><p>State the basis. The usual convention is monomer weight and monomer molarity; dimer molarity is that divided by the number of subunits.</p></div></details>
+    <details class="faq"><summary>How much protein do I weigh for a target molarity?</summary><div class="ans"><p>Mass in grams = molarity (mol/L) &times; volume (L) &times; MW (g/mol). For 10 mL of 20 &micro;M at 50 kDa, 10 mg of actual protein.</p></div></details>
+    <details class="faq"><summary>Why does my A280 disagree with my Bradford?</summary><div class="ans"><p>They measure different things. A280 depends on the extinction coefficient and is inflated by nucleic acids and scattering; Bradford and BCA responses vary between proteins and react to detergents and reductants. Check the molecular weight basis, the blank and the dilution factor before blaming either method.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="gas-volume-calculator.html">Gas Volume</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="gas-volume-calculator.html">Next: Gas Volume</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var mode='vial';
+var MW=document.getElementById('mw'),MWU=document.getElementById('mwU'),PUR=document.getElementById('pur'),
+    GROSS=document.getElementById('gross'),VOL=document.getElementById('vol'),
+    CONC=document.getElementById('conc'),CONCU=document.getElementById('concU'),UM=document.getElementById('um'),
+    TC=document.getElementById('tc'),TV=document.getElementById('tv'),
+    wGross=document.getElementById('wrapGross'),wVol=document.getElementById('wrapVol'),
+    wConc=document.getElementById('wrapConc'),wUM=document.getElementById('wrapUM'),
+    ro=document.getElementById('readout'),big=document.getElementById('big'),
+    unit=document.getElementById('unit'),side=document.getElementById('side'),
+    kv=document.getElementById('kv'),alerts=document.getElementById('alerts'),
+    steps=document.getElementById('steps'),ladder=document.getElementById('ladder'),
+    ladderNote=document.getElementById('ladderNote'),plan=document.getElementById('plan'),
+    planNote=document.getElementById('planNote');
+var AVO=6.02214076e23;
+
+function setMode(m){
+  mode=m;
+  document.getElementById('mVial').setAttribute('aria-pressed',m==='vial'?'true':'false');
+  document.getElementById('mMass').setAttribute('aria-pressed',m==='mass'?'true':'false');
+  document.getElementById('mMol').setAttribute('aria-pressed',m==='mol'?'true':'false');
+  wGross.hidden=(m!=='vial');wVol.hidden=(m!=='vial');
+  wConc.hidden=(m!=='mass');wUM.hidden=(m!=='mol');
+  run(true);
+}
+document.getElementById('mVial').addEventListener('click',function(){setMode('vial');});
+document.getElementById('mMass').addEventListener('click',function(){setMode('mass');});
+document.getElementById('mMol').addEventListener('click',function(){setMode('mol');});
+
+function kvAdd(k,v,lead){
+  var li=Chem.el('li',lead?'lead':'');
+  li.appendChild(Chem.el('span','k',k));
+  li.appendChild(Chem.el('span','v',v));
+  kv.appendChild(li);
+}
+function tableOut(node,headings,rowsData,animate){
+  Chem.clear(node);
+  var th=document.createElement('thead'),hr=document.createElement('tr');
+  headings.forEach(function(h){var c=document.createElement('th');c.textContent=h;hr.appendChild(c);});
+  th.appendChild(hr);node.appendChild(th);
+  var tb=document.createElement('tbody');
+  rowsData.forEach(function(r,i){
+    var tr=document.createElement('tr');
+    r.forEach(function(t,j){var td=document.createElement('td');td.textContent=t;
+      if(j>0){td.className='mono';}tr.appendChild(td);});
+    if(animate){Chem.stagger(tr,'anim-rise',i,55);}
+    tb.appendChild(tr);});
+  node.appendChild(tb);
+}
+
+function run(animate){
+  Chem.clear(kv);Chem.clear(alerts);
+  var mwDa=parseFloat(MW.value)*parseFloat(MWU.value);
+  var pur=parseFloat(PUR.value);
+  if(!isFinite(pur)||pur<=0||pur>100){pur=100;PUR.value=100;}
+  var pf=pur/100;
+
+  function bad(msg){ro.classList.add('bad');big.textContent=msg;unit.textContent='';side.textContent='';
+    Chem.clear(steps);Chem.clear(ladder);Chem.clear(plan);
+    ladderNote.textContent='';planNote.textContent='';}
+
+  if(!isFinite(mwDa)||mwDa<=0){return bad('Enter a molecular weight above zero.');}
+  if(mwDa<200){
+    return bad('A molecular weight of '+Chem.sig(mwDa,5)+' Da is too small for a protein \u2014 check the Da / kDa unit.');
+  }
+  ro.classList.remove('bad');
+
+  var S=[],mgmL,uM,activeMg=null,stockVol=null;
+
+  if(mode==='vial'){
+    var gross=parseFloat(GROSS.value),v=parseFloat(VOL.value);
+    if(!isFinite(gross)||gross<=0){return bad('Enter the powder mass in the vial.');}
+    if(!isFinite(v)||v<=0){return bad('Enter the volume to make up to.');}
+    activeMg=gross*pf;stockVol=v;
+    mgmL=activeMg/v;uM=mgmL*1000/(mwDa/1000);
+    S.push(['Correct for purity',Chem.sig(gross,5)+' mg \u00d7 '+Chem.fx(pf,4)+' = '+
+      Chem.sig(activeMg,5)+' mg of protein']);
+    S.push(['Make the stock',Chem.sig(activeMg,5)+' mg made up to '+Chem.sig(v,5)+' mL = '+
+      Chem.sig(mgmL,5)+' mg/mL']);
+    S.push(['Convert to molarity',Chem.sig(mgmL*1000,5)+' \u00b5g/mL \u00f7 '+
+      Chem.sig(mwDa/1000,5)+' kDa = '+Chem.sig(uM,5)+' \u00b5M']);
+  }else if(mode==='mass'){
+    var c=parseFloat(CONC.value)*parseFloat(CONCU.value);
+    if(!isFinite(c)||c<=0){return bad('Enter a concentration above zero.');}
+    mgmL=c*pf;uM=mgmL*1000/(mwDa/1000);
+    if(pur<100){S.push(['Correct for purity',Chem.sig(c,5)+' mg/mL \u00d7 '+Chem.fx(pf,4)+' = '+
+      Chem.sig(mgmL,5)+' mg/mL of protein']);}
+    S.push(['Convert to molarity',Chem.sig(mgmL*1000,5)+' \u00b5g/mL \u00f7 '+
+      Chem.sig(mwDa/1000,5)+' kDa = '+Chem.sig(uM,5)+' \u00b5M']);
+  }else{
+    var m=parseFloat(UM.value);
+    if(!isFinite(m)||m<=0){return bad('Enter a molarity above zero.');}
+    uM=m;mgmL=uM*(mwDa/1000)/1000;
+    S.push(['Convert to mass concentration',Chem.sig(uM,5)+' \u00b5M \u00d7 '+
+      Chem.sig(mwDa/1000,5)+' kDa \u00f7 1000 = '+Chem.sig(mgmL,5)+' mg/mL']);
+  }
+
+  Chem.countTo(big,uM,animate,uM<10?3:2);
+  unit.textContent='\u00b5M';
+  side.textContent=Chem.sig(mgmL,5)+' mg/mL \u00b7 MW '+Chem.sig(mwDa,6)+' Da ('+
+    Chem.sig(mwDa/1000,5)+' kDa)'+(pur<100?' \u00b7 '+Chem.sig(pur,4)+'% pure':'');
+
+  kvAdd('Stock molarity',Chem.sig(uM,5)+' \u00b5M',true);
+  kvAdd('Stock concentration',Chem.sig(mgmL,5)+' mg/mL');
+  if(activeMg!==null){
+    kvAdd('Protein in the vial',Chem.sig(activeMg,5)+' mg of '+Chem.sig(parseFloat(GROSS.value),5)+' mg powder');
+  }
+  kvAdd('1 mg/mL of this protein is',Chem.sig(1000000/mwDa,5)+' \u00b5M');
+
+  /* working dilution */
+  var tc=parseFloat(TC.value),tv=parseFloat(TV.value);
+  var planRows=[],ok=true;
+  if(!isFinite(tc)||tc<=0||!isFinite(tv)||tv<=0){
+    ok=false;planNote.textContent='Enter a target concentration and a final volume to get the dilution.';
+    Chem.clear(plan);
+  }else if(tc>uM){
+    ok=false;Chem.clear(plan);
+    planNote.textContent='The target ('+Chem.sig(tc,5)+' \u00b5M) is above the stock ('+Chem.sig(uM,5)+
+      ' \u00b5M), so it cannot be reached by dilution.';
+    var w=Chem.el('div','alert');
+    w.innerHTML='<strong>Target is stronger than the stock.</strong> Lower the target, or make a more concentrated stock.';
+    alerts.appendChild(w);
+  }else{
+    var v1=tc*tv/uM,dil=tv-v1;
+    planRows=[['Stock to take',Chem.sig(v1,4)+' \u00b5L',Chem.sig(v1/1000,4)+' mL'],
+              ['Buffer to add',Chem.sig(dil,4)+' \u00b5L',Chem.sig(dil/1000,4)+' mL'],
+              ['Final volume',Chem.sig(tv,4)+' \u00b5L',Chem.sig(tv/1000,4)+' mL'],
+              ['Dilution factor',Chem.sig(uM/tc,4)+'\u00d7','\u2014'],
+              ['Protein in the tube',Chem.sig(tc*tv/1e6,4)+' nmol',Chem.sig(tc*tv/1e6*1e-9*AVO,4)+' molecules']];
+    tableOut(plan,['','Microlitres','Millilitres'],planRows,animate);
+    planNote.textContent='Add '+Chem.sig(dil,4)+' \u00b5L of buffer to '+Chem.sig(v1,4)+
+      ' \u00b5L of stock \u2014 not '+Chem.sig(tv,4)+' \u00b5L, which would give '+
+      Chem.sig(tv+v1,4)+' \u00b5L at '+Chem.sig(uM*v1/(tv+v1),4)+' \u00b5M.';
+    if(v1<2){
+      var w2=Chem.el('div','alert');
+      w2.innerHTML='<strong>'+Chem.sig(v1,4)+' \u00b5L is a hard volume to pipette.</strong> Make an intermediate dilution first, or scale the final volume up.';
+      alerts.appendChild(w2);
+    }
+    S.push(['Dilute to the working concentration','V\u2081 = ('+Chem.sig(tc,5)+' \u00d7 '+Chem.sig(tv,5)+
+      ') \u00f7 '+Chem.sig(uM,5)+' = '+Chem.sig(v1,4)+' \u00b5L, plus '+Chem.sig(dil,4)+' \u00b5L buffer']);
+  }
+
+  Chem.clear(steps);
+  S.forEach(function(p,i){
+    var li=Chem.el('li'),d=Chem.el('div');
+    d.appendChild(Chem.el('span','what',p[0]));
+    d.appendChild(Chem.el('span','how'+(i===S.length-1?' sum':''),p[1]));
+    li.appendChild(d);Chem.stagger(li,'anim-rise',i,70);steps.appendChild(li);});
+
+  var lad=[0.1,0.25,0.5,1,2,5].map(function(c){
+    return [Chem.sig(c,4)+' mg/mL',Chem.sig(c*1000/(mwDa/1000),5),Chem.sig(c*1000,5)];});
+  tableOut(ladder,['Concentration','\u00b5M','\u00b5g/mL'],lad,animate);
+  ladderNote.textContent='At '+Chem.sig(mwDa/1000,5)+' kDa, 1 mg/mL is '+
+    Chem.sig(1000000/mwDa,5)+' \u00b5M. Halve the weight and you double the molarity for the same mass.';
+}
+document.getElementById('go').addEventListener('click',function(){run(true);});
+Array.prototype.forEach.call(document.querySelectorAll('.calc input'),function(n){
+  n.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run(true);}});});
+[MWU,CONCU].forEach(function(s){s.addEventListener('change',function(){run(true);});});
+Array.prototype.forEach.call(document.querySelectorAll('.chip[data-mw]'),function(c){
+  c.addEventListener('click',function(){MW.value=c.getAttribute('data-mw');MWU.value='1000';run(true);});});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body>
+</html>

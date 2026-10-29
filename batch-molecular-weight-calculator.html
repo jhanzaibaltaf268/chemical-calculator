@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Batch Molecular Weight Calculator</title>
+<meta name="description" content="Compare the molecular weights of several compounds at once: ranked with isomer ties kept, differences, ratios to the lightest, and moles per fixed mass.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; Batch Compare</p>
+    <h1>Batch Molecular Weight Calculator</h1>
+    <p class="standfirst">Several compounds in one pass &mdash; ranked, with ties kept, differences, ratios and the moles you get from a fixed mass of each.</p>
+    <div class="calc">
+      <label for="list">Formulas or names, one per line (up to 25)</label>
+      <textarea id="list" spellcheck="false">water
+glucose
+fructose
+sucrose
+lactose</textarea>
+      <div class="fields" style="margin-top:0.9rem">
+        <div class="field">
+          <label for="mass">Fixed mass to compare (g)</label>
+          <input type="number" id="mass" value="10" step="any" min="0">
+          <p class="hint">The heavier compound always gives fewer moles for the same mass.</p>
+        </div>
+      </div>
+      <div class="go-row">
+        <button class="go" id="go" type="button">Calculate</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-list="water|glucose|fructose|sucrose|lactose">sugars</button>
+        <button class="chip" type="button" data-list="CuSO4|CuSO4&middot;5H2O|MgSO4|MgSO4&middot;7H2O|Na2CO3|Na2CO3&middot;10H2O">hydrate pairs</button>
+        <button class="chip" type="button" data-list="H2O|CO2|NH3|CH4|O2|N2">small gases</button>
+        <button class="chip" type="button" data-list="NaCl|KCl|CaCl2|MgCl2|NH4Cl">chlorides</button>
+        <button class="chip" type="button" data-list="C6H12O6|Co|CO|Xx|2H2O">with bad lines</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <p class="basis">Names are resolved to formulas first. A name covering more than one form is flagged rather than guessed at silently.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel span">
+      <h2>Ranked by molar mass</h2>
+      <div class="scroll"><table id="tbl"></table></div>
+      <p class="cap">Sorted lightest first on unrounded values. &ldquo;Next&rdquo; is the gap to the next heavier distinct weight.</p>
+    </div>
+    <div class="panel">
+      <h2>Ties and isomers</h2>
+      <div id="ties"></div>
+      <p class="cap">Two compounds with one formula weigh the same. A tie is information, not a duplicate to delete.</p>
+    </div>
+    <div class="panel">
+      <h2>Lines not calculated</h2>
+      <div id="errs"></div>
+      <p class="cap">A bad line is reported by its number. The rest of the batch still calculates.</p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">What a comparison should actually tell you</h2>
+    <p>A sorted column of numbers is half the job. For each compound you want the rank with ties marked, the gap to the next heavier one, the ratio to the lightest, and the moles a fixed mass gives &mdash; because that last one is what you weigh.</p>
+
+    <h3>Worked by hand: the sugars batch</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Rank</th><th>Compound</th><th>Formula</th><th>g/mol</th><th>Ratio</th><th>mol in 10 g</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1</td><td>Water</td><td class="mono">H<sub>2</sub>O</td><td class="mono">18.015</td><td class="mono">1.00&times;</td><td class="mono">0.5551</td></tr>
+        <tr><td class="mono">2=</td><td>Glucose</td><td class="mono">C<sub>6</sub>H<sub>12</sub>O<sub>6</sub></td><td class="mono">180.156</td><td class="mono">10.00&times;</td><td class="mono">0.0555</td></tr>
+        <tr><td class="mono">2=</td><td>Fructose</td><td class="mono">C<sub>6</sub>H<sub>12</sub>O<sub>6</sub></td><td class="mono">180.156</td><td class="mono">10.00&times;</td><td class="mono">0.0555</td></tr>
+        <tr><td class="mono">4=</td><td>Sucrose</td><td class="mono">C<sub>12</sub>H<sub>22</sub>O<sub>11</sub></td><td class="mono">342.297</td><td class="mono">19.00&times;</td><td class="mono">0.0292</td></tr>
+        <tr><td class="mono">4=</td><td>Lactose</td><td class="mono">C<sub>12</sub>H<sub>22</sub>O<sub>11</sub></td><td class="mono">342.297</td><td class="mono">19.00&times;</td><td class="mono">0.0292</td></tr>
+      </tbody>
+    </table></div>
+    <p>Glucose and fructose tie, and so do sucrose and lactose, because each pair shares a formula. Molecular weight cannot separate isomers, and a batch that quietly dropped the second of each pair would be hiding that.</p>
+    <p>The two gaps happen to be identical: 180.156 &minus; 18.015 and 342.297 &minus; 180.156 both come to <span class="mono">162.141</span> g/mol, which is C<sub>6</sub>H<sub>10</sub>O<sub>5</sub> &mdash; a sugar unit less a water, twice over.</p>
+
+    <h3>Heavier means fewer moles</h3>
+    <p>10 g of glucose is 0.0555 mol; 10 g of sucrose is 0.0292 mol, about half. For a fixed mass, moles move the opposite way to molar mass &mdash; which is the whole reason to compare in moles rather than grams.</p>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Before you paste</h2>
+    <ol>
+      <li><strong>One compound per line.</strong></li>
+      <li><strong>Check capitals.</strong> <span class="mono">Co</span> is cobalt, <span class="mono">CO</span> is carbon monoxide. Both parse, so neither is flagged &mdash; only you can tell which you meant.</li>
+      <li><strong>Check hydrates and salt forms.</strong> CuSO<sub>4</sub> understates CuSO<sub>4</sub>&middot;5H<sub>2</sub>O by about 36%.</li>
+      <li><strong>Ties are isomers, not errors.</strong></li>
+      <li><strong>Sort by weight, not alphabetically.</strong> C<sub>12</sub>&hellip; sorts before C<sub>6</sub>&hellip; alphabetically and is heavier.</li>
+      <li><strong>Round for display only.</strong> Two weights within 0.1 g/mol can swap order after early rounding.</li>
+      <li><strong>A bad line should be flagged, not fatal.</strong></li>
+    </ol>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>Why do two rows show the same weight?</summary><div class="ans"><p>They are isomers or duplicates. Glucose and fructose are both C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> = 180.156 g/mol. One formula always gives one weight, but one weight does not guarantee one compound.</p></div></details>
+    <details class="faq"><summary>What happens to a mistyped line?</summary><div class="ans"><p>It is listed by line number with the reason, and every other line still calculates.</p></div></details>
+    <details class="faq"><summary>Does it sort by formula or by weight?</summary><div class="ans"><p>By weight, on unrounded values.</p></div></details>
+    <details class="faq"><summary>Can I paste names instead of formulas?</summary><div class="ans"><p>Yes. Names are resolved first, and a name covering several forms &mdash; copper sulfate, washing soda &mdash; is flagged so you can pick the right one.</p></div></details>
+    <details class="faq"><summary>How many lines can I paste?</summary><div class="ans"><p>Up to 25 at a time. Split a longer list into chunks.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="dilution-calculator.html">Dilution</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="dilution-calculator.html">Next: Dilution</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var LIST=document.getElementById('list'),MASS=document.getElementById('mass'),
+    ro=document.getElementById('readout'),big=document.getElementById('big'),
+    unit=document.getElementById('unit'),side=document.getElementById('side'),
+    tbl=document.getElementById('tbl'),ties=document.getElementById('ties'),
+    errs=document.getElementById('errs');
+var LIMIT=25;
+
+function volRow(cells,bold){
+  var tr=document.createElement('tr');
+  cells.forEach(function(c){
+    var td=document.createElement('td');
+    if(c[2]){td.className='mono';}
+    if(bold){td.innerHTML='<strong>'+c[0]+'</strong>';}else{td.textContent=c[0];}
+    if(c[1]){td.appendChild(c[1]);}
+    tr.appendChild(td);});
+  return tr;
+}
+
+function run(animate){
+  var lines=LIST.value.split('\n');
+  var mass=parseFloat(MASS.value);
+  if(!isFinite(mass)||mass<=0){mass=10;MASS.value=10;}
+
+  var ok=[],bad=[],amb=[],used=0;
+  lines.forEach(function(raw,i){
+    var s=raw.trim();
+    if(!s){return;}
+    if(used>=LIMIT){bad.push([i+1,s,'Over the '+LIMIT+'-line limit for one batch.']);return;}
+    used++;
+    try{
+      var a=Chem.analyse(s);
+      var hits=Chem.lookupName(s);
+      if(hits.length>1){amb.push([s,hits]);}
+      ok.push({line:i+1,raw:s,a:a,name:hits.length?hits[0].n:null});
+    }catch(e){bad.push([i+1,s,e.message]);}
+  });
+
+  Chem.clear(tbl);Chem.clear(ties);Chem.clear(errs);
+
+  if(!ok.length){
+    ro.classList.add('bad');
+    big.textContent=bad.length?'No line could be calculated.':'Paste at least one formula or name.';
+    unit.textContent='';side.textContent='';
+  }else{
+    ro.classList.remove('bad');
+    unit.textContent='compounds ranked';
+    side.textContent=Chem.sig(mass,5)+' g basis'+(bad.length?' \u00b7 '+bad.length+' line'+(bad.length===1?'':'s')+' skipped':'');
+    Chem.countTo(big,ok.length,animate,0);
+  }
+
+  ok.sort(function(x,y){return x.a.mw-y.a.mw;});
+  var distinct=[];
+  ok.forEach(function(r){
+    if(!distinct.length||Math.abs(distinct[distinct.length-1]-r.a.mw)>1e-9){distinct.push(r.a.mw);}
+  });
+  var lightest=ok.length?ok[0].a.mw:1;
+
+  var rank={},n=1;
+  ok.forEach(function(r,i){
+    var key=r.a.mw.toFixed(6);
+    if(!(key in rank)){rank[key]=i+1;}
+  });
+  var counts={};
+  ok.forEach(function(r){var k=r.a.mw.toFixed(6);counts[k]=(counts[k]||0)+1;});
+
+  var head=document.createElement('thead'),hr=document.createElement('tr');
+  ['#','Input','Formula','g/mol','','Next','Ratio','mol in '+Chem.sig(mass,4)+' g']
+    .forEach(function(h){var c=document.createElement('th');c.textContent=h;hr.appendChild(c);});
+  head.appendChild(hr);tbl.appendChild(head);
+  var tb=document.createElement('tbody');
+  var heaviest=ok.length?ok[ok.length-1].a.mw:1;
+
+  ok.forEach(function(r,i){
+    var key=r.a.mw.toFixed(6);
+    var tied=counts[key]>1;
+    var nextUp=null;
+    for(var d=0;d<distinct.length;d++){
+      if(distinct[d]-r.a.mw>1e-9){nextUp=distinct[d];break;}
+    }
+    var tr=document.createElement('tr');
+    function cell(txt,mono){var td=document.createElement('td');td.textContent=txt;
+      if(mono){td.className='mono';}tr.appendChild(td);return td;}
+    cell(rank[key]+(tied?'=':''),true);
+    cell(r.name||r.raw,false);
+    cell(r.a.input,true);
+    cell(Chem.f3(r.a.mw),true);
+    var bar=document.createElement('td');
+    var track=Chem.el('div','track');track.style.minWidth='3.5rem';
+    var fill=Chem.el('div','fill');track.appendChild(fill);bar.appendChild(track);
+    tr.appendChild(bar);
+    setTimeout(function(){fill.style.width=(r.a.mw/heaviest*100)+'%';},animate?60+i*55:0);
+    cell(nextUp===null?'\u2014':'+'+Chem.f3(nextUp-r.a.mw),true);
+    cell(Chem.fx(r.a.mw/lightest,2)+'\u00d7',true);
+    cell(Chem.sig(mass/r.a.mw,4),true);
+    if(animate){Chem.stagger(tr,'anim-rise',i,45);}
+    tb.appendChild(tr);
+  });
+  tbl.appendChild(tb);
+
+  var tieKeys=Object.keys(counts).filter(function(k){return counts[k]>1;});
+  if(!tieKeys.length){
+    ties.appendChild(Chem.el('p','cap','No two compounds in this batch share a weight.'));
+  }else{
+    tieKeys.forEach(function(k){
+      var members=ok.filter(function(r){return r.a.mw.toFixed(6)===k;});
+      var d=Chem.el('div','alert ok');
+      d.innerHTML='<strong>'+Chem.f3(parseFloat(k))+' g/mol</strong> \u2014 '+
+        members.map(function(m){return (m.name||m.raw);}).join(', ')+
+        '. Same formula ('+members[0].a.input+'), so the same weight. Kept, not merged.';
+      ties.appendChild(d);
+    });
+  }
+  amb.forEach(function(p){
+    var d=Chem.el('div','alert');
+    d.innerHTML='<strong>&ldquo;'+p[0]+'&rdquo; covers '+p[1].length+' forms.</strong> Calculated as '+
+      p[1][0].n+(p[1][0].form?' ('+p[1][0].form+')':'')+
+      '. Type the formula if you meant another.';
+    ties.appendChild(d);
+  });
+
+  if(!bad.length){
+    errs.appendChild(Chem.el('p','cap','Every line calculated.'));
+  }else{
+    bad.forEach(function(b){
+      var d=Chem.el('div','alert');
+      d.innerHTML='<strong>Line '+b[0]+':</strong> <span class="mono">'+
+        String(b[1]).replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</span> &mdash; '+b[2];
+      errs.appendChild(d);
+    });
+  }
+}
+document.getElementById('go').addEventListener('click',function(){run(true);});
+MASS.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run(true);}});
+Array.prototype.forEach.call(document.querySelectorAll('.chip[data-list]'),function(c){
+  c.addEventListener('click',function(){
+    LIST.value=c.getAttribute('data-list').split('|').join('\n');run(true);});});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body>
+</html>
