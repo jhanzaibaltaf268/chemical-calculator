@@ -9,6 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.pm-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.pm-fill{height:100%;transform-origin:left;animation:pmgrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes pmgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.pm-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -147,6 +153,35 @@
       </tbody>
     </table></div>
     <p class="mono" style="font-size:0.85rem;color:var(--ink-faint)">BSA is quoted between 66,430 and 66,500 Da depending on the source. The effect here is under 0.2%, but for other proteins a datasheet weight and a sequence prediction can differ enough to matter.</p>
+    <h3>Same mg/mL, different molecule counts</h3>
+    <p>1 mg/mL of lysozyme (14,310 Da) is 69.88 &micro;M. 1 mg/mL of IgG (150,000 Da) is 6.67 &micro;M. Same mass concentration, but the lysozyme solution holds 69.88 &divide; 6.67 = <strong>10.48 times as many molecules per mL</strong> &mdash; 4.21 &times; 10<sup>16</sup> against 4.01 &times; 10<sup>15</sup>. That gap is the whole reason for the conversion: comparing two proteins by mg/mL compares their masses, not their molecule counts, and activity, binding and stoichiometry all run on molecules.</p>
+    <p><strong>Lysozyme, 1 mg/mL</strong> &mdash; 69.88 &micro;M</p>
+    <div class="pm-track"><div class="pm-fill" style="width:100%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>IgG, 1 mg/mL</strong> &mdash; 6.67 &micro;M</p>
+    <div class="pm-track"><div class="pm-fill" style="width:9.5%;animation-delay:.25s;background:#d97b29"></div></div>
+    <p class="cap">Identical mass concentrations, tenfold different molarities.</p>
+
+    <h3>Where the mg/mL figure comes from</h3>
+    <p>The mg/mL figure itself often comes from absorbance: A280 with an extinction coefficient gives mass concentration, and the conversion to &micro;M still needs the molecular weight after that. The weight itself comes from the sequence &mdash; UniProtKB lists it, or the <a href="protein-molecular-weight-calculator.html">Protein Molecular Weight calculator</a> computes it from the one-letter sequence &mdash; but the sequence weight is the starting point, not the final answer: tags, glycosylation and the mature-vs-precursor question (the traps above) still change it.</p>
+
+    <h3>The wrong weight moves the answer directly</h3>
+    <p>&micro;M scales inversely with the weight entered, so a weight error becomes a molarity error of the same size, inverted. A 45 kDa protein entered as its 47 kDa precursor (signal peptide still counted) gives a &micro;M figure 4.26% low. A GFP fusion counted without its ~27 kDa tag &mdash; 45 kDa entered for a 72 kDa construct &mdash; gives a &micro;M figure 37.5% low. The BSA range (66,430&ndash;66,500 Da) moves the answer by only 0.11%, which is why small source differences are harmless and construct differences are not.</p>
+
+    <h3>Purity, once more, at 80%</h3>
+    <p>A vial labelled 1 mg that is 80% protein holds 0.8 mg. At 45 kDa in 1 mL, the uncorrected figure is 1,000 &divide; 45 = 22.22 &micro;M; the corrected figure is 800 &divide; 45 = <strong>17.78 &micro;M</strong>, 20% lower. Purity scales both mg/mL and &micro;M by the same factor &mdash; it is not a correction that applies to one and not the other. And the step from that stock to a working solution is the <a href="dilution-calculator.html">Dilution calculator&rsquo;s</a> C&#8321;V&#8321; = C&#8322;V&#8322;, as the working-dilution panel above already shows.</p>
+    <p><strong>Labelled</strong> &mdash; 1.0 mg</p>
+    <div class="pm-track"><div class="pm-fill" style="width:100%;animation-delay:.1s;background:#5aa469"></div></div>
+    <p><strong>Actual protein at 80%</strong> &mdash; 0.8 mg</p>
+    <div class="pm-track"><div class="pm-fill" style="width:80%;animation-delay:.25s;background:#d97b29"></div></div>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>1 mg/mL of lysozyme (14,310 Da) and 1 mg/mL of IgG (150,000 Da): what is each in &micro;M, and how many times more molecules does the lysozyme solution hold?</li>
+      <li>A vial labelled 1 mg at 80% purity, 45 kDa, made up to 1 mL: what is the corrected &micro;M?</li>
+      <li>A 45 kDa construct entered as 72 kDa with its GFP fusion counted: by what percentage is the &micro;M figure off?</li>
+    </ol>
+    <p>Answers: (1) 69.88 &micro;M and 6.67 &micro;M; 10.48 times more molecules. (2) 800 &divide; 45 = 17.78 &micro;M (uncorrected: 22.22 &micro;M). (3) 45 &divide; 72 = 0.625, so 37.5% low &mdash; and entering the precursor at 47 kDa instead gives 4.26% low.</p>
+    <p class="cap">Sources: UniProtKB sequence weights; the page&rsquo;s own arithmetic throughout.</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -159,6 +194,8 @@
       <li><strong>Monomer or oligomer?</strong> State the basis. Dimer &micro;M is monomer &micro;M divided by two.</li>
       <li><strong>Salt or hydrate form?</strong> Divide by the salt molar mass, not the free base &mdash; typically a 10% difference.</li>
       <li><strong>Purity applied once?</strong> Follow the certificate&rsquo;s own definition and do not count it twice.</li>
+      <li><strong>Comparing two proteins by mg/mL.</strong> 1 mg/mL of lysozyme is 69.88 &micro;M; 1 mg/mL of IgG is 6.67 &micro;M. Same mass, tenfold different molecule counts &mdash; compare in &micro;M whenever molecules matter.</li>
+      <li><strong>Average against monoisotopic weight.</strong> The &micro;M figure inherits whichever basis you enter. For a 45 kDa protein the gap is small, but it is still a basis to state, not a detail to ignore &mdash; especially when the assay counts whole molecules.</li>
     </ol>
     <div class="flagnote"><strong>Da against kDa is the expensive one.</strong> Entering 66.5 where daltons are expected gives a molarity 1,000&times; too high. No amount of careful rounding fixes a unit error &mdash; check the unit first. Likewise, 1 &micro;g/&micro;L <em>is</em> 1 mg/mL, not a thousandth of it, and &micro;M means &micro;mol/L, never &micro;mol/mL.</div>
   </section>
@@ -170,30 +207,12 @@
     <details class="faq"><summary>Monomer or dimer molecular weight?</summary><div class="ans"><p>State the basis. The usual convention is monomer weight and monomer molarity; dimer molarity is that divided by the number of subunits.</p></div></details>
     <details class="faq"><summary>How much protein do I weigh for a target molarity?</summary><div class="ans"><p>Mass in grams = molarity (mol/L) &times; volume (L) &times; MW (g/mol). For 10 mL of 20 &micro;M at 50 kDa, 10 mg of actual protein.</p></div></details>
     <details class="faq"><summary>Why does my A280 disagree with my Bradford?</summary><div class="ans"><p>They measure different things. A280 depends on the extinction coefficient and is inflated by nucleic acids and scattering; Bradford and BCA responses vary between proteins and react to detergents and reductants. Check the molecular weight basis, the blank and the dilution factor before blaming either method.</p></div></details>
+    <details class="faq"><summary>Why is 1 mg/mL of lysozyme not 1 mg/mL of IgG in &micro;M?</summary><div class="ans"><p>Because &micro;M divides by molecular weight. Lysozyme at 14,310 Da gives 69.88 &micro;M; IgG at 150,000 Da gives 6.67 &micro;M &mdash; 10.48 times fewer molecules at the same mass concentration.</p></div></details>
+    <details class="faq"><summary>Where do I get the molecular weight?</summary><div class="ans"><p>From the sequence: UniProtKB lists it, or the <a href="protein-molecular-weight-calculator.html">Protein Molecular Weight calculator</a> computes it from the one-letter sequence. Then check tags, glycosylation and the mature form against your actual construct.</p></div></details>
+    <details class="faq"><summary>How much does a wrong weight cost?</summary><div class="ans"><p>&micro;M scales inversely with the weight entered. A 45 kDa construct entered as 72 kDa with its GFP fusion gives a &micro;M figure 37.5% low; a precursor entered at 47 kDa gives 4.26% low; the BSA source range (66,430&ndash;66,500 Da) costs only 0.11%.</p></div></details>
+    <details class="faq"><summary>Does purity change &micro;M or just mg/mL?</summary><div class="ans"><p>Both, by the same factor. A vial labelled 1 mg at 80% purity holds 0.8 mg, so at 45 kDa in 1 mL the corrected figure is 17.78 &micro;M, not the uncorrected 22.22 &micro;M.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="gas-volume-calculator.html">Gas Volume</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
