@@ -9,6 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.el-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.el-fill{height:100%;transform-origin:left;animation:elgrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes elgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.el-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -124,6 +130,44 @@
         <tr><td>CuSO<sub>4</sub>&middot;5H<sub>2</sub>O</td><td class="mono">249.677</td><td class="mono">Cu 25.45, S 12.84, H 4.04, O 57.67</td></tr>
       </tbody>
     </table></div>
+    <h3>The reverse direction, worked</h3>
+    <p>Want 10 g of copper from copper(II) oxide? CuO is 63.546 &divide; 79.545 = 79.89% copper, so the compound to weigh is 10 &divide; 0.7989 = <strong>12.52 g of CuO</strong>. And that 12.52 g also brings 12.52 &times; 20.11% = <strong>2.52 g of oxygen</strong> &mdash; the reverse mode&rsquo;s &ldquo;also brings&rdquo; rows, which matter whenever the other elements are contaminants, reactants, or part of the next step. The fractions are the <a href="percent-composition-calculator.html">Percent Composition calculator&rsquo;s</a> output; the sample mass just scales them, in either direction.</p>
+
+    <h3>Elemental against oxide labelling</h3>
+    <p>Fertilizer labels report oxides, not elements, and the gap is large. P<sub>2</sub>O<sub>5</sub> is 2 &times; 30.974 + 5 &times; 15.999 = 141.943 g/mol, of which phosphorus is 61.948 &divide; 141.943 = 43.64%. So a fertilizer labelled 20% P<sub>2</sub>O<sub>5</sub> carries only 20 &times; 43.64% = <strong>8.73% elemental phosphorus</strong> &mdash; and supplying 10 g of elemental P from it needs 10 &divide; 0.0873 = <strong>114.6 g of fertilizer</strong>. Potash is the same story: K<sub>2</sub>O is 94.195 g/mol at 83.02% potassium, so a 60% K<sub>2</sub>O potash is 49.81% elemental K. Bars are the P<sub>2</sub>O<sub>5</sub> label against the elemental reality, scaled to the label.</p>
+    <p><strong>Label: 20% P&#8322;O&#8325;</strong></p>
+    <div class="el-track"><div class="el-fill" style="width:100%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>Elemental P inside: 8.73%</strong></p>
+    <div class="el-track"><div class="el-fill" style="width:43.7%;animation-delay:.25s;background:#d97b29"></div></div>
+    <p class="cap">The label number is not the element number. Convert before comparing fertilizers.</p>
+
+    <h3>250 g of CaCO<sub>3</sub>, as bars</h3>
+    <p>Calcium 100.10 g, carbon 30.00 g, oxygen 119.90 g &mdash; the page&rsquo;s own worked values, scaled to oxygen.</p>
+    <p><strong>Calcium</strong> &mdash; 100.10 g</p>
+    <div class="el-track"><div class="el-fill" style="width:83.5%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>Carbon</strong> &mdash; 30.00 g</p>
+    <div class="el-track"><div class="el-fill" style="width:25.0%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p><strong>Oxygen</strong> &mdash; 119.90 g</p>
+    <div class="el-track"><div class="el-fill" style="width:100%;animation-delay:.4s;background:#d97b29"></div></div>
+    <p class="cap">One fifth of the atoms, two fifths of the mass: calcium again.</p>
+
+    <h3>The check that catches broken arithmetic</h3>
+    <p>Take 652.4 g of MgO: MgO is 24.305 + 15.999 = 40.304 g/mol, so the sample holds 652.4 &divide; 40.304 = 16.187 mol, giving 16.187 &times; 24.305 = <strong>393.4 g of Mg</strong> and 16.187 &times; 15.999 = <strong>259.0 g of O</strong> &mdash; and 393.4 + 259.0 = 652.4, the sample mass, exactly. If a worked answer&rsquo;s parts total far more than the sample &mdash; hundreds of grams more, not hundredths from rounding &mdash; the arithmetic is wrong, not the method. Add the parts back, every time.</p>
+
+    <h3>From a solution to an element</h3>
+    <p>A dissolved compound needs one step first: concentration &times; volume = compound mass, then the element mass as usual. Worked: 250 mL of 2.00 M CaCl<sub>2</sub> holds 0.250 &times; 2.00 = 0.500 mol, which is 0.500 &times; 110.978 = 55.489 g of CaCl<sub>2</sub>; calcium is 40.078 &divide; 110.978 = 36.11% of that, so <strong>20.04 g of calcium</strong>. The <a href="molarity-calculator.html">Molarity calculator</a> handles the concentration-and-volume step.</p>
+
+    <h3>Purity, worked once in each direction</h3>
+    <p>Purity scales once, in both directions. Forward: 250 g of CaCO<sub>3</sub> at 90% purity holds 250 &times; 40.04% &times; 0.90 = <strong>90.09 g of calcium</strong>. Reverse: 100 g of calcium from the same 90%-pure carbonate needs 100 &divide; (0.4004 &times; 0.90) = <strong>277.5 g</strong> &mdash; not 249.7 g, which is the pure-compound figure. Forgetting the purity factor in reverse is the same error as applying it twice forward.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>How much CuO must you weigh for 10 g of copper, and how much oxygen comes with it?</li>
+      <li>A fertilizer is labelled 20% P<sub>2</sub>O<sub>5</sub>. What is its elemental phosphorus percentage, and how much fertilizer supplies 10 g of P?</li>
+      <li>250 mL of 2.00 M CaCl<sub>2</sub>: how many grams of calcium does it hold?</li>
+    </ol>
+    <p>Answers: (1) 10 &divide; 0.7989 = 12.52 g of CuO, bringing 2.52 g of O. (2) 8.73% elemental P; 10 &divide; 0.0873 = 114.6 g of fertilizer. (3) 0.500 mol &times; 110.978 = 55.489 g of CaCl<sub>2</sub>; &times; 36.11% = 20.04 g of Ca.</p>
+    <p class="cap">Sources: IUPAC abridged standard atomic weights, one canonical set across every page here.</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -136,6 +180,8 @@
       <li><strong>Applying purity twice.</strong> Scale once, and follow the certificate&rsquo;s own definition.</li>
       <li><strong>Mixing mg and g.</strong> Convert before multiplying, not after.</li>
       <li><strong>An element that is not in the formula.</strong> Its mass is 0 g. That is an answer, not an error.</li>
+      <li><strong>Forgetting the &ldquo;also brings&rdquo; rows.</strong> Weighing 12.52 g of CuO for 10 g of copper also brings 2.52 g of oxygen. If the other elements feed the next step or count as contamination, they need accounting, not ignoring.</li>
+      <li><strong>Forgetting purity in reverse.</strong> 100 g of calcium needs 249.7 g of pure CaCO<sub>3</sub> but 277.5 g of 90%-pure carbonate. Divide by the fraction times the purity, not by the fraction alone.</li>
     </ul>
   </section>
 
@@ -146,30 +192,12 @@
     <details class="faq"><summary>How does a hydrate change the answer?</summary><div class="ans"><p>The water&rsquo;s atoms count. In CuSO<sub>4</sub>&middot;5H<sub>2</sub>O water is 36.08% of the mass, and the hydrogen and oxygen rows include it.</p></div></details>
     <details class="faq"><summary>What if my sample is not pure?</summary><div class="ans"><p>Set the purity and every element mass scales by that fraction. A 90%-pure 250 g sample of CaCO<sub>3</sub> holds 90.09 g of calcium.</p></div></details>
     <details class="faq"><summary>Why don&rsquo;t my element masses add up to the sample mass?</summary><div class="ans"><p>Rounding. The unrounded values add up exactly; keep full precision until the last step and say which figures are rounded.</p></div></details>
+    <details class="faq"><summary>How much fertilizer do I weigh for 10 g of elemental phosphorus?</summary><div class="ans"><p>It depends on the label. From a 20% P<sub>2</sub>O<sub>5</sub> fertilizer, which is 8.73% elemental P, you need 10 &divide; 0.0873 = 114.6 g. Never weigh the elemental target against the oxide percentage.</p></div></details>
+    <details class="faq"><summary>How do I get element mass from a solution?</summary><div class="ans"><p>Concentration &times; volume gives the compound mass first, then the element mass as usual. 250 mL of 2.00 M CaCl<sub>2</sub> holds 55.489 g of CaCl<sub>2</sub>, hence 20.04 g of calcium. The <a href="molarity-calculator.html">Molarity calculator</a> handles the first step.</p></div></details>
+    <details class="faq"><summary>What does &ldquo;also brings&rdquo; mean in reverse mode?</summary><div class="ans"><p>The other elements in the compound you weigh. Weighing 12.52 g of CuO for 10 g of copper also brings 2.52 g of oxygen &mdash; part of the weighed material, whether you wanted it or not.</p></div></details>
+    <details class="faq"><summary>How does purity change the reverse calculation?</summary><div class="ans"><p>Divide by the mass fraction times the purity. 100 g of calcium needs 100 &divide; (0.4004 &times; 0.90) = 277.5 g of 90%-pure CaCO<sub>3</sub>, against 249.7 g of the pure salt.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="batch-molecular-weight-calculator.html">Batch Compare</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
