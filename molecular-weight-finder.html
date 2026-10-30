@@ -9,6 +9,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.fd-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.fd-fill{height:100%;transform-origin:left;animation:fdgrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes fdgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.fd-pill{display:inline-block;background:#eef3f6;border:1px solid #c9d6dd;border-radius:999px;padding:.3rem .8rem;margin:0 .2rem .4rem 0;font-weight:600}
+@media (prefers-reduced-motion:reduce){.fd-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -88,6 +95,33 @@
 
     <h3>Aspirin, resolved by name</h3>
     <p>Aspirin is the trade name for acetylsalicylic acid, C<sub>9</sub>H<sub>8</sub>O<sub>4</sub>. Both names mean the same compound in the same form, so there is one answer: 9 &times; 12.011 + 8 &times; 1.008 + 4 &times; 15.999 = <strong>180.159 g/mol</strong>. A 500 mg tablet of pure aspirin is 0.500 &divide; 180.159 = 2.78 mmol.</p>
+    <h3>Washing soda, the second ambiguous name</h3>
+    <p>Copper sulfate is not the only name with two answers. Washing soda returns both the anhydrous salt and the decahydrate: Na<sub>2</sub>CO<sub>3</sub> at 2 &times; 22.990 + 12.011 + 3 &times; 15.999 = <strong>105.988 g/mol</strong>, and Na<sub>2</sub>CO<sub>3</sub>&middot;10H<sub>2</sub>O at 105.988 + 10 &times; 18.015 = <strong>286.138 g/mol</strong> &mdash; where the ten waters are 180.150 g/mol, about 63% of the total. The decahydrate weighs nearly three times the anhydrous salt under the same name. The label, again, decides.</p>
+    <p><strong>Copper sulfate, anhydrous</strong> &mdash; 159.602 g/mol</p>
+    <div class="fd-track"><div class="fd-fill" style="width:63.9%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>Copper sulfate, pentahydrate</strong> &mdash; 249.677 g/mol</p>
+    <div class="fd-track"><div class="fd-fill" style="width:100%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p class="cap">The same name, two bars: the waters are 36% of the pentahydrate&rsquo;s weight.</p>
+
+    <h3>One formula, many names &mdash; and one name, no compound</h3>
+    <p>Names fan out in both directions. Aspirin, acetylsalicylic acid and ASA are one compound at 180.159 g/mol; baking soda, sodium bicarbonate and sodium hydrogen carbonate are one compound at 84.006 g/mol. Sucrose and lactose are the second isomer pair after glucose and fructose: both C<sub>12</sub>H<sub>22</sub>O<sub>11</sub>, both 12 &times; 12.011 + 22 &times; 1.008 + 11 &times; 15.999 = <strong>342.297 g/mol</strong>. And some familiar words are not compounds at all: typing &ldquo;sugar&rdquo; alone returns near matches, not a weight, because sugar is a class &mdash; blood sugar, fruit sugar, table sugar and milk sugar are four different compounds. A name lookup that silently picked one of them would be guessing.</p>
+    <p aria-hidden="true"><span class="fd-pill anim-pop" style="animation-delay:.05s">aspirin &rarr; C&#8329;H&#8328;O&#8324;</span><span class="fd-pill anim-pop" style="animation-delay:.3s">baking soda &rarr; NaHCO&#8323;</span><span class="fd-pill anim-pop" style="animation-delay:.55s">blue vitriol &rarr; CuSO&#8324;&middot;5H&#8322;O</span><span class="fd-pill anim-pop" style="animation-delay:.8s">sugar &rarr; near matches</span></p>
+    <p class="cap">Each name resolves before any arithmetic: a compound, a form, or an honest &ldquo;not one compound&rdquo;.</p>
+
+    <h3>The name-to-weight chain, end to end</h3>
+    <p>Every lookup on this page runs the same four steps. Worked for epsom salt: (1) the name resolves to magnesium sulfate heptahydrate, MgSO<sub>4</sub>&middot;7H<sub>2</sub>O &mdash; the name alone fixes the form here, unlike copper sulfate; (2) the formula splits into MgSO<sub>4</sub> plus seven waters; (3) MgSO<sub>4</sub> is 24.305 + 32.06 + 4 &times; 15.999 = 120.361 g/mol, and the waters are 7 &times; 18.015 = 126.105 g/mol; (4) the total is <strong>246.466 g/mol</strong>. If you already know the formula and want to skip the lookup, the <a href="molar-mass-calculator.html">Molar Mass calculator</a> takes it directly. Once the formula is settled, the <a href="percent-composition-calculator.html">Percent Composition calculator</a> breaks it into mass shares.</p>
+
+    <h3>When the counterion is the trap</h3>
+    <p>A hydrochloride adds HCl, 36.458 g/mol, to the free base. The page&rsquo;s &ldquo;roughly 15%&rdquo; is exact for a base near 207 g/mol: 36.458 &divide; (206.6 + 36.458) = 0.150. For a lighter base the share is bigger, for a heavier base smaller &mdash; so the trap scales with the drug, and the only safe move is the label: if it does not state the salt, the weight does not state the dose.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>Washing soda, decahydrate: Na<sub>2</sub>CO<sub>3</sub> is 105.988 g/mol. What is Na<sub>2</sub>CO<sub>3</sub>&middot;10H<sub>2</sub>O, and what share of it is water?</li>
+      <li>Epsom salt is MgSO<sub>4</sub>&middot;7H<sub>2</sub>O. MgSO<sub>4</sub> is 120.361 g/mol. What is the heptahydrate?</li>
+      <li>A free base weighs 206.6 g/mol. What does its hydrochloride weigh, and what share of the salt is HCl?</li>
+    </ol>
+    <p>Answers: (1) 105.988 + 180.150 = 286.138 g/mol; water is 180.150 &divide; 286.138 = 63.0%. (2) 120.361 + 126.105 = 246.466 g/mol. (3) 206.6 + 36.458 = 243.058 g/mol; HCl is 36.458 &divide; 243.058 = 15.0%.</p>
+    <p class="cap">Sources: IUPAC abridged standard atomic weights, one canonical set across every page here.</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -98,6 +132,8 @@
       <li><strong>Could the same formula be a different compound?</strong> Glucose and fructose are both 180.156 g/mol. The name separates them; the formula cannot.</li>
       <li><strong>Is it a mixture or a polymer?</strong> Gasoline, starch, steel and milk have no single molecular weight. &ldquo;No single value&rdquo; is the correct answer, not a number.</li>
       <li><strong>Element, compound or ion?</strong> Iron is 55.845; iron(III) oxide is 159.687. Roman numerals are oxidation states, not atom counts.</li>
+      <li><strong>Trusting the first match for an ambiguous name.</strong> Copper sulfate, washing soda and magnesium sulfate each return more than one form, and the page shows the first while listing the rest. The first is not the right one by default &mdash; the label is.</li>
+      <li><strong>A class word typed as a compound.</strong> Sugar, protein, starch and gasoline are classes, mixtures or polymers, not compounds. The page answers with near matches or &ldquo;no single value&rdquo; rather than a number, and that refusal is the correct result.</li>
     </ol>
     <div class="flagnote"><strong>Forgetting the counterion.</strong> A hydrochloride adds HCl, 36.458 g/mol, to the free base. Weighing by the base weight understates the moles of salt you actually have &mdash; roughly 15% for many drugs.</div>
   </section>
@@ -110,30 +146,13 @@
     <details class="faq"><summary>What if two compounds share a formula?</summary><div class="ans"><p>They weigh the same. Glucose and fructose are both 180.156 g/mol. The name tells them apart; the weight cannot.</p></div></details>
     <details class="faq"><summary>Can I look up a brand-name drug?</summary><div class="ans"><p>Only when the name maps to an active ingredient and a salt form. If the result does not state the salt, such as a hydrochloride, do not use it for dosing.</p></div></details>
     <details class="faq"><summary>What happens when the name is not found?</summary><div class="ans"><p>You get near matches or a request for the formula. Returning the wrong compound silently is worse than returning nothing.</p></div></details>
+    <details class="faq"><summary>What is the difference between a trade name and a systematic name?</summary><div class="ans"><p>Only the naming system. Aspirin is the trade name, acetylsalicylic acid the systematic name, and both resolve to C<sub>9</sub>H<sub>8</sub>O<sub>4</sub> = 180.159 g/mol. Blue vitriol is the old trade-style name for copper(II) sulfate pentahydrate, 249.677 g/mol. The weight follows the compound, not the name&rsquo;s style.</p></div></details>
+    <details class="faq"><summary>Why do I get several matches for one name?</summary><div class="ans"><p>Because the name covers several forms. Copper sulfate returns the anhydrous salt (159.602 g/mol) and the pentahydrate (249.677 g/mol); washing soda returns the anhydrous salt (105.988 g/mol) and the decahydrate (286.138 g/mol). Pick the form printed on your label.</p></div></details>
+    <details class="faq"><summary>What happens when I type a mixture or a polymer?</summary><div class="ans"><p>You get &ldquo;no single molecular weight&rdquo; and the reason: gasoline is a mixture of hydrocarbons, starch a polymer of variable chain length, steel an alloy. A single number for any of them would be invented, so the page refuses instead.</p></div></details>
+    <details class="faq"><summary>Can I type a formula here instead of a name?</summary><div class="ans"><p>Yes. When a name is not in the library, the page tries the input as a formula and calculates that. If you already know the formula, the <a href="molar-mass-calculator.html">Molar Mass calculator</a> takes it directly without the lookup step.</p></div></details>
+    <details class="faq"><summary>How do I check a drug&rsquo;s salt form before weighing?</summary><div class="ans"><p>Read the label for the salt: hydrochloride, sulfate, sodium, or nothing stated. A hydrochloride adds 36.458 g/mol to the free base &mdash; about 15% for a base near 207 g/mol. If the label does not state a salt, do not use the free-base weight for dosing.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="percent-composition-calculator.html">Percent Composition</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
