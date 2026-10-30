@@ -1,4 +1,11 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style>
+.hb-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.hb-fill{height:100%;transform-origin:left;animation:hbgrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes hbgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hb-pill{display:inline-block;background:#eef3f6;border:1px solid #c9d6dd;border-radius:999px;padding:.3rem .8rem;margin:0 .2rem .4rem 0;font-weight:600}
+@media (prefers-reduced-motion:reduce){.hb-fill{animation:none!important}}
+</style>
+</head><body>
 <title>Chemical Weight Calculator</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -137,13 +144,33 @@
       <li><strong>Round once.</strong> Keep full precision until the final line.</li>
       <li><strong>Millilitres are not litres.</strong> 250 mL of 0.500 M NaOH needs 0.125 mol &times; 39.997 = 5.00 g, dissolved and made up <em>to</em> 250 mL.</li>
       <li><strong>Some elements have no standard atomic weight.</strong> Many radioactive and synthetic ones do not; this calculator says so rather than inventing a value.</li>
+      <li><strong>A name that covers several forms.</strong> The calculator above resolves a name to one form; when a name covers several (copper sulfate, washing soda), the Finder page lists them all. Check there before trusting a single answer.</li>
+      <li><strong>A sequence typed as a formula.</strong> Pasting a protein or DNA sequence into the formula box gives nonsense, not a weight. Sequences go to the protein, peptide, amino acid, DNA and RNA pages.</li>
     </ul>
+  </section>
+
+  <section class="block wrap">
+    <h2 class="head">One compound, end to end: glucose</h2>
+    <p>One weight set runs through every tool here, so a number from one page feeds the next without re-checking. Follow glucose through the chain. Its weight is 180.156 g/mol. Ten grams is 10 &divide; 180.156 = <strong>0.0555 mol</strong>. Its composition is C 40.00%, H 6.71%, O 53.28%. A 100 mL solution at 0.5 M needs 0.5 &times; 0.100 &times; 180.156 = <strong>9.01 g</strong>. And if you only knew the name, the <a href="molecular-weight-finder.html">Molecular Weight Finder</a> resolves it to C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> before any of that starts.</p>
+    <p><strong>Carbon</strong> &mdash; 40.00%</p>
+    <div class="hb-track"><div class="hb-fill" style="width:75.1%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>Hydrogen</strong> &mdash; 6.71%</p>
+    <div class="hb-track"><div class="hb-fill" style="width:12.6%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p><strong>Oxygen</strong> &mdash; 53.28%</p>
+    <div class="hb-track"><div class="hb-fill" style="width:100%;animation-delay:.4s;background:#d97b29"></div></div>
+    <p class="cap">Glucose by mass, scaled to oxygen. The <a href="molar-mass-calculator.html">Molar Mass</a>, <a href="grams-to-moles-calculator.html">Grams to Moles</a>, <a href="percent-composition-calculator.html">Percent Composition</a> and <a href="molarity-calculator.html">Molarity</a> pages each carry one step of this thread.</p>
+    <p aria-hidden="true"><span class="hb-pill">finder</span><span class="hb-pill">molar mass</span><span class="hb-pill">grams to moles</span><span class="hb-pill">percent</span><span class="hb-pill">molarity</span></p>
+  </section>
+
+  <section class="block wrap">
+    <h2 class="head">Which tool, when</h2>
+    <p>Start from what you have, not from the directory. Only a name? The <a href="molecular-weight-finder.html">Finder</a> resolves it. A formula and nothing else? The calculator above, or the <a href="molar-mass-calculator.html">Molar Mass</a> page for the full breakdown. A weighed sample? <a href="grams-to-moles-calculator.html">Grams to Moles</a>. Shares inside a sample? <a href="percent-composition-calculator.html">Percent Composition</a> and <a href="element-mass-calculator.html">Element Mass</a>. Several compounds at once? <a href="batch-molecular-weight-calculator.html">Batch Compare</a>, which keeps isomer ties instead of deleting them. A solution to make or dilute? <a href="molarity-calculator.html">Molarity</a> and <a href="dilution-calculator.html">Dilution</a>. A protein in mg/mL? <a href="protein-molarity-calculator.html">Protein Molarity</a>. A gas? <a href="gas-volume-calculator.html">Gas Volume</a> &mdash; and check which STP the question means. A sequence instead of a formula? The <a href="protein-molecular-weight-calculator.html">Protein</a>, <a href="peptide-calculator.html">Peptide</a>, <a href="amino-acid-calculator.html">Amino Acid</a>, <a href="dna-calculator.html">DNA</a> and <a href="rna-calculator.html">RNA</a> pages. No rival set covers the whole chain in one place; this one does, on one weight set.</p>
   </section>
 
   <!-- ===== hub ===== -->
   <section class="block wrap" id="hub">
     <h2 class="head">The rest of the calculators</h2>
-    <p>This page is the hub. Each calculator below is a spoke with its own page: the hub links to all of them, and every spoke links back here and on to the next useful step. Spokes do not cross-link to each other, which keeps the paths clean.</p>
+    <p>This page is the hub. Each calculator below is a spoke with its own page: the hub links to all of them, and every spoke links back here and on to the next useful step. Spokes also link on to each other wherever the next step actually needs them, so the paths follow the work, not just the directory.</p>
     <div class="spokes">
       <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
       <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
@@ -200,6 +227,18 @@
     <details class="faq">
       <summary>What is percent composition for?</summary>
       <div class="ans"><p>Each element&rsquo;s subtotal divided by the total, times 100. It checks a compound&rsquo;s identity against elemental analysis, and gives the element masses in any sample.</p></div>
+    </details>
+    <details class="faq">
+      <summary>Which calculator do I start with?</summary>
+      <div class="ans"><p>From what you have: a name goes to the <a href="molecular-weight-finder.html">Finder</a>; a formula goes to the calculator above or the <a href="molar-mass-calculator.html">Molar Mass</a> page; a sequence goes to the protein, peptide, amino acid, DNA or RNA pages. The &ldquo;Which tool, when&rdquo; section above maps the rest.</p></div>
+    </details>
+    <details class="faq">
+      <summary>Do all the calculators use the same atomic weights?</summary>
+      <div class="ans"><p>Yes &mdash; one IUPAC abridged set across every page here, so a number from one page feeds the next. Other tables differ by hundredths: sulfuric acid is 98.072 here against 98.077 or 98.086 elsewhere. That is an edition effect, not chemistry.</p></div>
+    </details>
+    <details class="faq">
+      <summary>Why do pages link to each other as well as back here?</summary>
+      <div class="ans"><p>Because the next step is often another calculator, not the directory. Each page links on to the step its content actually needs &mdash; grams to moles after a weight, dilution after a stock &mdash; while this hub still lists all sixteen.</p></div>
     </details>
   </section>
 </main>
