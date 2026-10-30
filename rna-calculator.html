@@ -9,6 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.rn-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.rn-fill{height:100%;transform-origin:left;animation:rngrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes rngrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.rn-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -95,6 +101,61 @@
 
     <h3>Worked by hand: AUG, 5&prime;-phosphate</h3>
     <p>A 329.21 + U 306.17 + G 345.22 = 980.60 Da of residues; minus 2 &times; 18.015 = 36.03 Da of waters gives <strong>944.57 Da</strong>. The same sequence as 5&prime;-OH is 944.57 &minus; 79.98 = <strong>864.59 Da</strong> &mdash; the end alone moves the answer by 80 Da, which is why it is never left unstated.</p>
+
+    <h3>Worked by hand: AUG, 5&prime;-OH</h3>
+    <p>The residues and waters are unchanged: A 329.21 + U 306.17 + G 345.22 = 980.60 Da, minus 2 &times; 18.015 = 36.03 Da, giving 944.57 Da on the phosphate basis. Then apply the end: 944.57 &minus; 79.98 = <strong>864.59 Da</strong>. Same three bases, same two bonds &mdash; only the 5&prime; end differs, and the answer drops by 79.98 Da.</p>
+
+    <h3>Worked by hand: AUG + 10 A tail, 5&prime;-phosphate</h3>
+    <p>Residues: 980.60 Da for AUG plus 10 &times; 329.21 = 3,292.10 Da for the tail, giving 4,272.70 Da. The chain is now 13 bases, so waters are 12 &times; 18.015 = 216.18 Da. Total: 4,272.70 &minus; 216.18 = <strong>4,056.52 Da</strong> (4.057 kDa). Cross-check from the tail-free weight: 944.57 + 3,111.95 = 4,056.52 Da, where 3,111.95 Da is 10 &times; (329.21 &minus; 18.015).</p>
+
+    <p>Poly-A tail ladder for AUG, 5&prime;-phosphate (each added A contributes 329.21 Da minus one 18.015 Da bond water):</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Extra A residues</th><th>Added weight (Da)</th><th>AUG + tail, 5&prime;-phosphate (Da)</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">0</td><td class="mono">0.00</td><td class="mono">944.57</td></tr>
+        <tr><td class="mono">10</td><td class="mono">3,111.95</td><td class="mono">4,056.52</td></tr>
+        <tr><td class="mono">20</td><td class="mono">6,223.90</td><td class="mono">7,168.47</td></tr>
+        <tr><td class="mono">50</td><td class="mono">15,559.75</td><td class="mono">16,504.32</td></tr>
+        <tr><td class="mono">100</td><td class="mono">31,119.50</td><td class="mono">32,064.07</td></tr>
+      </tbody>
+    </table></div>
+    <h3>Why RNA residues are heavier than DNA residues</h3>
+    <p>Each RNA residue carries one more oxygen than its DNA cousin: the 2&prime;-OH on the ribose sugar. The numbers show it: A 329.21 vs 313.2 Da (16.01 Da more), G 345.22 vs 329.2 Da (16.02 Da more), C 305.18 vs 289.2 Da (15.98 Da more) &mdash; each about one oxygen (15.999 Da), the small gaps being table rounding. U against T is the exception that proves the rule: uracil&rsquo;s residue is 306.17 Da, and thymine is uracil plus a methyl group (CH&#8322;, 14.027 Da) minus that same oxygen, 306.17 &minus; 15.999 + 14.027 = 304.20 Da &mdash; exactly DNA&rsquo;s T residue. DNA follows the same residues-minus-waters pattern with T in place of U &mdash; see the <a href="dna-calculator.html">DNA calculator</a>.</p>
+
+    <h3>The three 5&prime; ends, side by side</h3>
+    <p>The same three bases, AUG, in all three 5&prime; forms. The extremes differ by 159 + 79.98 = 238.98 Da, about 239 Da &mdash; more than a whole extra base, from the end alone. Bars are scaled to the triphosphate form.</p>
+    <p><strong>AUG, 5&prime;-OH</strong> &mdash; 864.59 Da</p>
+    <div class="rn-track"><div class="rn-fill" style="width:78.3%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>AUG, 5&prime;-phosphate</strong> &mdash; 944.57 Da</p>
+    <div class="rn-track"><div class="rn-fill" style="width:85.6%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p><strong>AUG, 5&prime;-triphosphate</strong> &mdash; 1,103.57 Da</p>
+    <div class="rn-track"><div class="rn-fill" style="width:100%;animation-delay:.4s;background:#d97b29"></div></div>
+    <p class="cap">Same sequence, same length, three weights. State the end before quoting the number.</p>
+
+    <h3>Two conventions, one answer &mdash; do not mix them</h3>
+    <p>This page sums monophosphate residues (A 329.21 Da and friends) and then subtracts one water per bond. Other tables list residues already net of one water each (329.21 &minus; 18.015 = 311.20 Da for A) and pair them with different end terms. Both routes reach the same chain weight when each table is used with its own end terms. Mixing them is the error: subtracting waters from already-netted residues double-counts the water, and forgetting waters from monophosphates misses it entirely. If a source&rsquo;s arithmetic looks 18 Da per bond away from yours, check which convention its table uses before assuming a counting error.</p>
+
+    <h3>The tail takes over</h3>
+    <p>A poly-A tail quickly outweighs the message it follows. AUG alone is 944.57 Da; with 10 extra A residues it is 4,056.52 Da; with 100 it is 32,064.07 Da. Bars are scaled to the 100-tail weight.</p>
+    <p><strong>AUG, no tail</strong> &mdash; 944.57 Da</p>
+    <div class="rn-track"><div class="rn-fill" style="width:2.9%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>AUG + 10 A</strong> &mdash; 4,056.52 Da</p>
+    <div class="rn-track"><div class="rn-fill" style="width:12.7%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p><strong>AUG + 100 A</strong> &mdash; 32,064.07 Da</p>
+    <div class="rn-track"><div class="rn-fill" style="width:100%;animation-delay:.4s;background:#d97b29"></div></div>
+    <p class="cap">Each added A contributes 311.20 Da after its bond water; a long tail is most of the molecule.</p>
+
+    <h3>From weight to moles and copies</h3>
+    <p>The weight turns a weighed amount into moles and molecules. Picomoles = nanograms &times; 1,000 &divide; weight in Da. Worked for AUG + 10 A tail (4,056.52 Da): one microgram is 1,000,000 &divide; 4,056.52 = <strong>246.5 pmol</strong>, and 246.5 pmol &times; 6.02214076 &times; 10&#8322;&#179; &divide; 10&#185;&#8322; = <strong>1.48 &times; 10&#185;&#8308; copies</strong>. The <a href="molarity-calculator.html">Molarity calculator</a> turns moles and volume into molarity for any solute.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>AUG as 5&prime;-phosphate is 944.57 Da. What is it as 5&prime;-triphosphate on this page&rsquo;s basis, and on the 178 Da basis?</li>
+      <li>How much does one microgram of AUG + 10 A tail (4,056.52 Da) contain, in picomoles?</li>
+      <li>A 1,000-base mRNA averages 321.445 Da per residue. Roughly how much does it weigh?</li>
+    </ol>
+    <p>Answers: (1) 944.57 + 159 = 1,103.57 Da here; 944.57 + 178 = 1,122.57 Da on the other basis. (2) 1,000,000 &divide; 4,056.52 = 246.5 pmol. (3) 1,000 &times; 321.445 &minus; 999 &times; 18.015 = 303,448 Da, about 303 kDa (before the 5&prime; end adjustment).</p>
+    <p class="cap">Sources: ThermoFisher residue weights; this page&rsquo;s 5&prime; end terms (phosphate basis, OH &minus;79.98, triphosphate +159).</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -105,6 +166,11 @@
       <li><strong>Poly-A tail counts.</strong> Each added A is a full 329.21 Da residue minus its bond water. Ten extra A residues add about 3,112 Da, not a round number.</li>
       <li><strong>Length rules are estimates.</strong> A per-base average (about 330&ndash;340 Da) is fine for a gel; for a synthesised oligo, sum the actual bases.</li>
       <li><strong>Modified bases.</strong> Pseudouridine, methylated bases and caps are not in the four-letter table. Add their residue masses explicitly.</li>
+      <li><strong>Forgetting the waters.</strong> Summing residues alone overstates the weight by (length &minus; 1) &times; 18.015 Da &mdash; for a 100-base chain, 99 &times; 18.015 = 1,783.49 Da too high. Subtract the waters before quoting the number.</li>
+      <li><strong>Double-counting the tail.</strong> If the tail A residues are already in the pasted sequence, do not also enter them in the poly-A field, or they are counted twice. Put the tail in one place only.</li>
+      <li><strong>Triphosphate corrections differ by source.</strong> This page adds 159 Da for a 5&prime;-triphosphate; some sources add 178 Da, a 19 Da gap. Compare triphosphate weights only on the same stated basis.</li>
+      <li><strong>Mixing residue tables with end terms.</strong> This page&rsquo;s residues are monophosphates with waters subtracted afterwards; other tables net the water into the residue and use different end terms. Pairing one table with the other&rsquo;s end term shifts the answer by 18 Da per bond.</li>
+      <li><strong>A cap is not a triphosphate.</strong> A capped mRNA carries a methylated guanosine cap at the 5&prime; end, a different group from a triphosphate. Using the +159 Da triphosphate term for a capped transcript understates the cap&rsquo;s mass &mdash; state the cap explicitly instead.</li>
     </ol>
     <div class="flagnote"><strong>The end is the expensive one.</strong> Base-counting errors move the answer by hundreds of daltons per base, but the 5&prime; end moves it silently &mdash; same sequence, same length, three different weights. State the end before quoting the number.</div>
   </section>
@@ -116,30 +182,17 @@
     <details class="faq"><summary>How does a poly-A tail change the weight?</summary><div class="ans"><p>Each added A contributes 329.21 Da minus one bond water (18.015 Da), so about 311.20 Da per residue. Ten extra A residues add about 3,112 Da.</p></div></details>
     <details class="faq"><summary>Can I use DNA weights for RNA?</summary><div class="ans"><p>No. RNA residues carry an extra oxygen (the 2&prime;-OH) and uracil replaces thymine. A DNA weight for the same letters is a different molecule.</p></div></details>
     <details class="faq"><summary>Why does another source give a different RNA weight?</summary><div class="ans"><p>Usually the 5&prime; end basis, the poly-A tail, or a length-average rule instead of a base sum. Check all three before assuming either is wrong.</p></div></details>
+    <details class="faq"><summary>Why do two sources differ by 19 Da for a 5&prime;-triphosphate RNA?</summary><div class="ans"><p>They use different triphosphate corrections: this page adds 159 Da, some sources add 178 Da. AUG is 944.57 + 159 = 1,103.57 Da here, against 944.57 + 178 = 1,122.57 Da on the other basis &mdash; neither is a counting error, they are different stated bases.</p></div></details>
+    <details class="faq"><summary>How do I convert an RNA weight from Da to kDa?</summary><div class="ans"><p>Divide by 1,000. AUG + 10 A tail at 4,056.52 Da is 4.057 kDa, and AUG alone at 944.57 Da is 0.945 kDa.</p></div></details>
+    <details class="faq"><summary>What happens if I paste T, lowercase letters, or unknown letters?</summary><div class="ans"><p>T is read as U, lowercase is uppercased, and unknown letters are skipped and reported, never silently counted. Pasting a DNA-style sequence therefore gives an RNA weight for the U-substituted letters &mdash; check the reported skips before trusting the result.</p></div></details>
+    <details class="faq"><summary>How heavy should a tRNA be, as a sanity check?</summary><div class="ans"><p>Roughly 25&ndash;30 kDa. If your result for a tRNA-sized RNA lands in the hundreds of daltons or the hundreds of kilodaltons, recheck the sequence length, the poly-A tail, and the 5&prime; end before anything else.</p></div></details>
+    <details class="faq"><summary>Why is RNA heavier than DNA for the same letters?</summary><div class="ans"><p>The 2&prime;-OH oxygen: each RNA residue carries one more oxygen (15.999 Da) than its DNA cousin. A is 329.21 vs 313.2 Da; G is 345.22 vs 329.2 Da; C is 305.18 vs 289.2 Da. U against T nets the other way, because thymine adds a methyl group on top: 306.17 &minus; 15.999 + 14.027 = 304.20 Da.</p></div></details>
+    <details class="faq"><summary>What is the difference between a 5&prime; cap and a 5&prime; triphosphate?</summary><div class="ans"><p>A triphosphate is three phosphates in a row (+159 Da here); a cap is a methylated guanosine joined through its own triphosphate bridge, a much larger group. Do not use the triphosphate term for a capped transcript &mdash; state the cap explicitly.</p></div></details>
+    <details class="faq"><summary>How many copies are in a microgram?</summary><div class="ans"><p>Picomoles = nanograms &times; 1,000 &divide; weight in Da, then multiply by Avogadro&rsquo;s number. One microgram of AUG + 10 A tail (4,056.52 Da) is 246.5 pmol, or 1.48 &times; 10&#185;&#8308; copies.</p></div></details>
+    <details class="faq"><summary>How heavy should an mRNA be, as a sanity check?</summary><div class="ans"><p>Roughly 300 kDa per 1,000 bases: 1,000 &times; 321.445 &minus; 999 &times; 18.015 = 303,448 Da, before the 5&prime; end adjustment. A tRNA-sized RNA is roughly 25&ndash;30 kDa. If your result lands far outside those bands, recheck the length, the tail, and the end.</p></div></details>
+    <details class="faq"><summary>Does this page handle double-stranded RNA?</summary><div class="ans"><p>No &mdash; it treats RNA as single-stranded. A double-stranded RNA needs both strands summed separately, because the complement carries different residues, exactly as the <a href="dna-calculator.html">DNA calculator</a> explains for double-stranded DNA.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to &micro;M, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="index.html">Back to the hub</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
