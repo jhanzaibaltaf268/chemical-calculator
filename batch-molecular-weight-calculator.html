@@ -9,6 +9,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.ba-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.ba-fill{height:100%;transform-origin:left;animation:bagrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes bagrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.ba-pill{display:inline-block;background:#eef3f6;border:1px solid #c9d6dd;border-radius:999px;padding:.3rem .8rem;margin:0 .2rem .4rem 0;font-weight:600}
+@media (prefers-reduced-motion:reduce){.ba-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -102,6 +109,37 @@ lactose</textarea>
 
     <h3>Heavier means fewer moles</h3>
     <p>10 g of glucose is 0.0555 mol; 10 g of sucrose is 0.0292 mol, about half. For a fixed mass, moles move the opposite way to molar mass &mdash; which is the whole reason to compare in moles rather than grams.</p>
+    <h3>The sugars ladder, as bars</h3>
+    <p>Water, glucose, sucrose &mdash; the three distinct rungs of the sugars batch, scaled to sucrose. The two ties (glucose with fructose, sucrose with lactose) share their rungs exactly.</p>
+    <p><strong>Water</strong> &mdash; 18.015 g/mol</p>
+    <div class="ba-track"><div class="ba-fill" style="width:5.3%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>Glucose = fructose</strong> &mdash; 180.156 g/mol</p>
+    <div class="ba-track"><div class="ba-fill" style="width:52.6%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p><strong>Sucrose = lactose</strong> &mdash; 342.297 g/mol</p>
+    <div class="ba-track"><div class="ba-fill" style="width:100%;animation-delay:.4s;background:#d97b29"></div></div>
+    <p class="cap">Each rung is the previous one plus 162.141 g/mol &mdash; the story of the next section.</p>
+
+    <h3>Reading the gaps: one residue, twice</h3>
+    <p>The two gaps in the sugars batch are identical: 180.156 &minus; 18.015 = 162.141, and 342.297 &minus; 180.156 = 162.141. That number is C<sub>6</sub>H<sub>10</sub>O<sub>5</sub> &mdash; a hexose sugar less one water &mdash; and it is the condensation step itself: glucose + fructose &minus; water = sucrose, 180.156 &times; 2 &minus; 18.015 = 342.297 exactly. The ladder reads water &rarr; add one sugar residue &rarr; glucose &rarr; add another &rarr; sucrose. Gaps in a batch are chemistry, not just arithmetic.</p>
+    <p aria-hidden="true"><span class="ba-pill anim-pop" style="animation-delay:.05s">glucose = fructose</span><span class="ba-pill anim-pop" style="animation-delay:.3s">sucrose = lactose</span><span class="ba-pill anim-pop" style="animation-delay:.55s">gap = C&#8326;H&#8321;&#8320;O&#8325;</span></p>
+
+    <h3>Hydration reshuffles the ranking</h3>
+    <p>The hydrate-pairs batch proves that a ranking depends on the forms, not just the families. Sorted lightest first: Na<sub>2</sub>CO<sub>3</sub> 105.988, MgSO<sub>4</sub> 120.361, CuSO<sub>4</sub> 159.602, MgSO<sub>4</sub>&middot;7H<sub>2</sub>O 246.466, CuSO<sub>4</sub>&middot;5H<sub>2</sub>O 249.677, Na<sub>2</sub>CO<sub>3</sub>&middot;10H<sub>2</sub>O 286.138 g/mol. The gaps run 14.373, 39.241, 86.864, 3.211, 36.461. Notice the middle: the two heptahydrate/pentahydrate forms sit 3.211 g/mol apart, while their anhydrous parents sit 39.241 apart &mdash; hydration pulled magnesium sulfate past copper sulfate and parked the two hydrates side by side. The waters are 51.17% of MgSO<sub>4</sub>&middot;7H<sub>2</sub>O and 62.96% of Na<sub>2</sub>CO<sub>3</sub>&middot;10H<sub>2</sub>O. Compare forms, or the ranking misleads.</p>
+
+    <h3>What a weight ranking cannot tell you</h3>
+    <p>Glucose and fructose tie on weight and differ everywhere else &mdash; structure, sweetness, metabolism. A weight ranking answers only the weight question. For what else differs, the <a href="percent-composition-calculator.html">Percent Composition calculator</a> breaks each formula into mass shares, and properties beyond composition (solubility, toxicity, behaviour) belong to reference data, not to a molar mass. Never read a tie as an identity, and never read a rank as a quality score.</p>
+
+    <h3>Moles per fixed mass, across the sugars</h3>
+    <p>For solution work the ranking inverts: the lightest compound gives the most moles per gram. Per 100 g: water 5.551 mol, glucose 0.555 mol, sucrose 0.292 mol. Ten grams told the same story at a tenth of the scale (0.5551, 0.0555, 0.0292 mol) &mdash; the fixed mass is arbitrary, the inversion is not. The <a href="grams-to-moles-calculator.html">Grams to Moles calculator</a> runs this conversion for any single compound.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>The sugars batch gaps are both 162.141 g/mol. What formula is that, and what reaction does it describe?</li>
+      <li>Sort Na<sub>2</sub>CO<sub>3</sub>, MgSO<sub>4</sub>, CuSO<sub>4</sub>, MgSO<sub>4</sub>&middot;7H<sub>2</sub>O, CuSO<sub>4</sub>&middot;5H<sub>2</sub>O, Na<sub>2</sub>CO<sub>3</sub>&middot;10H<sub>2</sub>O lightest first. Which two hydrates land side by side?</li>
+      <li>How many moles are in 100 g of glucose and 100 g of sucrose?</li>
+    </ol>
+    <p>Answers: (1) C<sub>6</sub>H<sub>10</sub>O<sub>5</sub>, a hexose less water &mdash; the condensation step; glucose + fructose &minus; water = sucrose. (2) Na<sub>2</sub>CO<sub>3</sub> 105.988, MgSO<sub>4</sub> 120.361, CuSO<sub>4</sub> 159.602, MgSO<sub>4</sub>&middot;7H<sub>2</sub>O 246.466, CuSO<sub>4</sub>&middot;5H<sub>2</sub>O 249.677, Na<sub>2</sub>CO<sub>3</sub>&middot;10H<sub>2</sub>O 286.138 &mdash; the two sulfate hydrates, 3.211 apart. (3) 100 &divide; 180.156 = 0.555 mol; 100 &divide; 342.297 = 0.292 mol.</p>
+    <p class="cap">Sources: IUPAC abridged standard atomic weights, one canonical set across every page here.</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -114,6 +152,8 @@ lactose</textarea>
       <li><strong>Sort by weight, not alphabetically.</strong> C<sub>12</sub>&hellip; sorts before C<sub>6</sub>&hellip; alphabetically and is heavier.</li>
       <li><strong>Round for display only.</strong> Two weights within 0.1 g/mol can swap order after early rounding.</li>
       <li><strong>A bad line should be flagged, not fatal.</strong></li>
+      <li><strong>Accepting the first form of an ambiguous name.</strong> Copper sulfate and washing soda each cover several forms, and the page calculates the first while flagging the rest. The flag is the point &mdash; check it before trusting the row.</li>
+      <li><strong>Comparing weights across different bases.</strong> Ranking an anhydrous salt against a hydrate as if they were one family misleads: hydration alone moves MgSO<sub>4</sub> from 120.361 to 246.466 g/mol. State the form on every row.</li>
     </ol>
   </section>
 
@@ -124,30 +164,12 @@ lactose</textarea>
     <details class="faq"><summary>Does it sort by formula or by weight?</summary><div class="ans"><p>By weight, on unrounded values.</p></div></details>
     <details class="faq"><summary>Can I paste names instead of formulas?</summary><div class="ans"><p>Yes. Names are resolved first, and a name covering several forms &mdash; copper sulfate, washing soda &mdash; is flagged so you can pick the right one.</p></div></details>
     <details class="faq"><summary>How many lines can I paste?</summary><div class="ans"><p>Up to 25 at a time. Split a longer list into chunks.</p></div></details>
+    <details class="faq"><summary>Why do the gaps repeat in the sugars batch?</summary><div class="ans"><p>Because each step adds the same residue: C<sub>6</sub>H<sub>10</sub>O<sub>5</sub> (162.141 g/mol), a hexose less water. Water + residue = glucose; glucose + residue = sucrose. Identical gaps are chemistry, not coincidence.</p></div></details>
+    <details class="faq"><summary>Can I compare hydrates with anhydrous salts?</summary><div class="ans"><p>Yes, but state every form &mdash; hydration reshuffles the ranking. MgSO<sub>4</sub>&middot;7H<sub>2</sub>O (246.466) sits next to CuSO<sub>4</sub>&middot;5H<sub>2</sub>O (249.677), while anhydrous MgSO<sub>4</sub> (120.361) sits far below anhydrous CuSO<sub>4</sub> (159.602).</p></div></details>
+    <details class="faq"><summary>What does the ratio column mean?</summary><div class="ans"><p>Each weight divided by the lightest weight in the batch. Glucose at 10.00&times; weighs ten times the lightest compound (water, 18.015 g/mol); sucrose at 19.00&times; weighs nineteen times it.</p></div></details>
+    <details class="faq"><summary>How do I turn the ranking into moles?</summary><div class="ans"><p>Divide the fixed mass by each molar mass: 100 g of glucose is 100 &divide; 180.156 = 0.555 mol; 100 g of sucrose is 0.292 mol. The <a href="grams-to-moles-calculator.html">Grams to Moles calculator</a> does this for any single compound.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="dilution-calculator.html">Dilution</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
