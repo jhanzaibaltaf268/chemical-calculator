@@ -9,6 +9,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.pp-pill{display:inline-block;background:#eef3f6;border:1px solid #c9d6dd;border-radius:999px;padding:.3rem .8rem;margin:0 .2rem .4rem 0;font-weight:600}
+.pp-op{display:inline-block;margin:0 .2rem .4rem 0;color:#8a8f94}
+.pp-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.pp-fill{height:100%;transform-origin:left;animation:ppgrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes ppgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.pp-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -96,7 +104,7 @@
 
   <section class="block wrap" id="method">
     <h2 class="head">Residues, water, corrections</h2>
-    <p>A peptide&rsquo;s weight is the sum of its residue masses plus one water for the termini, adjusted for whatever chemistry the ends and the cysteines carry. The residue is the free acid minus water &mdash; 18.015 Da lighter (average).</p>
+    <p>A peptide&rsquo;s weight is the sum of its residue masses plus one water for the termini, adjusted for whatever chemistry the ends and the cysteines carry. Longer chains use the same rule &mdash; the <a href="protein-molecular-weight-calculator.html">Protein Molecular Weight calculator</a> applies it to full proteins. The residue is the free acid minus water &mdash; 18.015 Da lighter (average). The <a href="amino-acid-calculator.html">Amino Acid calculator</a> shows free mass against residue mass for one acid at a time.</p>
     <ol>
       <li><strong>Sum the residue masses.</strong></li>
       <li><strong>Add one water.</strong> 18.015 Da average, 18.01056 Da monoisotopic.</li>
@@ -105,6 +113,47 @@
 
     <h3>Worked by hand: GGCK</h3>
     <p>G 57.0519 + G 57.0519 + C 103.1388 + K 128.1741 = 345.4167 Da of residues; plus 18.015 Da of water gives <strong>363.43 Da</strong> average. A note on the last digit: some tables print this peptide as 363.44 Da, because they work from a table rounded to two decimals (free masses minus three waters: 417.49 &minus; 54.045 = 363.445). The 0.01 Da gap is rounding in the printed table, not chemistry &mdash; full-precision residues give 363.43 Da, and this calculator uses full precision throughout.</p>
+
+    <h3>Worked by hand: CGCK with one disulfide</h3>
+    <p>C 103.1388 + G 57.0519 + C 103.1388 + K 128.1741 = 391.5036 Da of residues; plus 18.015 Da of water gives 409.5186 Da for the reduced peptide. The two cysteines can form one disulfide, so subtract 2.016 Da: 409.5186 &minus; 2.016 = <strong>407.50 Da</strong> average. The reduced and oxidised forms differ by exactly that 2.016 Da &mdash; which is why the bond count, not just the cysteine count, has to be stated.</p>
+
+    <h3>Worked by hand: Ac-ACDE-NH<sub>2</sub> (N-acetyl and C-amide)</h3>
+    <p>A 71.0788 + C 103.1388 + D 115.0886 + E 129.1155 = 418.4217 Da of residues; plus 18.015 Da of water gives 436.4367 Da, or 436.44 Da, for the free peptide. N-acetyl adds 42.011 Da and C-amide subtracts 0.984 Da, a net +41.027 Da: 436.4367 + 42.011 &minus; 0.984 = 477.4637, so <strong>477.46 Da</strong> average. The two end corrections together move the weight by 41.027 Da, not by either correction alone.</p>
+
+    <div class="scroll"><table>
+      <thead><tr><th>Correction</th><th>Change (Da)</th><th>When to apply it</th></tr></thead>
+      <tbody>
+        <tr><td>One water (termini)</td><td class="mono">+18.015</td><td>Always, once per peptide</td></tr>
+        <tr><td>Each disulfide bond</td><td class="mono">&minus;2.016</td><td>Only for bonds known to exist</td></tr>
+        <tr><td>N-acetyl</td><td class="mono">+42.011</td><td>Only if the N-terminus is acetylated</td></tr>
+        <tr><td>C-amide</td><td class="mono">&minus;0.984</td><td>Only if the C-terminus is amidated</td></tr>
+        <tr><td>N-acetyl and C-amide together</td><td class="mono">+41.027</td><td>42.011 &minus; 0.984, when both ends are modified</td></tr>
+      </tbody>
+    </table></div>
+    <h3>Which termini does your peptide actually have?</h3>
+    <p>The default on this page is a free N-terminus and a free acid C-terminus, which is what a biological peptide carries. A synthetic peptide from a supplier very often carries the other pair: acetylated N-terminus and amidated C-terminus, added for stability. The two pairs differ by 41.027 Da, so a supplier peptide calculated as free/free comes out 41.027 Da too light. Before trusting any peptide weight, read the certificate or the synthesis specification for the two ends, and set the two boxes to match. ACDE free is 436.44 Da; the same sequence as Ac-ACDE-NH&#8322; is 477.46 Da &mdash; same residues, different molecule.</p>
+    <p><strong>ACDE, free termini</strong> &mdash; 436.44 Da</p>
+    <div class="pp-track"><div class="pp-fill" style="width:91.4%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>Ac-ACDE-NH&#8322;, both ends modified</strong> &mdash; 477.46 Da</p>
+    <div class="pp-track"><div class="pp-fill" style="width:100%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p class="cap">Same residues, 41.027 Da apart. Bars are scaled to the modified peptide.</p>
+
+    <h3>All corrections at once: one peptide, four adjustments</h3>
+    <p>Take CGCK with one disulfide, an acetylated N-terminus and an amidated C-terminus, and stack every correction in order. Residues: C 103.1388 + G 57.0519 + C 103.1388 + K 128.1741 = 391.5036 Da. Add one water: 391.5036 + 18.015 = 409.5186 Da for the reduced free peptide. Subtract one disulfide: 409.5186 &minus; 2.016 = 407.5026 Da. Add N-acetyl: 407.5026 + 42.011 = 449.5136 Da. Subtract C-amide: 449.5136 &minus; 0.984 = <strong>448.53 Da</strong> average. Each pill below pops in after the last.</p>
+    <p aria-hidden="true"><span class="pp-pill anim-pop" style="animation-delay:.05s">391.50</span><span class="pp-op anim-pop" style="animation-delay:.2s">+</span><span class="pp-pill anim-pop" style="animation-delay:.35s">18.02</span><span class="pp-op anim-pop" style="animation-delay:.5s">&minus;</span><span class="pp-pill anim-pop" style="animation-delay:.65s">2.02</span><span class="pp-op anim-pop" style="animation-delay:.8s">+</span><span class="pp-pill anim-pop" style="animation-delay:.95s">42.01</span><span class="pp-op anim-pop" style="animation-delay:1.1s">&minus;</span><span class="pp-pill anim-pop" style="animation-delay:1.25s">0.98</span><span class="pp-op anim-pop" style="animation-delay:1.4s">=</span><span class="pp-pill anim-pop" style="animation-delay:1.55s">448.53 Da</span></p>
+    <p class="cap">Residues, water, disulfide, acetyl, amide &mdash; in that order, every time.</p>
+
+    <h3>What the sequence sum still does not include</h3>
+    <p>Three things sit outside the sequence entirely. First, the salt form: a TFA or HCl salt weighs more than the free peptide by the counterion mass, which no residue sum ever sees &mdash; check whether the supplier&rsquo;s weight is salt or free before comparing. Second, purity against content: purity (by HPLC) is the target peptide&rsquo;s share among peptide impurities, while content (by amino acid analysis or UV) is the peptide&rsquo;s share of the weighed powder against salts and moisture. A sample at 95% purity but 80% content holds 0.80 mg of peptide per weighed milligram, not 0.95 mg &mdash; and it is content, not purity, that sets how much peptide a weighed amount actually holds. Third, the descriptive extras other tools report from the same sequence &mdash; the molecular formula, the hydropathy plot, GRAVY (the grand average of hydropathy) and solubility predictions &mdash; describe the peptide&rsquo;s character; none of them changes its weight.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>A peptide&rsquo;s residues sum to 600.0000 Da average, with 2 disulfides and an acetylated N-terminus. What is its weight?</li>
+      <li>Your supplier&rsquo;s peptide is Ac-&hellip;-NH&#8322;, but you calculated it as free/free. How far off is the result, and in which direction?</li>
+      <li>A sequence has 3 cysteines. How many disulfides can it form at most?</li>
+    </ol>
+    <p>Answers: (1) 600.0000 + 18.015 &minus; 2 &times; 2.016 + 42.011 = 655.99 Da. (2) 41.027 Da too light &mdash; the two end corrections together add 41.027 Da. (3) One, with one thiol left free; entering two bonds over-subtracts 2.016 Da.</p>
+    <p class="cap">Sources: Lehninger, Principles of Biochemistry (1982) pKa values; IUPAC abridged standard atomic weights.</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -116,6 +165,10 @@
       <li><strong>Ile against Leu.</strong> Identical mass (isomers). No mass calculator can tell them apart; the sequence must.</li>
       <li><strong>Salt form.</strong> A TFA or HCl salt weighs more than the free peptide. Check whether the supplier&rsquo;s weight includes the counter-ion.</li>
       <li><strong>Average or monoisotopic?</strong> Average for synthesis and HPLC work; monoisotopic for mass spectrometry. The gap grows with length.</li>
+      <li><strong>Non-standard letters skipped.</strong> B, J, O, U, X and Z are not among the 20 standard codes, so this calculator skips and reports them rather than counting them &mdash; check the sequence before trusting a weight built from it.</li>
+      <li><strong>Odd cysteine count.</strong> Three cysteines can form at most one disulfide, with one thiol left free. Entering two bonds over-subtracts 2.016 Da.</li>
+      <li><strong>One end corrected, the other forgotten.</strong> Supplier peptides usually carry both modifications. Applying only the acetyl leaves the result 0.984 Da too heavy; applying only the amide leaves it 42.011 Da too light. Set both boxes or neither, as the certificate says.</li>
+      <li><strong>Purity weighed as content.</strong> Weighing 1 mg of a 95%-pure, 80%-content sample gives 0.80 mg of peptide, not 0.95 mg. Content, not purity, sets how much peptide a weighed amount holds.</li>
     </ol>
     <div class="flagnote"><strong>Cysteine state is the quiet one.</strong> Reduced cysteine and cystine (disulfide-bonded) differ by 2.016 Da per bond, and suppliers do not always state which form their weight assumes. Two cysteines in a sequence do not prove a bond exists &mdash; count only the bonds you know are there.</div>
   </section>
@@ -127,30 +180,17 @@
     <details class="faq"><summary>How do disulfides change the weight?</summary><div class="ans"><p>Each disulfide bond removes two hydrogens: subtract 2.016 Da per bond from the reduced weight.</p></div></details>
     <details class="faq"><summary>What do N-acetyl and C-amide do to the mass?</summary><div class="ans"><p>N-acetyl adds 42.011 Da; C-amide subtracts 0.984 Da against the free acid. Apply them only when the peptide actually carries them.</p></div></details>
     <details class="faq"><summary>Average or monoisotopic for a peptide?</summary><div class="ans"><p>Average for synthesis, purification and weighing; monoisotopic for mass spectrometry, where the lightest isotope peak is what the instrument reads.</p></div></details>
+    <details class="faq"><summary>Why is my peptide heavier on the supplier&rsquo;s certificate than here?</summary><div class="ans"><p>Check in order, before disputing the value: salt form against free peptide, average against monoisotopic, disulfides counted or not, and N-acetyl or C-amide present or not. Compare like with like on all four, and most gaps disappear.</p></div></details>
+    <details class="faq"><summary>Can a mass calculation tell isoleucine from leucine?</summary><div class="ans"><p>No. Ile and Leu are isomers with the same average residue mass, 113.1594 Da, so any sequence swapping one for the other weighs exactly the same. Only the sequence itself can tell them apart.</p></div></details>
+    <details class="faq"><summary>What happens if my sequence contains X, B or another unusual letter?</summary><div class="ans"><p>Only the 20 standard one-letter codes count. Unusual letters are skipped and reported, so the weight is for the counted residues only &mdash; confirm what that letter was meant to stand for before weighing anything out.</p></div></details>
+    <details class="faq"><summary>What do N-acetyl and C-amide together do to the mass?</summary><div class="ans"><p>They add a net +41.027 Da: +42.011 Da for N-acetyl and &minus;0.984 Da for C-amide. For ACDE that moves the free peptide from 436.44 Da to 477.46 Da.</p></div></details>
+    <details class="faq"><summary>How do I know which termini my peptide has?</summary><div class="ans"><p>Read the supplier&rsquo;s certificate or the synthesis specification. Biological peptides are free/free; synthetic peptides are very often acetyl/amide. The two pairs differ by 41.027 Da, so guessing wrong moves the weight by exactly that much.</p></div></details>
+    <details class="faq"><summary>What is the difference between peptide purity and peptide content?</summary><div class="ans"><p>Purity (by HPLC) is the target peptide&rsquo;s share among peptide impurities; content (by amino acid analysis or UV) is the peptide&rsquo;s share of the weighed powder against salts and moisture. A 95%-pure, 80%-content sample holds 0.80 mg of peptide per weighed milligram.</p></div></details>
+    <details class="faq"><summary>Do I need the molecular formula too?</summary><div class="ans"><p>Not for the weight &mdash; the residue sum already gives it. The formula is a cross-check on composition, and some tools report it alongside the mass, but it feeds nothing into the calculation.</p></div></details>
+    <details class="faq"><summary>What is GRAVY?</summary><div class="ans"><p>The grand average of hydropathy: the mean hydrophobicity score of the residues. It describes solubility character &mdash; positive means more hydrophobic &mdash; but it does not change the weight.</p></div></details>
+    <details class="faq"><summary>Can this calculator tell me the pI or net charge?</summary><div class="ans"><p>No &mdash; this page does weight only. pI and net charge need pKa values for every ionizable group (Lehninger 1982 values are the usual set) and a charge-vs-pH calculation, which is what the dedicated peptide-property tools do.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to &micro;M, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="amino-acid-calculator.html">Amino Acid</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
