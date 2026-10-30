@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grams to Moles Calculator — Mass to Moles &amp; Back</title>
+<meta name="description" content="Grams to moles calculator: convert grams to moles and moles to grams with the molar mass shown, plus the molecule count for any formula you type.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; Grams to Moles</p>
+    <h1>Grams to Moles Calculator</h1>
+    <p class="standfirst">Mass to moles and back &mdash; the molar mass does the work, and the molecule count comes free.</p>
+    <div class="calc">
+      <div class="modes" role="group" aria-label="Mode">
+        <button type="button" id="mG2M" aria-pressed="true">Grams &rarr; moles</button>
+        <button type="button" id="mM2G" aria-pressed="false">Moles &rarr; grams</button>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <label for="formula">Chemical formula</label>
+          <input type="text" id="formula" value="C6H12O6" spellcheck="false" autocomplete="off" placeholder="H2O, NaCl, Ca(OH)2">
+          <p class="hint">Names work too: glucose, aspirin, washing soda.</p>
+        </div>
+        <div class="field">
+          <label for="val" id="valLabel">Mass (g)</label>
+          <input type="number" id="val" value="180.156" step="any" min="0">
+        </div>
+      </div>
+      <div class="go-row">
+        <button class="go" id="go" type="button">Calculate</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-f="C6H12O6" data-v="180.156">glucose 180.156 g</button>
+        <button class="chip" type="button" data-f="NaCl" data-v="25">NaCl 25 g</button>
+        <button class="chip" type="button" data-f="H2O" data-v="18.015">water 18.015 g</button>
+        <button class="chip" type="button" data-f="C9H8O4" data-v="180.159">aspirin 180.159 g</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <ul class="kv" id="kv"></ul>
+      <div id="alerts"></div>
+      <p class="basis">Moles = grams &divide; molar mass. Grams = moles &times; molar mass. One mole holds 6.02214076 &times; 10<sup>23</sup> formula units.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">The molar mass line is the whole calculation. Get the form right &mdash; hydrate included &mdash; and the rest is one division.</p>
+    </div>
+    <div class="panel span">
+      <h2>Moles at a glance</h2>
+      <div class="scroll"><table id="ladder"></table></div>
+      <p class="cap" id="ladderNote"></p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">Two directions, one divisor</h2>
+    <p><code>moles = grams &divide; molar mass</code> and <code>grams = moles &times; molar mass</code>. The molar mass comes from the formula, brackets and hydrate water included.</p>
+
+    <h3>Worked by hand: 25 g of sodium chloride</h3>
+    <p>NaCl weighs 22.990 + 35.45 = <strong>58.440 g/mol</strong>.</p>
+    <ol>
+      <li><strong>Divide.</strong> 25 &divide; 58.440 = <strong>0.4278 mol</strong>.</li>
+      <li><strong>Count the units.</strong> 0.4278 &times; 6.02214076 &times; 10<sup>23</sup> = <strong>2.58 &times; 10<sup>23</sup></strong> formula units.</li>
+    </ol>
+    <p>The default above runs the other way round: 180.156 g of glucose &divide; 180.156 g/mol = <strong>1.0000 mol</strong> exactly &mdash; one mole of glucose by definition.</p>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Traps worth knowing</h2>
+    <ol>
+      <li><strong>Which form?</strong> Anhydrous CuSO4 is 159.602 g/mol; the pentahydrate is 249.677. Typing the wrong one moves every answer by 56%.</li>
+      <li><strong>Salt or free base?</strong> A drug&middot;HCl salt weighs about 36.458 g/mol more than the free base. Divide by the salt mass when you weigh the salt.</li>
+      <li><strong>Milligrams are not grams.</strong> 250 mg is 0.250 g. Dividing milligrams by g/mol gives millimoles, not moles.</li>
+      <li><strong>Moles of what?</strong> State the unit: moles of NaCl formula units, moles of glucose molecules. &ldquo;Moles of sodium&rdquo; in NaCl is the same number; in Na2CO3 it is double.</li>
+      <li><strong>Round once.</strong> Keep full precision until the final line.</li>
+    </ol>
+    <div class="flagnote"><strong>The hydrate is the expensive one.</strong> Forgetting five waters in CuSO4&middot;5H2O understates the molar mass by 90.075 g/mol, so the mole count comes out about 56% too high. Check the label before the arithmetic.</div>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>How do I convert grams to moles?</summary><div class="ans"><p>Divide the mass in grams by the molar mass in g/mol. 25 g of NaCl &divide; 58.440 g/mol = 0.4278 mol.</p></div></details>
+    <details class="faq"><summary>How do I convert moles back to grams?</summary><div class="ans"><p>Multiply moles by the molar mass. 2 mol of glucose &times; 180.156 g/mol = 360.312 g.</p></div></details>
+    <details class="faq"><summary>How many molecules are in a mole?</summary><div class="ans"><p>6.02214076 &times; 10<sup>23</sup> &mdash; the Avogadro constant. Multiply moles by it for molecules, or by it for formula units of a salt.</p></div></details>
+    <details class="faq"><summary>Do I use the hydrate or the anhydrous mass?</summary><div class="ans"><p>Whichever form you actually weigh. The label decides: a hydrate&rsquo;s waters are part of the weighed mass and part of the molar mass.</p></div></details>
+    <details class="faq"><summary>Why does my mole count look 1,000&times; off?</summary><div class="ans"><p>Almost always milligrams entered as grams, or the reverse. 250 mg is 0.250 g; dividing 250 by g/mol gives millimoles.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to &micro;M, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
+      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
+      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
+      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
+      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
+      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
+      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
+      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="molarity-calculator.html">Molarity</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="molarity-calculator.html">Next: Molarity</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var mode='g2m';
+var F=document.getElementById('formula'),V=document.getElementById('val'),
+    valLabel=document.getElementById('valLabel'),ro=document.getElementById('readout'),
+    big=document.getElementById('big'),unit=document.getElementById('unit'),
+    side=document.getElementById('side'),kv=document.getElementById('kv'),
+    steps=document.getElementById('steps'),ladder=document.getElementById('ladder'),
+    ladderNote=document.getElementById('ladderNote');
+var AVO=6.02214076e23;
+
+function setMode(m){
+  mode=m;
+  document.getElementById('mG2M').setAttribute('aria-pressed',m==='g2m'?'true':'false');
+  document.getElementById('mM2G').setAttribute('aria-pressed',m==='m2g'?'true':'false');
+  valLabel.textContent=(m==='g2m'?'Mass (g)':'Amount (mol)');
+  run(true);
+}
+document.getElementById('mG2M').addEventListener('click',function(){setMode('g2m');});
+document.getElementById('mM2G').addEventListener('click',function(){setMode('m2g');});
+
+function kvAdd(k,v,lead){
+  var li=Chem.el('li',lead?'lead':'');
+  li.appendChild(Chem.el('span','k',k));
+  li.appendChild(Chem.el('span','v',v));
+  kv.appendChild(li);
+}
+function tableOut(node,headings,rowsData,animate){
+  Chem.clear(node);
+  var th=document.createElement('thead'),hr=document.createElement('tr');
+  headings.forEach(function(h){var c=document.createElement('th');c.textContent=h;hr.appendChild(c);});
+  th.appendChild(hr);node.appendChild(th);
+  var tb=document.createElement('tbody');
+  rowsData.forEach(function(r,i){
+    var tr=document.createElement('tr');
+    r.forEach(function(t,j){var td=document.createElement('td');td.textContent=t;
+      if(j>0){td.className='mono';}tr.appendChild(td);});
+    if(animate){Chem.stagger(tr,'anim-rise',i,55);}
+    tb.appendChild(tr);});
+  node.appendChild(tb);
+}
+
+function run(animate){
+  var a;
+  try{a=Chem.analyse(F.value);}
+  catch(err){
+    ro.classList.add('bad');
+    big.textContent=err.message;
+    unit.textContent='';side.textContent='';
+    Chem.clear(kv);Chem.clear(steps);Chem.clear(ladder);ladderNote.textContent='';
+    return;
+  }
+  var v=parseFloat(V.value);
+  if(!isFinite(v)||v<0){
+    ro.classList.add('bad');
+    big.textContent='Enter a value of zero or above.';
+    unit.textContent='';side.textContent='';
+    Chem.clear(kv);Chem.clear(steps);Chem.clear(ladder);ladderNote.textContent='';
+    return;
+  }
+  ro.classList.remove('bad');
+  var mw=a.mw,mol,grams,S=[];
+  if(mode==='g2m'){
+    mol=v/mw;grams=v;
+    S.push(['Molar mass from the formula',a.input+' = '+Chem.fx(mw,3)+' g/mol']);
+    S.push(['Divide',Chem.sig(v,5)+' g \u00f7 '+Chem.fx(mw,3)+' g/mol = '+Chem.sig(mol,5)+' mol']);
+  }else{
+    mol=v;grams=v*mw;
+    S.push(['Molar mass from the formula',a.input+' = '+Chem.fx(mw,3)+' g/mol']);
+    S.push(['Multiply',Chem.sig(v,5)+' mol \u00d7 '+Chem.fx(mw,3)+' g/mol = '+Chem.sig(grams,5)+' g']);
+  }
+  S.push(['Count the units',Chem.sig(mol,5)+' mol \u00d7 6.02214076 \u00d7 10\u00b2\u00b3 = '+mol*AVO.toExponential(3)+' formula units']);
+  if(mode==='g2m'){
+    Chem.countTo(big,mol,animate,mol<1?4:3);
+    unit.textContent='mol';
+  }else{
+    Chem.countTo(big,grams,animate,3);
+    unit.textContent='g';
+  }
+  side.textContent=a.input+' \u00b7 '+Chem.fx(mw,3)+' g/mol'+(a.lookedUp?' \u00b7 '+a.lookedUp:'');
+  Chem.clear(kv);
+  kvAdd(mode==='g2m'?'Moles':'Grams',mode==='g2m'?Chem.sig(mol,5)+' mol':Chem.sig(grams,5)+' g',true);
+  kvAdd('Molar mass',Chem.fx(mw,3)+' g/mol');
+  kvAdd('Formula units',(mol*AVO).toExponential(3));
+  kvAdd(mode==='g2m'?'Back-check':'Back-check',mode==='g2m'?Chem.sig(mol,5)+' mol \u00d7 '+Chem.fx(mw,3)+' = '+Chem.sig(grams,5)+' g':Chem.sig(grams,5)+' g \u00f7 '+Chem.fx(mw,3)+' = '+Chem.sig(mol,5)+' mol');
+  Chem.clear(steps);
+  S.forEach(function(p,i){
+    var li=Chem.el('li'),d=Chem.el('div');
+    d.appendChild(Chem.el('span','what',p[0]));
+    d.appendChild(Chem.el('span','how'+(i===S.length-1?' sum':''),p[1]));
+    li.appendChild(d);Chem.stagger(li,'anim-rise',i,70);steps.appendChild(li);});
+  var lad=[1,10,25,100,1000].map(function(g){
+    return [Chem.sig(g,4)+' g',Chem.sig(g/mw,5)+' mol',(g/mw*AVO).toExponential(3)];});
+  tableOut(ladder,['Mass','Moles','Formula units'],lad,animate);
+  ladderNote.textContent='For '+a.input+' at '+Chem.fx(mw,3)+' g/mol, 1 mol weighs '+Chem.fx(mw,3)+' g.';
+}
+document.getElementById('go').addEventListener('click',function(){run(true);});
+[F,V].forEach(function(n){
+  n.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run(true);}});});
+Array.prototype.forEach.call(document.querySelectorAll('.chip[data-f]'),function(c){
+  c.addEventListener('click',function(){
+    F.value=c.getAttribute('data-f');V.value=c.getAttribute('data-v');setMode('g2m');});});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body>
+</html>

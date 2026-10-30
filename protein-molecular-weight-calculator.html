@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Protein Molecular Weight Calculator — From Sequence</title>
+<meta name="description" content="Protein molecular weight calculator: paste a one-letter sequence and get average or monoisotopic weight, with residues counted and water added back.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; Protein Molecular Weight</p>
+    <h1>Protein Molecular Weight Calculator</h1>
+    <p class="standfirst">Paste a sequence, get the weight &mdash; residues summed, one water added back, termini stated.</p>
+    <div class="calc">
+      <div class="modes" role="group" aria-label="Mass type">
+        <button type="button" id="mAvg" aria-pressed="true">Average mass</button>
+        <button type="button" id="mMono" aria-pressed="false">Monoisotopic mass</button>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <label for="seq">Protein sequence (one-letter codes)</label>
+          <input type="text" id="seq" value="MQIFVKTLTGKTITLEVEPSDTIENVKAKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYNIQKESTLHLVLRLRGG" spellcheck="false" autocomplete="off" placeholder="e.g. MQIFVKTLTGKTITLEVEPSDTIENVKAKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYNIQKESTLHLVLRLRGG">
+          <p class="hint">Spaces and line breaks are ignored. Unknown letters are skipped and reported, never silently counted.</p>
+        </div>
+        <div class="field">
+          <label for="met">Starting methionine</label>
+          <select id="met">
+            <option value="keep" selected>Keep the initial Met</option>
+            <option value="drop">Remove the initial Met (mature protein)</option>
+          </select>
+          <p class="hint">Many mature proteins lose their first methionine. Dropping it removes 131.19 Da average.</p>
+        </div>
+      </div>
+      <div class="go-row">
+        <button class="go" id="go" type="button">Calculate</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-seq="MQIFVKTLTGKTITLEVEPSDTIENVKAKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYNIQKESTLHLVLRLRGG">ubiquitin (76)</button>
+        <button class="chip" type="button" data-seq="GIVEQCCTSICSLYQLENYCN">insulin A chain (21)</button>
+        <button class="chip" type="button" data-seq="GGCK">GGCK</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <ul class="kv" id="kv"></ul>
+      <div id="alerts"></div>
+      <p class="basis">Weight = sum of residue masses + one water (18.015 Da average, 18.01056 Da monoisotopic) for the two termini. A residue is the free acid minus water.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">Count first, then add. The water line is the one most people miss &mdash; or add twice.</p>
+    </div>
+    <div class="panel span">
+      <h2>Residue composition</h2>
+      <div class="scroll"><table id="comp"></table></div>
+      <p class="cap" id="compNote"></p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">Residues, plus one water</h2>
+    <p>A protein&rsquo;s weight is the sum of its amino-acid <em>residue</em> masses plus one water molecule for the two termini. A residue is what is left after its peptide bond loses water &mdash; always 18.015 Da lighter than the free acid (average).</p>
+    <ol>
+      <li><strong>Count the residues.</strong> One letter each; the count per acid is the composition table below the calculator.</li>
+      <li><strong>Multiply by residue masses and add.</strong></li>
+      <li><strong>Add one water.</strong> 18.015 Da average, 18.01056 Da monoisotopic. This is the termini, not an extra residue.</li>
+    </ol>
+
+    <h3>Worked by hand: ubiquitin, 76 residues</h3>
+    <p>Ubiquitin&rsquo;s sequence sums to 8,546.83 Da of residues; plus 18.015 Da of water gives <strong>8,564.84 Da</strong> average (8.565 kDa). Summing the <em>free</em> acids instead would give 9,915.97 Da &mdash; overstated by 75 &times; 18.015 Da, one water per bond instead of one per chain.</p>
+    <p>Insulin&rsquo;s A chain, GIVEQCCTSICSLYQLENYCN (21 residues), comes to <strong>2,383.71 Da</strong> average and <strong>2,382.00 Da</strong> monoisotopic by the same rule.</p>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Traps worth knowing</h2>
+    <ol>
+      <li><strong>Free or residue?</strong> Summing free masses without subtracting water per bond overstates every protein by 18.015 Da per residue. The classic beginner error.</li>
+      <li><strong>Water counted twice?</strong> One water per chain, not per residue and not per terminus. n residues, n&minus;1 bonds, one water back.</li>
+      <li><strong>Starting methionine.</strong> Many mature proteins lose it. Keeping it adds 131.19 Da average to a weight that should not have it.</li>
+      <li><strong>Tags and fusions.</strong> A His-tag is small; a GFP fusion adds about 27 kDa. The sequence you type must be the construct you weigh.</li>
+      <li><strong>Glycosylation.</strong> Sequence sums understate glycoproteins. Use the measured value when the assay counts whole molecules.</li>
+      <li><strong>Average or monoisotopic?</strong> Average for lab work and SDS-PAGE; monoisotopic for high-resolution mass spectrometry. The gap grows with chain length.</li>
+      <li><strong>Disulfides.</strong> Each disulfide bond subtracts 2.016 Da. This page sums the reduced chain; the peptide page applies the correction.</li>
+    </ol>
+    <div class="flagnote"><strong>The 18 Da error is the famous one.</strong> A result about 18 Da &mdash; or a multiple of it &mdash; away from the expected value is almost always a water-count error: free masses summed, termini added twice, or one water per residue. Count bonds: n residues, n&minus;1 waters lost, one water back.</div>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>How do I calculate a protein&rsquo;s weight from its sequence?</summary><div class="ans"><p>Add the residue masses, then add one water (18.015 Da average). Ubiquitin: 8,546.83 + 18.015 = 8,564.84 Da.</p></div></details>
+    <details class="faq"><summary>Should I use average or monoisotopic mass?</summary><div class="ans"><p>Average for lab work and SDS-PAGE; monoisotopic for high-resolution mass spectrometry. Insulin A is 2,383.71 Da average and 2,382.00 Da monoisotopic.</p></div></details>
+    <details class="faq"><summary>Why is my result about 18 Da too high?</summary><div class="ans"><p>Almost always a water-count error &mdash; free masses summed without subtracting per bond, or termini added twice. Count bonds: n residues, n&minus;1 waters lost.</p></div></details>
+    <details class="faq"><summary>Do I remove the starting methionine?</summary><div class="ans"><p>For a mature protein, usually yes &mdash; many lose it after translation. The calculator offers the choice because the sequence as written and the protein as weighed often differ by exactly that residue.</p></div></details>
+    <details class="faq"><summary>Why do isoleucine and leucine have the same mass?</summary><div class="ans"><p>Same formula (C6H13NO2), different arrangement &mdash; isomers. No mass calculator can distinguish them; you need sequence information.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to &micro;M, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
+      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
+      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
+      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
+      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
+      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
+      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
+      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="peptide-calculator.html">Peptide</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="peptide-calculator.html">Next: Peptide</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var AVG={A:71.0788,R:156.1875,N:114.1038,D:115.0886,C:103.1388,E:129.1155,Q:128.1307,G:57.0519,H:137.1411,I:113.1594,L:113.1594,K:128.1741,M:131.1925,F:147.1766,P:97.1167,S:87.0780,T:101.1051,W:186.2132,Y:163.1760,V:99.1326};
+var MONO={A:71.03711,R:156.10111,N:114.04293,D:115.02694,C:103.00919,E:129.04259,Q:128.05858,G:57.02146,H:137.05891,I:113.08406,L:113.08406,K:128.09496,M:131.04049,F:147.06841,P:97.05276,S:87.03203,T:101.04768,W:186.07931,Y:163.06333,V:99.06841};
+var NAMES={A:'Alanine',R:'Arginine',N:'Asparagine',D:'Aspartic acid',C:'Cysteine',E:'Glutamic acid',Q:'Glutamine',G:'Glycine',H:'Histidine',I:'Isoleucine',L:'Leucine',K:'Lysine',M:'Methionine',F:'Phenylalanine',P:'Proline',S:'Serine',T:'Threonine',W:'Tryptophan',Y:'Tyrosine',V:'Valine'};
+var mode='avg';
+var SEQ=document.getElementById('seq'),MET=document.getElementById('met'),
+    ro=document.getElementById('readout'),big=document.getElementById('big'),
+    unit=document.getElementById('unit'),side=document.getElementById('side'),
+    kv=document.getElementById('kv'),alerts=document.getElementById('alerts'),
+    steps=document.getElementById('steps'),comp=document.getElementById('comp'),
+    compNote=document.getElementById('compNote');
+
+function setMode(m){
+  mode=m;
+  document.getElementById('mAvg').setAttribute('aria-pressed',m==='avg'?'true':'false');
+  document.getElementById('mMono').setAttribute('aria-pressed',m==='mono'?'true':'false');
+  run(true);
+}
+document.getElementById('mAvg').addEventListener('click',function(){setMode('avg');});
+document.getElementById('mMono').addEventListener('click',function(){setMode('mono');});
+
+function kvAdd(k,v,lead){
+  var li=Chem.el('li',lead?'lead':'');
+  li.appendChild(Chem.el('span','k',k));
+  li.appendChild(Chem.el('span','v',v));
+  kv.appendChild(li);
+}
+function tableOut(node,headings,rowsData,animate){
+  Chem.clear(node);
+  var th=document.createElement('thead'),hr=document.createElement('tr');
+  headings.forEach(function(h){var c=document.createElement('th');c.textContent=h;hr.appendChild(c);});
+  th.appendChild(hr);node.appendChild(th);
+  var tb=document.createElement('tbody');
+  rowsData.forEach(function(r,i){
+    var tr=document.createElement('tr');
+    r.forEach(function(t,j){var td=document.createElement('td');td.textContent=t;
+      if(j>0){td.className='mono';}tr.appendChild(td);});
+    if(animate){Chem.stagger(tr,'anim-rise',i,55);}
+    tb.appendChild(tr);});
+  node.appendChild(tb);
+}
+
+function run(animate){
+  var seq=SEQ.value.toUpperCase().replace(/[^A-Z]/g,'');
+  var table=(mode==='mono'?MONO:AVG);
+  var water=(mode==='mono'?18.01056:18.015);
+  if(MET.value==='drop'&&seq.charAt(0)==='M'){seq=seq.slice(1);}
+  Chem.clear(kv);Chem.clear(alerts);
+  if(!seq){
+    ro.classList.add('bad');big.textContent='Enter a protein sequence first.';
+    unit.textContent='';side.textContent='';
+    Chem.clear(steps);Chem.clear(comp);compNote.textContent='';
+    return;
+  }
+  var counts={},unknown=[],sum=0;
+  seq.split('').forEach(function(ch){
+    if(table[ch]){counts[ch]=(counts[ch]||0)+1;sum+=table[ch];}
+    else{unknown.push(ch);}
+  });
+  if(unknown.length){
+    var w=Chem.el('div','alert');
+    w.innerHTML='<strong>Skipped unknown letters:</strong> '+unknown.filter(function(v,i,a){return a.indexOf(v)===i;}).join(', ')+'. Only the 20 standard codes count.';
+    alerts.appendChild(w);
+  }
+  var total=sum+water;
+  ro.classList.remove('bad');
+  Chem.countTo(big,total,animate,2);
+  unit.textContent='Da';
+  side.textContent=seq.length+' residues \u00b7 '+Chem.fx(total/1000,3)+' kDa \u00b7 '+(mode==='mono'?'monoisotopic':'average');
+  kvAdd('Molecular weight',Chem.fx(total,2)+' Da',true);
+  kvAdd('In kilodaltons',Chem.fx(total/1000,3)+' kDa');
+  kvAdd('Residues',String(seq.length));
+  kvAdd('Water added',Chem.fx(water,5)+' Da');
+  var S=[
+    ['Count the residues',seq.length+' residues'+(MET.value==='drop'?' (initial Met removed)':'')],
+    ['Sum the residue masses',Chem.fx(sum,2)+' Da'],
+    ['Add one water',Chem.fx(sum,2)+' + '+Chem.fx(water,5)+' = '+Chem.fx(total,2)+' Da']
+  ];
+  Chem.clear(steps);
+  S.forEach(function(p,i){
+    var li=Chem.el('li'),d=Chem.el('div');
+    d.appendChild(Chem.el('span','what',p[0]));
+    d.appendChild(Chem.el('span','how'+(i===S.length-1?' sum':''),p[1]));
+    li.appendChild(d);Chem.stagger(li,'anim-rise',i,70);steps.appendChild(li);});
+  var rowsData=Object.keys(counts).sort().map(function(ch){
+    return [ch+' ('+NAMES[ch]+')',String(counts[ch]),Chem.fx(table[ch],mode==='mono'?5:4),Chem.fx(counts[ch]*table[ch],2)];});
+  rowsData.push(['Water (termini)','1',Chem.fx(water,5),Chem.fx(water,2)]);
+  rowsData.push(['Total',String(seq.length),'\u2014',Chem.fx(total,2)]);
+  tableOut(comp,['Residue','Count','Mass (Da)','Subtotal (Da)'],rowsData,animate);
+  compNote.textContent='Residue masses are full-precision '+(mode==='mono'?'monoisotopic':'average')+' values; the display rounds to two decimals.';
+}
+document.getElementById('go').addEventListener('click',function(){run(true);});
+SEQ.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run(true);}});
+MET.addEventListener('change',function(){run(true);});
+Array.prototype.forEach.call(document.querySelectorAll('.chip[data-seq]'),function(c){
+  c.addEventListener('click',function(){SEQ.value=c.getAttribute('data-seq');run(true);});});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body>
+</html>

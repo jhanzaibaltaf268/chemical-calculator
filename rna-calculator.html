@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RNA Calculator — Weight from a Base Sequence</title>
+<meta name="description" content="RNA calculator: weight from an RNA base sequence with poly-A tail length and the 5-prime end stated, phosphate, hydroxyl, or triphosphate. Basis stated.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; RNA</p>
+    <h1>RNA Calculator</h1>
+    <p class="standfirst">RNA weight from the bases &mdash; monophosphate residues summed, waters removed, 5&prime; end stated.</p>
+    <div class="calc">
+      <div class="fields">
+        <div class="field">
+          <label for="seq">RNA sequence (A, U, G, C)</label>
+          <input type="text" id="seq" value="AUG" spellcheck="false" autocomplete="off" placeholder="e.g. AUG">
+          <p class="hint">T is read as U. Unknown letters are skipped and reported, never silently counted.</p>
+        </div>
+        <div class="field">
+          <label for="poly">Poly-A tail (extra A residues)</label>
+          <input type="number" id="poly" value="0" step="1" min="0">
+        </div>
+        <div class="field">
+          <label for="end">5&prime; end</label>
+          <select id="end">
+            <option value="phos" selected>5&prime;-phosphate (basis)</option>
+            <option value="oh">5&prime;-OH (&minus;79.98 Da)</option>
+            <option value="tri">5&prime;-triphosphate (+159 Da)</option>
+          </select>
+          <p class="hint">The 5&prime; end is the biggest single swing in an RNA weight. State it, every time.</p>
+        </div>
+      </div>
+      <div class="go-row">
+        <button class="go" id="go" type="button">Calculate</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-seq="AUG" data-poly="0" data-end="phos">AUG, phosphate</button>
+        <button class="chip" type="button" data-seq="AUG" data-poly="0" data-end="oh">AUG, 5′-OH</button>
+        <button class="chip" type="button" data-seq="ACGU" data-poly="10" data-end="phos">ACGU + 10 A tail</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <ul class="kv" id="kv"></ul>
+      <div id="alerts"></div>
+      <p class="basis">Residue monophosphates: A 329.21, U 306.17, G 345.22, C 305.18 Da. Sum them, subtract 18.015 Da per bond, then adjust the 5&prime; end.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">Residues first, waters second, end last. The end adjustment is a statement about the molecule, not a rounding choice.</p>
+    </div>
+    <div class="panel span">
+      <h2>Base composition</h2>
+      <div class="scroll"><table id="comp"></table></div>
+      <p class="cap" id="compNote"></p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">Residues, waters, end</h2>
+    <p>An RNA weight is the sum of its nucleotide residue monophosphates minus one water per phosphodiester bond, adjusted for the 5&prime; end. The residue values already carry one phosphate each, so the chain&rsquo;s weight is exact for its stated ends &mdash; unlike a length estimate.</p>
+    <ol>
+      <li><strong>Sum the residues.</strong> A 329.21, U 306.17, G 345.22, C 305.18 Da, plus 329.21 Da per poly-A residue.</li>
+      <li><strong>Subtract the waters.</strong> (length &minus; 1) &times; 18.015 Da, one per bond.</li>
+      <li><strong>Adjust the 5&prime; end.</strong> Phosphate is the basis (no change); 5&prime;-OH subtracts 79.98 Da; 5&prime;-triphosphate adds about 159 Da.</li>
+    </ol>
+
+    <h3>Worked by hand: AUG, 5&prime;-phosphate</h3>
+    <p>A 329.21 + U 306.17 + G 345.22 = 980.60 Da of residues; minus 2 &times; 18.015 = 36.03 Da of waters gives <strong>944.57 Da</strong>. The same sequence as 5&prime;-OH is 944.57 &minus; 79.98 = <strong>864.59 Da</strong> &mdash; the end alone moves the answer by 80 Da, which is why it is never left unstated.</p>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Traps worth knowing</h2>
+    <ol>
+      <li><strong>U or T?</strong> RNA uses uracil (306.17 Da residue); DNA uses thymine. Typing a DNA sequence into an RNA calculator understates every T position.</li>
+      <li><strong>The 5&prime; end unstated.</strong> Phosphate, hydroxyl and triphosphate differ by up to about 239 Da between the extremes. A weight without its end basis is not a complete answer.</li>
+      <li><strong>Poly-A tail counts.</strong> Each added A is a full 329.21 Da residue minus its bond water. Ten extra A residues add about 3,112 Da, not a round number.</li>
+      <li><strong>Length rules are estimates.</strong> A per-base average (about 330&ndash;340 Da) is fine for a gel; for a synthesised oligo, sum the actual bases.</li>
+      <li><strong>Modified bases.</strong> Pseudouridine, methylated bases and caps are not in the four-letter table. Add their residue masses explicitly.</li>
+    </ol>
+    <div class="flagnote"><strong>The end is the expensive one.</strong> Base-counting errors move the answer by hundreds of daltons per base, but the 5&prime; end moves it silently &mdash; same sequence, same length, three different weights. State the end before quoting the number.</div>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>How do I calculate RNA weight from a sequence?</summary><div class="ans"><p>Sum the residue monophosphates (A 329.21, U 306.17, G 345.22, C 305.18), subtract 18.015 Da per bond, then adjust the 5&prime; end. AUG as 5&prime;-phosphate is 944.57 Da.</p></div></details>
+    <details class="faq"><summary>What does the 5&prime; end change?</summary><div class="ans"><p>Phosphate is the basis. 5&prime;-OH subtracts 79.98 Da; 5&prime;-triphosphate adds about 159 Da. AUG is 944.57 Da as phosphate and 864.59 Da as hydroxyl.</p></div></details>
+    <details class="faq"><summary>How does a poly-A tail change the weight?</summary><div class="ans"><p>Each added A contributes 329.21 Da minus one bond water (18.015 Da), so about 311.20 Da per residue. Ten extra A residues add about 3,112 Da.</p></div></details>
+    <details class="faq"><summary>Can I use DNA weights for RNA?</summary><div class="ans"><p>No. RNA residues carry an extra oxygen (the 2&prime;-OH) and uracil replaces thymine. A DNA weight for the same letters is a different molecule.</p></div></details>
+    <details class="faq"><summary>Why does another source give a different RNA weight?</summary><div class="ans"><p>Usually the 5&prime; end basis, the poly-A tail, or a length-average rule instead of a base sum. Check all three before assuming either is wrong.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to &micro;M, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
+      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
+      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
+      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
+      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
+      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
+      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
+      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="index.html">Back to the hub</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="index.html">Next: Back to the hub</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var M={A:329.21,U:306.17,G:345.22,C:305.18};
+var SEQ=document.getElementById('seq'),POLY=document.getElementById('poly'),
+    END=document.getElementById('end'),
+    ro=document.getElementById('readout'),big=document.getElementById('big'),
+    unit=document.getElementById('unit'),side=document.getElementById('side'),
+    kv=document.getElementById('kv'),alerts=document.getElementById('alerts'),
+    steps=document.getElementById('steps'),comp=document.getElementById('comp'),
+    compNote=document.getElementById('compNote');
+
+function kvAdd(k,v,lead){
+  var li=Chem.el('li',lead?'lead':'');
+  li.appendChild(Chem.el('span','k',k));
+  li.appendChild(Chem.el('span','v',v));
+  kv.appendChild(li);
+}
+function tableOut(node,headings,rowsData,animate){
+  Chem.clear(node);
+  var th=document.createElement('thead'),hr=document.createElement('tr');
+  headings.forEach(function(h){var c=document.createElement('th');c.textContent=h;hr.appendChild(c);});
+  th.appendChild(hr);node.appendChild(th);
+  var tb=document.createElement('tbody');
+  rowsData.forEach(function(r,i){
+    var tr=document.createElement('tr');
+    r.forEach(function(t,j){var td=document.createElement('td');td.textContent=t;
+      if(j>0){td.className='mono';}tr.appendChild(td);});
+    if(animate){Chem.stagger(tr,'anim-rise',i,55);}
+    tb.appendChild(tr);});
+  node.appendChild(tb);
+}
+function bad(msg){
+  ro.classList.add('bad');big.textContent=msg;unit.textContent='';side.textContent='';
+  Chem.clear(kv);Chem.clear(steps);Chem.clear(comp);compNote.textContent='';
+}
+
+function run(animate){
+  var raw=SEQ.value.toUpperCase().replace(/T/g,'U');
+  var seq=raw.replace(/[^AUGC]/g,'');
+  var tail=parseInt(POLY.value,10);
+  if(!isFinite(tail)||tail<0){tail=0;POLY.value=0;}
+  seq+='A'.repeat(tail);
+  Chem.clear(kv);Chem.clear(alerts);
+  if(!seq){
+    return bad('Enter an RNA sequence first.');
+  }
+  var counts={A:0,U:0,G:0,C:0},sum=0;
+  seq.split('').forEach(function(ch){counts[ch]++;sum+=M[ch];});
+  var waters=(seq.length-1)*18.015;
+  var end=END.value,adj=0,endLabel="5\u2032-phosphate";
+  if(end==='oh'){adj=-79.98;endLabel="5\u2032-OH";}
+  if(end==='tri'){adj=159;endLabel="5\u2032-triphosphate";}
+  var total=sum-waters+adj;
+  ro.classList.remove('bad');
+  Chem.countTo(big,total,animate,2);
+  unit.textContent='Da';
+  side.textContent=seq.length+' bases \u00b7 '+Chem.fx(total/1000,3)+' kDa \u00b7 '+endLabel;
+  kvAdd('Molecular weight',Chem.fx(total,2)+' Da',true);
+  kvAdd('In kilodaltons',Chem.fx(total/1000,3)+' kDa');
+  kvAdd('Bases',seq.length+(tail?' (incl. '+tail+' A tail)':''));
+  kvAdd('5\u2032 end',endLabel+(adj?(' ('+(adj>0?'+':'')+Chem.fx(adj,2)+' Da)'): ' (basis)'));
+  var S=[
+    ['Sum the residues',Chem.fx(sum,2)+' Da'],
+    ['Subtract the waters','\u2212 ('+seq.length+' \u2212 1) \u00d7 18.015 = \u2212'+Chem.fx(waters,2)+' Da']
+  ];
+  if(adj){S.push(['5\u2032 end',endLabel+' '+(adj>0?'+':'')+Chem.fx(adj,2)+' Da']);}
+  S.push(['Total',Chem.fx(total,2)+' Da']);
+  Chem.clear(steps);
+  S.forEach(function(p,i){
+    var li=Chem.el('li'),d=Chem.el('div');
+    d.appendChild(Chem.el('span','what',p[0]));
+    d.appendChild(Chem.el('span','how'+(i===S.length-1?' sum':''),p[1]));
+    li.appendChild(d);Chem.stagger(li,'anim-rise',i,70);steps.appendChild(li);});
+  var rowsData=['A','U','G','C'].map(function(ch){
+    return [ch,String(counts[ch]),Chem.fx(M[ch],2),Chem.fx(counts[ch]*M[ch],2)];});
+  rowsData.push(['Total',String(seq.length),'\u2014',Chem.fx(total,2)]);
+  tableOut(comp,['Base','Count','Residue (Da)','Subtotal (Da)'],rowsData,animate);
+  compNote.textContent='Subtotals sum to '+Chem.fx(sum,2)+' Da before waters and the 5\u2032 end adjustment.';
+}
+document.getElementById('go').addEventListener('click',function(){run(true);});
+SEQ.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run(true);}});
+[POLY,END].forEach(function(n){n.addEventListener('change',function(){run(true);});});
+Array.prototype.forEach.call(document.querySelectorAll('.chip'),function(c){
+  c.addEventListener('click',function(){
+    SEQ.value=c.getAttribute('data-seq');
+    POLY.value=c.getAttribute('data-poly');
+    END.value=c.getAttribute('data-end');
+    run(true);});});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body>
+</html>

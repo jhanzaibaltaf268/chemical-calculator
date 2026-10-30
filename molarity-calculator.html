@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Molarity Calculator — Moles, Litres &amp; Mass to Weigh</title>
+<meta name="description" content="Molarity calculator: find molarity from moles and volume, or the mass to weigh for any target molarity and volume, with a purity correction.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; Molarity</p>
+    <h1>Molarity Calculator</h1>
+    <p class="standfirst">Molarity from moles and volume &mdash; or the mass to weigh for the solution you actually want.</p>
+    <div class="calc">
+      <div class="modes" role="group" aria-label="Mode">
+        <button type="button" id="mM" aria-pressed="true">Molarity from moles &amp; volume</button>
+        <button type="button" id="mW" aria-pressed="false">Mass to weigh</button>
+      </div>
+      <div class="fields">
+        <div class="field" id="wrapMol">
+          <label for="mol">Moles</label>
+          <input type="number" id="mol" value="1" step="any" min="0">
+        </div>
+        <div class="field" id="wrapVolL">
+          <label for="volL">Volume (L)</label>
+          <input type="number" id="volL" value="1" step="any" min="0">
+        </div>
+        <div class="field" id="wrapFormula" hidden>
+          <label for="formula">Chemical formula</label>
+          <input type="text" id="formula" value="NaOH" spellcheck="false" autocomplete="off" placeholder="NaOH, NaCl, glucose">
+        </div>
+        <div class="field" id="wrapTarget" hidden>
+          <label for="target">Target molarity (M)</label>
+          <input type="number" id="target" value="0.5" step="any" min="0">
+        </div>
+        <div class="field" id="wrapVolMl" hidden>
+          <label for="volMl">Final volume (mL)</label>
+          <input type="number" id="volMl" value="250" step="any" min="0">
+        </div>
+        <div class="field" id="wrapPur" hidden>
+          <label for="pur">Purity (%)</label>
+          <input type="number" id="pur" value="100" step="any" min="0" max="100">
+          <p class="hint">Actual mass = theoretical mass &divide; purity fraction.</p>
+        </div>
+      </div>
+      <div class="go-row">
+        <button class="go" id="go" type="button">Calculate</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-mode="m" data-mol="1" data-vol="1">1 mol in 1 L</button>
+        <button class="chip" type="button" data-mode="w" data-f="NaOH" data-t="0.5" data-v="250">0.5 M NaOH, 250 mL</button>
+        <button class="chip" type="button" data-mode="w" data-f="NaCl" data-t="1" data-v="1000">1 M NaCl, 1 L</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <ul class="kv" id="kv"></ul>
+      <div id="alerts"></div>
+      <p class="basis">Molarity = moles &divide; litres. Mass to weigh = molarity &times; litres &times; molar mass. Dissolve and make up <em>to</em> the final volume.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">The unit conversion is the whole trap: millilitres must become litres before they meet the molarity.</p>
+    </div>
+    <div class="panel span">
+      <h2>Mass to weigh at a glance</h2>
+      <div class="scroll"><table id="ladder"></table></div>
+      <p class="cap" id="ladderNote"></p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">Two directions, one definition</h2>
+    <p><code>M = n &divide; V</code> with V in litres, and <code>grams = M &times; V(L) &times; molar mass</code>. Purity divides at the end: a solid that is only 95% the compound needs theoretical mass &divide; 0.95 of powder.</p>
+
+    <h3>Worked by hand: 250 mL of 0.500 M NaOH</h3>
+    <p>NaOH weighs 22.990 + 15.999 + 1.008 = <strong>39.997 g/mol</strong>.</p>
+    <ol>
+      <li><strong>Litres.</strong> 250 mL = <strong>0.250 L</strong>.</li>
+      <li><strong>Moles.</strong> 0.500 &times; 0.250 = <strong>0.125 mol</strong>.</li>
+      <li><strong>Mass.</strong> 0.125 &times; 39.997 = <strong>5.00 g</strong>. Dissolve and make up <em>to</em> 250 mL &mdash; not add 250 mL of water, which would overshoot the volume.</li>
+      <li><strong>With 95% purity.</strong> 5.00 &divide; 0.95 = <strong>5.26 g</strong> of powder.</li>
+    </ol>
+    <p>The default above runs the first direction: 1 mol in 1 L = <strong>1 M</strong> exactly.</p>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Traps worth knowing</h2>
+    <ol>
+      <li><strong>Millilitres are not litres.</strong> 250 mL of 0.500 M NaOH needs 0.125 mol, not 125 mol. Divide mL by 1,000 first.</li>
+      <li><strong>Make up to, not add to.</strong> Adding 250 mL of water to the solid gives more than 250 mL of solution, and a weaker molarity than planned.</li>
+      <li><strong>Which form?</strong> Weigh the hydrate with the hydrate&rsquo;s molar mass, the anhydrous salt with its own.</li>
+      <li><strong>Purity counted once.</strong> Theoretical mass &divide; purity fraction. Multiplying by purity instead understates the weigh-out.</li>
+      <li><strong>M is not mM.</strong> 0.5 M is 500 mM. A factor of 1,000 hides in the prefix, not in the arithmetic.</li>
+    </ol>
+    <div class="flagnote"><strong>The volume is the expensive one.</strong> Everything else in this calculation is a single multiplication, so a mL&ndash;litre slip is a 1,000&times; error that no amount of careful weighing fixes. Convert the volume first, every time.</div>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>How do I calculate molarity?</summary><div class="ans"><p>Divide moles by litres. 1 mol in 1 L is 1 M; 0.125 mol in 0.250 L is 0.500 M.</p></div></details>
+    <details class="faq"><summary>How much do I weigh for a target molarity?</summary><div class="ans"><p>Grams = molarity &times; litres &times; molar mass. For 250 mL of 0.500 M NaOH: 0.500 &times; 0.250 &times; 39.997 = 5.00 g.</p></div></details>
+    <details class="faq"><summary>Do I add the final volume of water?</summary><div class="ans"><p>No. Dissolve the solid in part of the water, transfer it, then top up to the final volume. Adding the full volume gives a larger volume and a lower molarity.</p></div></details>
+    <details class="faq"><summary>How does purity change the weigh-out?</summary><div class="ans"><p>Divide the theoretical mass by the purity fraction. At 95% purity, 5.00 g theoretical needs 5.26 g of powder.</p></div></details>
+    <details class="faq"><summary>What is the difference between M and mM?</summary><div class="ans"><p>A factor of 1,000. 1 M = 1,000 mM. Check the prefix before the number, especially on protocols copied from another lab.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to &micro;M, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
+      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
+      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
+      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
+      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
+      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
+      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
+      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="protein-molecular-weight-calculator.html">Protein Molecular Weight</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="protein-molecular-weight-calculator.html">Next: Protein Molecular Weight</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var mode='m';
+var MOL=document.getElementById('mol'),VOLL=document.getElementById('volL'),
+    F=document.getElementById('formula'),TGT=document.getElementById('target'),
+    VOLML=document.getElementById('volMl'),PUR=document.getElementById('pur'),
+    wMol=document.getElementById('wrapMol'),wVolL=document.getElementById('wrapVolL'),
+    wF=document.getElementById('wrapFormula'),wT=document.getElementById('wrapTarget'),
+    wV=document.getElementById('wrapVolMl'),wP=document.getElementById('wrapPur'),
+    ro=document.getElementById('readout'),big=document.getElementById('big'),
+    unit=document.getElementById('unit'),side=document.getElementById('side'),
+    kv=document.getElementById('kv'),steps=document.getElementById('steps'),
+    ladder=document.getElementById('ladder'),ladderNote=document.getElementById('ladderNote');
+
+function setMode(m){
+  mode=m;
+  document.getElementById('mM').setAttribute('aria-pressed',m==='m'?'true':'false');
+  document.getElementById('mW').setAttribute('aria-pressed',m==='w'?'true':'false');
+  wMol.hidden=(m!=='m');wVolL.hidden=(m!=='m');
+  wF.hidden=(m!=='w');wT.hidden=(m!=='w');wV.hidden=(m!=='w');wP.hidden=(m!=='w');
+  run(true);
+}
+document.getElementById('mM').addEventListener('click',function(){setMode('m');});
+document.getElementById('mW').addEventListener('click',function(){setMode('w');});
+
+function kvAdd(k,v,lead){
+  var li=Chem.el('li',lead?'lead':'');
+  li.appendChild(Chem.el('span','k',k));
+  li.appendChild(Chem.el('span','v',v));
+  kv.appendChild(li);
+}
+function tableOut(node,headings,rowsData,animate){
+  Chem.clear(node);
+  var th=document.createElement('thead'),hr=document.createElement('tr');
+  headings.forEach(function(h){var c=document.createElement('th');c.textContent=h;hr.appendChild(c);});
+  th.appendChild(hr);node.appendChild(th);
+  var tb=document.createElement('tbody');
+  rowsData.forEach(function(r,i){
+    var tr=document.createElement('tr');
+    r.forEach(function(t,j){var td=document.createElement('td');td.textContent=t;
+      if(j>0){td.className='mono';}tr.appendChild(td);});
+    if(animate){Chem.stagger(tr,'anim-rise',i,55);}
+    tb.appendChild(tr);});
+  node.appendChild(tb);
+}
+function bad(msg){
+  ro.classList.add('bad');big.textContent=msg;unit.textContent='';side.textContent='';
+  Chem.clear(kv);Chem.clear(steps);Chem.clear(ladder);ladderNote.textContent='';
+}
+
+function run(animate){
+  Chem.clear(kv);
+  var S=[];
+  if(mode==='m'){
+    var n=parseFloat(MOL.value),v=parseFloat(VOLL.value);
+    if(!isFinite(n)||n<0||!isFinite(v)||v<=0){return bad('Enter moles of zero or above and a volume above zero.');}
+    ro.classList.remove('bad');
+    var M=n/v;
+    Chem.countTo(big,M,animate,M<1?4:3);
+    unit.textContent='M';
+    side.textContent=Chem.sig(n,5)+' mol \u00f7 '+Chem.sig(v,5)+' L';
+    kvAdd('Molarity',Chem.sig(M,5)+' M',true);
+    kvAdd('In millimolar',Chem.sig(M*1000,5)+' mM');
+    kvAdd('Moles',Chem.sig(n,5)+' mol');
+    kvAdd('Volume',Chem.sig(v,5)+' L ('+Chem.sig(v*1000,5)+' mL)');
+    S.push(['Divide',Chem.sig(n,5)+' mol \u00f7 '+Chem.sig(v,5)+' L = '+Chem.sig(M,5)+' M']);
+    tableOut(ladder,['Moles in 1 L','Molarity'],[[ '0.1 mol','0.100 M'],['0.5 mol','0.500 M'],['1 mol','1.000 M'],['2 mol','2.000 M']],animate);
+    ladderNote.textContent='At 1 L, the mole count and the molarity are the same number.';
+  }else{
+    var a;
+    try{a=Chem.analyse(F.value);}
+    catch(err){return bad(err.message);}
+    var t=parseFloat(TGT.value),ml=parseFloat(VOLML.value),pur=parseFloat(PUR.value);
+    if(!isFinite(t)||t<0||!isFinite(ml)||ml<=0){return bad('Enter a target molarity of zero or above and a volume above zero.');}
+    if(!isFinite(pur)||pur<=0||pur>100){pur=100;PUR.value=100;}
+    var L=ml/1000,theor=t*L*a.mw,actual=theor/(pur/100);
+    ro.classList.remove('bad');
+    Chem.countTo(big,actual,animate,3);
+    unit.textContent='g to weigh';
+    side.textContent=a.input+' \u00b7 '+Chem.fx(a.mw,3)+' g/mol \u00b7 '+Chem.sig(t,5)+' M \u00b7 '+Chem.sig(ml,5)+' mL';
+    kvAdd('Mass to weigh',Chem.sig(actual,5)+' g',true);
+    kvAdd('Theoretical mass (100% pure)',Chem.sig(theor,5)+' g');
+    kvAdd('Moles needed',Chem.sig(t*L,5)+' mol');
+    kvAdd('Molar mass',Chem.fx(a.mw,3)+' g/mol');
+    S.push(['Litres',Chem.sig(ml,5)+' mL \u00f7 1000 = '+Chem.sig(L,5)+' L']);
+    S.push(['Moles',Chem.sig(t,5)+' M \u00d7 '+Chem.sig(L,5)+' L = '+Chem.sig(t*L,5)+' mol']);
+    S.push(['Theoretical mass',Chem.sig(t*L,5)+' mol \u00d7 '+Chem.fx(a.mw,3)+' g/mol = '+Chem.sig(theor,5)+' g']);
+    if(pur<100){S.push(['Purity correction',Chem.sig(theor,5)+' g \u00f7 '+Chem.fx(pur/100,4)+' = '+Chem.sig(actual,5)+' g of powder']);}
+    var lad=[0.1,0.25,0.5,1].map(function(m){
+      return [Chem.sig(m,4)+' M',Chem.sig(m*L*a.mw,5)+' g',Chem.sig(m*L*a.mw/(pur/100),5)+' g'];});
+    tableOut(ladder,['Target','Theoretical','At '+Chem.sig(pur,4)+'% purity'],lad,animate);
+    ladderNote.textContent='For '+a.input+' made up to '+Chem.sig(ml,5)+' mL at '+Chem.sig(pur,4)+'% purity.';
+  }
+  Chem.clear(steps);
+  S.forEach(function(p,i){
+    var li=Chem.el('li'),d=Chem.el('div');
+    d.appendChild(Chem.el('span','what',p[0]));
+    d.appendChild(Chem.el('span','how'+(i===S.length-1?' sum':''),p[1]));
+    li.appendChild(d);Chem.stagger(li,'anim-rise',i,70);steps.appendChild(li);});
+}
+document.getElementById('go').addEventListener('click',function(){run(true);});
+[MOL,VOLL,F,TGT,VOLML,PUR].forEach(function(n){
+  n.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run(true);}});});
+Array.prototype.forEach.call(document.querySelectorAll('.chip'),function(c){
+  c.addEventListener('click',function(){
+    if(c.getAttribute('data-mode')==='m'){
+      MOL.value=c.getAttribute('data-mol');VOLL.value=c.getAttribute('data-vol');setMode('m');
+    }else{
+      F.value=c.getAttribute('data-f');TGT.value=c.getAttribute('data-t');
+      VOLML.value=c.getAttribute('data-v');PUR.value=100;setMode('w');
+    }});});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body>
+</html>

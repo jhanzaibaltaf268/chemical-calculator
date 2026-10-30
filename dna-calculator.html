@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DNA Calculator — Weight from Sequence or Length</title>
+<meta name="description" content="DNA calculator: weight from a base sequence or a length, single or double stranded, with GC content and the 660 Da per base pair rule. Canonical basis stated.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true">g/m</span>Chemical Weight</a>
+    <nav>
+      <a href="#working">Calculator</a>
+      <a href="#method">Method</a>
+      <a href="#traps">Traps</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html#hub">All calculators</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="crumb"><a href="index.html">Chemical Weight Calculator</a> &rsaquo; DNA</p>
+    <h1>DNA Calculator</h1>
+    <p class="standfirst">DNA weight two ways &mdash; from the bases you have, or from the length you know.</p>
+    <div class="calc">
+      <div class="fields">
+        <div class="field">
+          <label for="seq">DNA sequence (A, T, G, C) &mdash; or leave blank and use length below</label>
+          <input type="text" id="seq" value="" spellcheck="false" autocomplete="off" placeholder="e.g. ACGTACGTAC">
+          <p class="hint">A sequence gives GC content too; a length alone gives the weight only.</p>
+        </div>
+        <div class="field">
+          <label for="len">Length (bp / bases, optional)</label>
+          <input type="number" id="len" value="670" step="any" min="0">
+        </div>
+        <div class="field">
+          <label for="strand">Strand</label>
+          <select id="strand">
+            <option value="ds" selected>Double-stranded (660 Da/bp)</option>
+            <option value="ss">Single-stranded (330 Da/base)</option>
+          </select>
+        </div>
+      </div>
+      <div class="go-row">
+        <button class="go" id="go" type="button">Calculate</button>
+      </div>
+      <div class="chips">
+        <span class="chip-label">Try:</span>
+        <button class="chip" type="button" data-seq="" data-len="670" data-strand="ds">670 bp double-stranded</button>
+        <button class="chip" type="button" data-seq="ACGTACGTAC" data-len="" data-strand="ss">ACGTACGTAC single-stranded</button>
+        <button class="chip" type="button" data-seq="" data-len="1000" data-strand="ds">1,000 bp double-stranded</button>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <span class="big" id="big">&mdash;</span>
+        <span class="unit" id="unit"></span>
+        <span class="side" id="side"></span>
+      </div>
+      <ul class="kv" id="kv"></ul>
+      <div id="alerts"></div>
+      <p class="basis">Length estimate, canonical basis stated: 660 Da per base pair double-stranded, 330 Da per base single-stranded. A base-exact weight needs the sequence and the end chemistry.</p>
+    </div>
+  </div>
+
+  <div class="wrap viz" id="working">
+    <div class="panel">
+      <h2>The working</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="cap">Length times the per-unit rule. The strand choice doubles or halves the answer, so it comes first.</p>
+    </div>
+    <div class="panel span">
+      <h2>Weight at a glance</h2>
+      <div class="scroll"><table id="ladder"></table></div>
+      <p class="cap" id="ladderNote"></p>
+    </div>
+  </div>
+
+  <section class="block wrap" id="method">
+    <h2 class="head">One rule per strand</h2>
+    <p><code>double-stranded weight = base pairs &times; 660 Da</code> and <code>single-stranded weight = bases &times; 330 Da</code>. The 660 figure is two 330-Da strands averaged over base composition; it is an estimate, not a count of the actual bases.</p>
+
+    <h3>Worked by hand: 670 base pairs, double-stranded</h3>
+    <ol>
+      <li><strong>Length.</strong> 670 bp.</li>
+      <li><strong>Multiply.</strong> 670 &times; 660 = <strong>442,200 Da</strong> = 442.2 kDa.</li>
+    </ol>
+    <p>With a sequence instead, the same rule applies to its length, and GC content follows: ACGTACGTAC is 10 bases, 5 of them G or C, so <strong>50.0% GC</strong>; single-stranded it weighs 10 &times; 330 = <strong>3,300 Da</strong>.</p>
+  </section>
+
+  <section class="block wrap" id="traps">
+    <h2 class="head">Traps worth knowing</h2>
+    <ol>
+      <li><strong>Base pairs or bases?</strong> A 670 bp double-stranded fragment is 1,340 bases of sequence. Multiplying bases by 660 doubles the answer.</li>
+      <li><strong>Single or double?</strong> The strand choice is a factor of two. Primers and oligos are single-stranded; plasmids and fragments are usually double-stranded.</li>
+      <li><strong>Estimate, not exact.</strong> 660 Da/bp averages base composition. A GC-rich fragment weighs slightly more per pair than an AT-rich one; for an exact weight, sum the actual residues.</li>
+      <li><strong>Ends unstated.</strong> Phosphorylated, hydroxyl or overhanging ends shift the weight. The length rule assumes a standard linear fragment.</li>
+      <li><strong>Kilobases.</strong> 1 kb is 1,000 bp, not 1,024. A 4.42 kb plasmid is about 2,917 kDa double-stranded by this rule.</li>
+    </ol>
+    <div class="flagnote"><strong>The strand factor is the expensive one.</strong> Everything else here is a single multiplication, so entering bases where base pairs belong &mdash; or the reverse &mdash; is a clean factor-of-two error that no rounding fixes. State the strand before the length.</div>
+  </section>
+
+  <section class="block wrap" id="faq">
+    <h2 class="head">Questions people actually ask</h2>
+    <details class="faq" open><summary>How much does DNA weigh per base pair?</summary><div class="ans"><p>About 660 Da per base pair double-stranded, 330 Da per base single-stranded. 670 bp double-stranded is 442,200 Da.</p></div></details>
+    <details class="faq"><summary>Is 660 Da/bp exact?</summary><div class="ans"><p>No &mdash; it is an average over base composition. It is the standard quick estimate; a base-exact weight needs the sequence summed residue by residue.</p></div></details>
+    <details class="faq"><summary>How do I calculate GC content?</summary><div class="ans"><p>Count G plus C, divide by the total bases, times 100. ACGTACGTAC is 5 of 10, so 50.0% GC. A length alone cannot give GC content.</p></div></details>
+    <details class="faq"><summary>Single-stranded or double-stranded for a primer?</summary><div class="ans"><p>Single-stranded: use 330 Da per base. A 20-base primer is about 6,600 Da by this rule.</p></div></details>
+    <details class="faq"><summary>Why does another source give a different weight for the same fragment?</summary><div class="ans"><p>Usually the per-unit rule (660 vs 617.96 Da/bp for the sodium salt form, or a base-exact sum) or the end chemistry. Check which basis the other source states before assuming either is wrong.</p></div></details>
+  </section>
+
+  <section class="block wrap" id="hub">
+    <h2 class="head">The other calculators</h2>
+    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
+    <div class="spokes">
+      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
+      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
+      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
+      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
+      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
+      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
+      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to &micro;M, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
+      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
+      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
+      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
+      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
+      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
+      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
+      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
+      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
+    </div>
+    <p class="nextstep"><strong>Next:</strong> <a href="rna-calculator.html">RNA</a> &middot; <a href="index.html">Back to the hub</a></p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fnav">
+      <a href="index.html">Chemical Weight Calculator</a>
+      <a href="index.html#hub">All calculators</a>
+      <a href="rna-calculator.html">Next: RNA</a>
+    </div>
+    <p style="margin:0">Atomic weights: IUPAC abridged standard values, one canonical set across every page here. Results are rounded once, at the end. Check any lab-critical value against a current IUPAC table before use.</p>
+  </div>
+</footer>
+
+<script src="chem.js"></script>
+<script>
+var SEQ=document.getElementById('seq'),LEN=document.getElementById('len'),
+    STRAND=document.getElementById('strand'),
+    ro=document.getElementById('readout'),big=document.getElementById('big'),
+    unit=document.getElementById('unit'),side=document.getElementById('side'),
+    kv=document.getElementById('kv'),steps=document.getElementById('steps'),
+    ladder=document.getElementById('ladder'),ladderNote=document.getElementById('ladderNote');
+
+function kvAdd(k,v,lead){
+  var li=Chem.el('li',lead?'lead':'');
+  li.appendChild(Chem.el('span','k',k));
+  li.appendChild(Chem.el('span','v',v));
+  kv.appendChild(li);
+}
+function tableOut(node,headings,rowsData,animate){
+  Chem.clear(node);
+  var th=document.createElement('thead'),hr=document.createElement('tr');
+  headings.forEach(function(h){var c=document.createElement('th');c.textContent=h;hr.appendChild(c);});
+  th.appendChild(hr);node.appendChild(th);
+  var tb=document.createElement('tbody');
+  rowsData.forEach(function(r,i){
+    var tr=document.createElement('tr');
+    r.forEach(function(t,j){var td=document.createElement('td');td.textContent=t;
+      if(j>0){td.className='mono';}tr.appendChild(td);});
+    if(animate){Chem.stagger(tr,'anim-rise',i,55);}
+    tb.appendChild(tr);});
+  node.appendChild(tb);
+}
+function bad(msg){
+  ro.classList.add('bad');big.textContent=msg;unit.textContent='';side.textContent='';
+  Chem.clear(kv);Chem.clear(steps);Chem.clear(ladder);ladderNote.textContent='';
+}
+
+function run(animate){
+  var seq=SEQ.value.toUpperCase().replace(/[^ATGC]/g,'');
+  var lenIn=parseFloat(LEN.value);
+  var len=seq?seq.length:(isFinite(lenIn)?lenIn:0);
+  Chem.clear(kv);
+  if(!len){
+    return bad('Enter a sequence or a length first.');
+  }
+  var ds=(STRAND.value==='ds');
+  var per=ds?660:330;
+  var mw=len*per;
+  var gc=null,counts=null;
+  if(seq){
+    var g=0,c=0;
+    seq.split('').forEach(function(ch){if(ch==='G'){g++;}else if(ch==='C'){c++;}});
+    gc=(g+c)/seq.length*100;
+    counts={A:0,T:0,G:0,C:0};
+    seq.split('').forEach(function(ch){counts[ch]++;});
+  }
+  ro.classList.remove('bad');
+  Chem.countTo(big,mw,animate,0);
+  unit.textContent='Da';
+  side.textContent=Chem.fx(mw/1000,1)+' kDa \u00b7 '+len+' '+(ds?'bp':'bases')+' \u00d7 '+per+' Da';
+  kvAdd('Molecular weight',Chem.fx(mw,0)+' Da',true);
+  kvAdd('In kilodaltons',Chem.fx(mw/1000,1)+' kDa');
+  kvAdd('Length',len+' '+(ds?'base pairs':'bases'));
+  kvAdd('Per unit',per+' Da');
+  if(gc!==null){kvAdd('GC content',Chem.fx(gc,1)+'%');}
+  var S=[
+    ['Length',seq?seq.length+' bases counted from the sequence':Chem.sig(lenIn,5)+' '+(ds?'bp':'bases')+' entered'],
+    ['Rule',ds?'Double-stranded: 660 Da per base pair':'Single-stranded: 330 Da per base'],
+    ['Multiply',len+' \u00d7 '+per+' = '+Chem.fx(mw,0)+' Da']
+  ];
+  if(gc!==null){S.push(['GC content','(G + C) \u00f7 length = '+Chem.fx(gc,1)+'%']);}
+  Chem.clear(steps);
+  S.forEach(function(p,i){
+    var li=Chem.el('li'),d=Chem.el('div');
+    d.appendChild(Chem.el('span','what',p[0]));
+    d.appendChild(Chem.el('span','how'+(i===S.length-1?' sum':''),p[1]));
+    li.appendChild(d);Chem.stagger(li,'anim-rise',i,70);steps.appendChild(li);});
+  var lad=[100,500,670,1000,5000].map(function(l){
+    return [String(l)+' '+(ds?'bp':'bases'),Chem.fx(l*per,0)+' Da',Chem.fx(l*per/1000,1)+' kDa'];});
+  tableOut(ladder,['Length','Weight','Kilodaltons'],lad,animate);
+  ladderNote.textContent='Length estimate at '+per+' Da per '+(ds?'base pair':'base')+' — canonical basis stated.';
+}
+document.getElementById('go').addEventListener('click',function(){run(true);});
+[SEQ,LEN].forEach(function(n){
+  n.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run(true);}});});
+STRAND.addEventListener('change',function(){run(true);});
+Array.prototype.forEach.call(document.querySelectorAll('.chip'),function(c){
+  c.addEventListener('click',function(){
+    SEQ.value=c.getAttribute('data-seq')||'';
+    LEN.value=c.getAttribute('data-len')||'';
+    STRAND.value=c.getAttribute('data-strand');
+    run(true);});});
+run(false);
+if(!Chem.reduced){setTimeout(function(){run(true);},140);}
+</script>
+</body>
+</html>
