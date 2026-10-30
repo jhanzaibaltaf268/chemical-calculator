@@ -9,6 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.di-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.di-fill{height:100%;transform-origin:left;animation:digrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes digrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.di-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -130,6 +136,36 @@
 
     <h3>Purity-corrected stocks</h3>
     <p>A stock made from powder is really its label times the assay purity. A stock labelled 10 mg/mL at 95% purity is 9.5 mg/mL. To make 50 mL of 1 mg/mL you need (1 &times; 50) &divide; 9.5 = 5.26 mL, not 5.0 mL &mdash; using the uncorrected figure lands you at 0.95 mg/mL, 5% low. For hydrated or salt forms, take the molar mass from the vial label rather than from memory.</p>
+    <h3>Solve for any of the four</h3>
+    <p>The equation rearranges three more ways, and each answers a real question. Final concentration: 2 mL of 5 mg/mL made up to 10 mL gives C&#8322; = 5 &times; 2 &divide; 10 = <strong>1 mg/mL</strong>, a 5-fold dilution. Final volume: 10 mL of 10 mM diluted to 1 mM gives V&#8322; = 10 &times; 10 &divide; 1 = <strong>100 mL</strong>. Stock concentration: 20 mL made up to 200 mL at 1&times; came from C&#8321; = 1 &times; 200 &divide; 20 = <strong>10&times;</strong> &mdash; the buffer-stock question, answered backwards. Any three known values determine the fourth.</p>
+
+    <h3>One step against two steps, as slices</h3>
+    <p>The 10,000&times; example again, as shares of the flask. A single step takes 0.01 mL of stock in 100 mL &mdash; 0.01% of the flask, effectively invisible. The split plan takes 100 &micro;L in 10 mL (1%) and then 1.0 mL in 100 mL (1%) &mdash; two comfortable slices instead of one impossible one.</p>
+    <p><strong>Single step</strong> &mdash; 0.01 mL in 100 mL (0.01%)</p>
+    <div class="di-track"><div class="di-fill" style="width:0.4%;animation-delay:.1s;background:#d97b29"></div></div>
+    <p><strong>Step 1 of 2</strong> &mdash; 100 &micro;L in 10 mL (1%)</p>
+    <div class="di-track"><div class="di-fill" style="width:1%;animation-delay:.25s;background:#4a90b8"></div></div>
+    <p><strong>Step 2 of 2</strong> &mdash; 1.0 mL in 100 mL (1%)</p>
+    <div class="di-track"><div class="di-fill" style="width:1%;animation-delay:.4s;background:#4a90b8"></div></div>
+    <p class="cap">The single-step bar is drawn at a minimum visible width; its true share is 0.01%.</p>
+
+    <h3>The 1:10 ratio, worked both ways</h3>
+    <p>The table above reads 1:10 as one part stock plus nine parts diluent: ten parts total, DF 10, strength 1/10. The other convention reads it as one part stock plus ten parts diluent: eleven parts total, DF 11, strength 1/11. For 1,000 mL under the second convention that is 1,000 &divide; 11 = <strong>90.91 mL of concentrate and 909.09 mL of water</strong>, at <strong>9.09% strength</strong> &mdash; 9.09% below the intended 10%. The notation is identical; the result is not. Confirm the convention before pipetting.</p>
+
+    <h3>Concentrating is not a dilution</h3>
+    <p>Wanting 50 mL of 2 M from a 1 M stock gives V&#8321; = 2 &times; 50 &divide; 1 = 100 mL &mdash; more stock than the final volume, which is impossible by dilution. The calculator refuses this case on purpose: C&#8322; above C&#8321; is not a calculation, it is a different task &mdash; evaporate solvent, or start from a stronger stock. A V&#8321; larger than V&#8322; is the same signal in any rearrangement.</p>
+
+    <h3>Where the stock concentration comes from</h3>
+    <p>Dilution starts from a stock whose concentration is already known &mdash; and when it is made from powder, that concentration comes from mass, molar mass and volume, which is the <a href="molarity-calculator.html">Molarity calculator&rsquo;s</a> job. At the other end, the diluted concentration is what downstream work consumes: a protein solution diluted to its working strength is then read as mg/mL to &micro;M by the <a href="protein-molarity-calculator.html">Protein Molarity calculator</a>. Dilution sits between the two; neither end is guessed.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>2 mL of 5 mg/mL made up to 10 mL: what is the final concentration, and the dilution factor?</li>
+      <li>1,000 mL at 1:10 under the &ldquo;one part plus ten parts&rdquo; convention: how much concentrate, how much water, what strength?</li>
+      <li>50 mL of 2 M from a 1 M stock: what does the equation give, and why is it refused?</li>
+    </ol>
+    <p>Answers: (1) 5 &times; 2 &divide; 10 = 1 mg/mL; DF 5. (2) 90.91 mL concentrate + 909.09 mL water; 9.09% strength, 9.09% below 10%. (3) V&#8321; = 100 mL, more than the 50 mL final volume &mdash; concentrating, not diluting, so a stronger stock or evaporation is needed.</p>
+    <p class="cap">Sources: the dilution equation is mole conservation, C &times; V unchanged by adding solvent; the page&rsquo;s own arithmetic throughout.</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -142,6 +178,8 @@
       <li><strong>Assuming volumes simply add.</strong> Fine for dilute aqueous solutions; not for concentrated mixtures &mdash; 50 mL of ethanol plus 50 mL of water is about 96 mL. Top up to the mark.</li>
       <li><strong>Rounding volumes early.</strong> 5.26 mL rounded to 5.3 shifts the result by 0.8%. At the microlitre scale, rounding to the nearest &micro;L can shift it by 10%.</li>
       <li><strong>Compounding error down a series.</strong> Every transfer carries its own error. Use the largest practical transfer volume, change tips each step, and mix every tube fully.</li>
+      <li><strong>1:10 without a convention.</strong> One part plus nine (DF 10) here, one part plus ten (DF 11) elsewhere &mdash; a 9.09% difference in the final concentration. The table on this page states its convention; a protocol that does not must be confirmed.</li>
+      <li><strong>Wrong molar mass for the form.</strong> A stock made from a hydrate or a salt uses the vial label&rsquo;s form, not the anhydrous formula. The wrong molar mass makes the stock concentration wrong before dilution even starts.</li>
     </ul>
   </section>
 
@@ -152,30 +190,12 @@
     <details class="faq"><summary>Do C&#8321; and C&#8322; need the same units?</summary><div class="ans"><p>Yes &mdash; the same kind and the same scale. This calculator uses one unit selector for both so they cannot drift apart. Volumes must match each other, but need not match the concentrations.</p></div></details>
     <details class="faq"><summary>Does purity change the calculation?</summary><div class="ans"><p>Yes. Correct C&#8321; first. A 95%-pure stock labelled 10 mg/mL is really 9.5 mg/mL, so 50 mL of 1 mg/mL needs 5.26 mL.</p></div></details>
     <details class="faq"><summary>Do 1:10, 10&times; and a factor of 10 mean the same thing?</summary><div class="ans"><p>Here, yes: one part stock plus nine parts diluent, ten parts total, one tenth the strength. Some protocols use 1:10 differently, so confirm the convention.</p></div></details>
+    <details class="faq"><summary>Can I solve for C&#8321;, C&#8322; or V&#8322; instead of V&#8321;?</summary><div class="ans"><p>Yes &mdash; the equation rearranges. C&#8322; = C&#8321;V&#8321; &divide; V&#8322; (2 mL of 5 mg/mL to 10 mL gives 1 mg/mL); V&#8322; = C&#8321;V&#8321; &divide; C&#8322; (10 mL of 10 mM to 1 mM gives 100 mL); C&#8321; = C&#8322;V&#8322; &divide; V&#8321; (20 mL to 200 mL at 1&times; came from a 10&times; stock).</p></div></details>
+    <details class="faq"><summary>What if my target is stronger than my stock?</summary><div class="ans"><p>That is concentrating, not diluting, and no dilution step achieves it: 50 mL of 2 M from a 1 M stock would need 100 mL of stock, more than the final volume. Evaporate solvent or start from a stronger stock.</p></div></details>
+    <details class="faq"><summary>Why is 1:10 sometimes 11 parts?</summary><div class="ans"><p>Two conventions share the notation. This page reads 1:10 as one part stock plus nine parts diluent (10 total, DF 10). Some protocols read it as one part plus ten parts diluent (11 total, DF 11): 1,000 mL then needs 90.91 mL of concentrate and 909.09 mL of water, at 9.09% strength.</p></div></details>
+    <details class="faq"><summary>How do I know the stock concentration to enter?</summary><div class="ans"><p>From the label, corrected for purity &mdash; or, for a stock made from powder, from mass, molar mass and volume, which is the <a href="molarity-calculator.html">Molarity calculator&rsquo;s</a> job. Never enter a guessed stock concentration.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="protein-molarity-calculator.html">Protein Molarity</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
