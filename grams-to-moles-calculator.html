@@ -9,6 +9,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.gm-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.gm-fill{height:100%;transform-origin:left;animation:gmgrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes gmgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.gm-step{display:inline-block;background:#eef3f6;border:1px solid #c9d6dd;border-radius:999px;padding:.3rem .8rem;margin:0 .2rem .4rem 0;font-weight:600}
+.gm-arrow{display:inline-block;margin:0 .2rem .4rem 0;color:#8a8f94}
+@media (prefers-reduced-motion:reduce){.gm-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -82,7 +90,7 @@
 
   <section class="block wrap" id="method">
     <h2 class="head">Two directions, one divisor</h2>
-    <p><code>moles = grams &divide; molar mass</code> and <code>grams = moles &times; molar mass</code>. The molar mass comes from the formula, brackets and hydrate water included.</p>
+    <p><code>moles = grams &divide; molar mass</code> and <code>grams = moles &times; molar mass</code>. The <a href="molar-mass-calculator.html">molar mass</a> comes from the formula, brackets and hydrate water included.</p>
 
     <h3>Worked by hand: 25 g of sodium chloride</h3>
     <p>NaCl weighs 22.990 + 35.45 = <strong>58.440 g/mol</strong>.</p>
@@ -91,6 +99,83 @@
       <li><strong>Count the units.</strong> 0.4278 &times; 6.02214076 &times; 10<sup>23</sup> = <strong>2.58 &times; 10<sup>23</sup></strong> formula units.</li>
     </ol>
     <p>The default above runs the other way round: 180.156 g of glucose &divide; 180.156 g/mol = <strong>1.0000 mol</strong> exactly &mdash; one mole of glucose by definition.</p>
+
+    <h3>Worked by hand: 180.156 g of glucose is one mole</h3>
+    <p>Glucose, C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>, weighs 6 &times; 12.011 + 12 &times; 1.008 + 6 &times; 15.999 = 72.066 + 12.096 + 95.994 = <strong>180.156 g/mol</strong>.</p>
+    <ol>
+      <li><strong>Divide.</strong> 180.156 &divide; 180.156 = <strong>1.0000 mol</strong>.</li>
+      <li><strong>Count the molecules.</strong> 1.0000 &times; 6.02214076 &times; 10<sup>23</sup> = <strong>6.022 &times; 10<sup>23</sup></strong> glucose molecules.</li>
+    </ol>
+    <p>That is why the calculator opens on 180.156 g of glucose: the weighed mass and the molar mass are the same number, so the answer is one mole by construction.</p>
+
+    <h3>Worked by hand: 250 mg of aspirin, and the reverse check</h3>
+    <p>Aspirin, C<sub>9</sub>H<sub>8</sub>O<sub>4</sub>, weighs 9 &times; 12.011 + 8 &times; 1.008 + 4 &times; 15.999 = 108.099 + 8.064 + 63.996 = <strong>180.159 g/mol</strong>.</p>
+    <ol>
+      <li><strong>Convert milligrams first.</strong> 250 mg = <strong>0.250 g</strong>.</li>
+      <li><strong>Divide.</strong> 0.250 &divide; 180.159 = <strong>0.001388 mol</strong>, which is <strong>1.388 mmol</strong> (multiply moles by 1,000).</li>
+      <li><strong>Count the molecules.</strong> 0.001388 &times; 6.02214076 &times; 10<sup>23</sup> = <strong>8.359 &times; 10<sup>20</sup></strong> aspirin molecules.</li>
+      <li><strong>Check in reverse.</strong> 0.001388 mol &times; 180.159 g/mol = <strong>0.250 g</strong> &mdash; the starting mass, as it must be.</li>
+    </ol>
+
+    <h3>Mass to moles ladder for sodium chloride</h3>
+    <p>NaCl is 58.440 g/mol, so 58.440 g is exactly one mole and every other mass scales from it:</p>
+    <div class="scroll"><table>
+      <tr><th>Mass of NaCl</th><th>Moles</th><th>Formula units</th></tr>
+      <tr><td class="mono">1 g</td><td class="mono">0.01711 mol</td><td class="mono">1.030 &times; 10<sup>22</sup></td></tr>
+      <tr><td class="mono">5.844 g</td><td class="mono">0.1000 mol</td><td class="mono">6.022 &times; 10<sup>22</sup></td></tr>
+      <tr><td class="mono">10 g</td><td class="mono">0.1711 mol</td><td class="mono">1.030 &times; 10<sup>23</sup></td></tr>
+      <tr><td class="mono">25 g</td><td class="mono">0.4278 mol</td><td class="mono">2.576 &times; 10<sup>23</sup></td></tr>
+      <tr><td class="mono">58.440 g</td><td class="mono">1.0000 mol</td><td class="mono">6.022 &times; 10<sup>23</sup></td></tr>
+      <tr><td class="mono">100 g</td><td class="mono">1.711 mol</td><td class="mono">1.030 &times; 10<sup>24</sup></td></tr>
+    </table></div>
+    <p>Read any row across: mass &divide; 58.440 gives moles, and moles &times; 6.02214076 &times; 10<sup>23</sup> gives formula units.</p>
+    <h3>Which direction is your question asking?</h3>
+    <p>Every moles question gives you something and asks for something else. Match what you have to the right rearrangement, and the arithmetic is one step:</p>
+    <div class="scroll"><table>
+      <thead><tr><th>You have</th><th>You want</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td>Mass in grams</td><td>Moles</td><td class="mono">n = m &divide; M</td></tr>
+        <tr><td>Moles</td><td>Mass in grams</td><td class="mono">m = n &times; M</td></tr>
+        <tr><td>Mass and moles</td><td>Molar mass</td><td class="mono">M = m &divide; n</td></tr>
+        <tr><td>Solution strength and volume</td><td>Moles</td><td class="mono">n = M &times; V</td></tr>
+        <tr><td>Gas pressure, volume, temperature</td><td>Moles</td><td class="mono">n = PV &divide; RT</td></tr>
+        <tr><td>Particle count</td><td>Moles</td><td class="mono">n = N &divide; N&#8320;</td></tr>
+      </tbody>
+    </table></div>
+    <p>The solution and gas rows lead elsewhere on this site: the <a href="molarity-calculator.html">Molarity calculator</a> takes strength and volume, and the <a href="gas-volume-calculator.html">Gas Volume calculator</a> takes pressure, volume and temperature. Everything else on this page is the first three rows.</p>
+
+    <h3>Units on both ladders at once</h3>
+    <p>Balances read milligrams, grams or kilograms; protocols ask for moles, millimoles or micromoles. Cross both ladders in one chain, converting mass to grams first and moles to the wanted unit last. Watch 250 mg of aspirin travel the whole way: 250 mg = 0.250 g, 0.250 &divide; 180.159 = 0.001388 mol, which is 1.388 mmol, which is 1,388 &micro;mol. The same chain the other way: a balance reading 125 mg of NaCl is 0.125 g, 0.125 &divide; 58.440 = 0.002139 mol, or 2.139 mmol. And a bulk scale reading 2.5 kg of water is 2,500 g, 2,500 &divide; 18.015 = 138.77 mol. One chain, no separate conversions to remember.</p>
+    <p aria-hidden="true"><span class="gm-step anim-pop" style="animation-delay:.05s">250 mg</span><span class="gm-arrow anim-pop" style="animation-delay:.2s">&rarr;</span><span class="gm-step anim-pop" style="animation-delay:.35s">0.250 g</span><span class="gm-arrow anim-pop" style="animation-delay:.5s">&rarr;</span><span class="gm-step anim-pop" style="animation-delay:.65s">0.001388 mol</span><span class="gm-arrow anim-pop" style="animation-delay:.8s">&rarr;</span><span class="gm-step anim-pop" style="animation-delay:.95s">1.388 mmol</span><span class="gm-arrow anim-pop" style="animation-delay:1.1s">&rarr;</span><span class="gm-step anim-pop" style="animation-delay:1.25s">1,388 &micro;mol</span></p>
+    <p class="cap">Each pill pops in after the last, following one sample across both unit ladders.</p>
+
+    <h3>Same mass, different moles</h3>
+    <p>One hundred grams of three substances holds very different amounts. Water gives the most moles because each molecule is lightest; glucose gives the fewest. Bars are scaled to water.</p>
+    <p><strong>Water</strong> &mdash; 100 g &divide; 18.015 = 5.551 mol</p>
+    <div class="gm-track"><div class="gm-fill" style="width:100%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>Salt</strong> &mdash; 100 g &divide; 58.440 = 1.711 mol</p>
+    <div class="gm-track"><div class="gm-fill" style="width:30.8%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p><strong>Glucose</strong> &mdash; 100 g &divide; 180.156 = 0.5551 mol</p>
+    <div class="gm-track"><div class="gm-fill" style="width:10.0%;animation-delay:.4s;background:#d97b29"></div></div>
+    <p class="cap">Same weighed mass, ten times fewer moles of glucose than of water. There is no single grams-to-moles factor: the substance sets it.</p>
+
+    <h3>Using the moles: ratios in a reaction</h3>
+    <p>Converting to moles is usually only the first half. Balanced equations speak in moles, so the mole counts go straight into the ratio. Worked end to end: hydrogen and oxygen make water, 2H<sub>2</sub> + O<sub>2</sub> &rarr; 2H<sub>2</sub>O, a 2:1 ratio of hydrogen to oxygen. Start with 10 g of hydrogen: H<sub>2</sub> weighs 2.016 g/mol, so 10 &divide; 2.016 = 4.960 mol of H<sub>2</sub>. The ratio halves it for oxygen: 4.960 &divide; 2 = 2.480 mol of O<sub>2</sub>, which weighs 2.480 &times; 31.998 = 79.36 g. The water made is 4.960 mol &times; 18.015 g/mol = 89.36 g. Mass in, moles across, mass out &mdash; the ratio step in the middle is why the conversion exists at all.</p>
+
+    <h3>Impure samples and mixtures, worked</h3>
+    <p>Purity first, division second. A 100 g bottle that is 95% NaCl holds 0.95 &times; 100 = 95 g of NaCl, which is 95 &divide; 58.440 = 1.626 mol; dividing the full 100 g would overstate the moles by the 5 g of impurity. A mixture has no single molar mass at all: work each component separately. Ten grams of a 50/50 NaCl/KCl mix is 5 g of NaCl, 5 &divide; 58.440 = 0.08556 mol, plus 5 g of KCl, 5 &divide; 74.548 = 0.06707 mol. Two mole counts, not one &mdash; adding the masses and dividing once by either molar mass gives a number that means nothing.</p>
+
+    <h3>How precise should the answer be?</h3>
+    <p>Match your least precise input. A balance reading to the nearest 0.01 g does not justify five decimals in the mole count, and a molar mass quoted to three decimals caps the answer at three or four significant figures. The calculator shows more digits than most measurements justify so the arithmetic stays visible; round the final answer to what you actually measured. Rounding changes the display, not the calculation &mdash; keep full precision through the steps and round once, at the end.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>How many moles are in 40 g of glucose?</li>
+      <li>A protocol asks for 2.5 mmol of NaCl. What mass do you weigh?</li>
+      <li>You have 5 g of aspirin at 80% purity. How many moles of aspirin is that?</li>
+    </ol>
+    <p>Answers: (1) 40 &divide; 180.156 = 0.2220 mol. (2) 0.0025 mol &times; 58.440 g/mol = 0.1461 g, or 146.1 mg. (3) 0.80 &times; 5 = 4 g of aspirin, 4 &divide; 180.159 = 0.02220 mol.</p>
+    <p class="cap">Sources: CIAAW Abridged Standard Atomic Weights 2024; BIPM, the SI mole; NIST, 2019 SI redefinition; LibreTexts, Mole-Mass and Mass-Mole Conversions.</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -99,8 +184,13 @@
       <li><strong>Which form?</strong> Anhydrous CuSO4 is 159.602 g/mol; the pentahydrate is 249.677. Typing the wrong one moves every answer by 56%.</li>
       <li><strong>Salt or free base?</strong> A drug&middot;HCl salt weighs about 36.458 g/mol more than the free base. Divide by the salt mass when you weigh the salt.</li>
       <li><strong>Milligrams are not grams.</strong> 250 mg is 0.250 g. Dividing milligrams by g/mol gives millimoles, not moles.</li>
-      <li><strong>Moles of what?</strong> State the unit: moles of NaCl formula units, moles of glucose molecules. &ldquo;Moles of sodium&rdquo; in NaCl is the same number; in Na2CO3 it is double.</li>
+      <li><strong>Moles of what?</strong> State the unit: moles of NaCl formula units, moles of glucose molecules. &ldquo;Moles of sodium&rdquo; in NaCl is the same number; in Na2CO3 it is double. For grams of a single element inside a compound, use the <a href="element-mass-calculator.html">Element Mass calculator</a>.</li>
       <li><strong>Round once.</strong> Keep full precision until the final line.</li>
+      <li><strong>Brackets multiply everything inside.</strong> Ca(OH)<sub>2</sub> is 74.092 g/mol, not 57.085: the subscript 2 doubles both O and H. Count the bracketed group twice.</li>
+      <li><strong>Purity counts.</strong> A 95% pure sample contributes only 0.95 &times; the weighed mass of compound. Multiply by the purity fraction before dividing.</li>
+      <li><strong>Moles are not molarity.</strong> Moles alone say nothing about concentration; divide by the volume in litres to get mol/L &mdash; the <a href="molarity-calculator.html">Molarity calculator</a> does that step.</li>
+      <li><strong>Millimoles are not micromoles.</strong> One millimole is 1,000 micromoles. Reporting 1.388 mmol as 1.388 &micro;mol understates the amount a thousandfold &mdash; check which side of the ladder the protocol wants.</li>
+      <li><strong>More digits than the balance justifies.</strong> A mass weighed to two significant figures gives a mole count to two significant figures. Extra digits from the calculator are display, not accuracy.</li>
     </ol>
     <div class="flagnote"><strong>The hydrate is the expensive one.</strong> Forgetting five waters in CuSO4&middot;5H2O understates the molar mass by 90.075 g/mol, so the mole count comes out about 56% too high. Check the label before the arithmetic.</div>
   </section>
@@ -112,30 +202,17 @@
     <details class="faq"><summary>How many molecules are in a mole?</summary><div class="ans"><p>6.02214076 &times; 10<sup>23</sup> &mdash; the Avogadro constant. Multiply moles by it for molecules, or by it for formula units of a salt.</p></div></details>
     <details class="faq"><summary>Do I use the hydrate or the anhydrous mass?</summary><div class="ans"><p>Whichever form you actually weigh. The label decides: a hydrate&rsquo;s waters are part of the weighed mass and part of the molar mass.</p></div></details>
     <details class="faq"><summary>Why does my mole count look 1,000&times; off?</summary><div class="ans"><p>Almost always milligrams entered as grams, or the reverse. 250 mg is 0.250 g; dividing 250 by g/mol gives millimoles.</p></div></details>
+    <details class="faq"><summary>How many moles are in 1 gram of water?</summary><div class="ans"><p>1 &divide; 18.015 g/mol = 0.05551 mol, about 3.343 &times; 10<sup>22</sup> water molecules.</p></div></details>
+    <details class="faq"><summary>What is a millimole, and when do I use it?</summary><div class="ans"><p>One millimole (mmol) is 0.001 mol. Use it for milligram-scale work: 250 mg of aspirin is 1.388 mmol, which is easier to read than 0.001388 mol.</p></div></details>
+    <details class="faq"><summary>How many grams is 0.5 mol of sodium chloride?</summary><div class="ans"><p>Multiply: 0.5 mol &times; 58.440 g/mol = 29.220 g.</p></div></details>
+    <details class="faq"><summary>How many moles of oxygen atoms are in 1 mol of glucose?</summary><div class="ans"><p>Six. Each glucose molecule, C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>, carries 6 oxygen atoms, so 1 mol of glucose contains 6 mol of oxygen atoms.</p></div></details>
+    <details class="faq"><summary>I know the mass and the moles. How do I find the molar mass?</summary><div class="ans"><p>Divide: M = m &divide; n. A sample weighing 36.04 g that contains 2.000 mol has a molar mass of 36.04 &divide; 2.000 = 18.02 g/mol &mdash; water, within rounding. This rearrangement identifies an unknown or checks an experimental measurement.</p></div></details>
+    <details class="faq"><summary>How do I get moles from a solution?</summary><div class="ans"><p>Multiply strength by volume: n = M &times; V, with volume in litres. 0.200 L of 0.500 M solution holds 0.100 mol. The <a href="molarity-calculator.html">Molarity calculator</a> carries this step, including the mass to weigh out.</p></div></details>
+    <details class="faq"><summary>How do I get moles from a gas?</summary><div class="ans"><p>Use n = PV &divide; RT, with pressure, volume and temperature in matching units. The <a href="gas-volume-calculator.html">Gas Volume calculator</a> handles the gas side, including which STP value the question means.</p></div></details>
+    <details class="faq"><summary>What if my sample is only 95% pure?</summary><div class="ans"><p>Multiply the weighed mass by the purity fraction first, then divide. 100 g at 95% purity is 95 g of compound: 95 &divide; 58.440 = 1.626 mol of NaCl. Dividing the full 100 g counts the impurity as product.</p></div></details>
+    <details class="faq"><summary>How many decimals should I report?</summary><div class="ans"><p>As many as your least precise input justifies &mdash; usually three or four significant figures. Keep full precision through the working and round once, at the end.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to &micro;M, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="molarity-calculator.html">Molarity</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
