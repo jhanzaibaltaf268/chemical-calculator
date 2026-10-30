@@ -9,6 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.aa-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.aa-fill{height:100%;transform-origin:left;animation:aagrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes aagrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.aa-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -129,6 +135,12 @@
     <p><strong>Insulin A chain</strong>, GIVEQCCTSICSLYQLENYCN, = <strong>2,383.71 Da</strong> average, <strong>2,382.00 Da</strong> monoisotopic. <strong>Ubiquitin</strong> = <strong>8,564.84 Da</strong>. <strong>Peptide GGCK</strong> = <strong>363.43 Da</strong> by full-precision residues (363.44 Da from a two-decimal table &mdash; see the note above). Each disulfide bond subtracts 2.016 Da.</p>
     <p>Average mass suits lab work and SDS-PAGE; monoisotopic mass suits high-resolution mass spectrometry.</p>
 
+    <h3>Worked example: one acid, free against residue</h3>
+    <p><strong>Alanine, average mass.</strong> Free 89.09 Da &minus; 18.015 Da water = 71.075 Da, which rounds to <strong>71.08 Da residue</strong> &mdash; exactly the table value below. The same acid in monoisotopic mass is 89.048 Da free and 71.037 Da residue (89.048 &minus; 18.01056 = 71.037 Da, to three decimals). One acid, one water, two different mass types &mdash; never mix the average water (18.015 Da) with monoisotopic residues, or the monoisotopic water (18.01056 Da) with average residues.</p>
+
+    <h3>Worked example: a short chain with water and a disulfide</h3>
+    <p><strong>Peptide CC, average mass, with its two cysteines joined by one disulfide bond.</strong> Residues first: 103.1388 + 103.1388 = 206.2776 Da. Add one water for the termini: 206.2776 + 18.015 = 224.2926 Da &mdash; that is the chain with no disulfide, <strong>224.29 Da</strong>. Then subtract one disulfide: 224.2926 &minus; 2.016 = 222.2766 Da, so the oxidised chain is <strong>222.28 Da</strong>. The same sum from the printed two-decimal table (103.14 + 103.14 + 18.015 &minus; 2.016 = 222.279 Da) also rounds to 222.28 Da, so the answer is stable either way here. Note what was <em>not</em> done: water was added once, not once per residue, and the disulfide was subtracted once, at the end.</p>
+
     <h3>Why your supplier&rsquo;s number (COA) may differ</h3>
     <p>Before disputing a value, check those four first &mdash; they explain almost every mismatch:</p>
     <ul>
@@ -165,6 +177,26 @@
       </tbody>
     </table></div>
     <p>Summing free masses without subtracting water for each peptide bond is the classic beginner error &mdash; it overstates every protein by 18.015 Da per bond. Single-acid figures above are the draft&rsquo;s printed two-decimal values; chain sums use full-precision residues, so a full-precision sum can differ from the printed table by 0.01 Da (cysteine free prints 121.16 Da; full-precision residues give 121.15 Da).</p>
+    <h3>Every acid is glycine plus a side chain</h3>
+    <p>All 20 standard acids share one core, C&#8322;H&#8325;NO&#8322;, which sums to 2 &times; 12.011 + 5 &times; 1.008 + 14.007 + 2 &times; 15.999 = <strong>75.067 Da</strong> on this site&rsquo;s atomic weights. That is glycine itself: its side chain is a single hydrogen, so glycine is the core, 75.07 Da free. Every other acid is glycine plus a side-chain difference. Alanine (C&#8323;H&#8327;NO&#8322;) is glycine plus CH&#8322;, 14.027 Da: 75.067 + 14.027 = 89.094 Da, which prints as 89.09 Da free. Serine (C&#8323;H&#8327;NO&#8323;) is glycine plus CH&#8322;O, 30.026 Da: 75.067 + 30.026 = 105.093 Da, or 105.09 Da free. Cysteine (C&#8323;H&#8327;NO&#8322;S) sums to 121.154 Da on these weights, which prints as 121.15 Da &mdash; the printed table&rsquo;s 121.16 Da comes from a different table&rsquo;s rounding, the same 0.01 Da story as GGCK. Any formula sums the same way &mdash; the <a href="molar-mass-calculator.html">Molar Mass calculator</a> does it atom by atom.</p>
+
+    <h3>The water slice: small acids, big share</h3>
+    <p>The 18.015 Da of water is a fixed amount, so it is a much bigger share of a small acid than of a large one: 24.0% of glycine&rsquo;s free mass, but only 8.8% of tryptophan&rsquo;s. Bars are scaled to tryptophan&rsquo;s free mass.</p>
+    <p><strong>Glycine, free</strong> &mdash; 75.07 Da</p>
+    <div class="aa-track"><div class="aa-fill" style="width:36.8%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>Glycine, residue</strong> &mdash; 57.05 Da</p>
+    <div class="aa-track"><div class="aa-fill" style="width:27.9%;animation-delay:.25s;background:#8fbfa5"></div></div>
+    <p><strong>Tryptophan, free</strong> &mdash; 204.23 Da</p>
+    <div class="aa-track"><div class="aa-fill" style="width:100%;animation-delay:.4s;background:#5aa469"></div></div>
+    <p><strong>Tryptophan, residue</strong> &mdash; 186.21 Da</p>
+    <div class="aa-track"><div class="aa-fill" style="width:91.2%;animation-delay:.55s;background:#d97b29"></div></div>
+    <p class="cap">The same 18.015 Da removed from each; the gap looks small on tryptophan and large on glycine.</p>
+
+    <h3>Free, residue, or salt? Which number is on the bottle</h3>
+    <p>A bottle rarely holds the free acid alone. Hydrochloride salts add 36.46 Da per HCl: cysteine as its hydrochloride is 121.15 + 36.46 = 157.61 Da on these weights, not 121.15 Da &mdash; weighing the salt as if it were the free acid gives less amino acid than planned. Hydrates add 18.015 Da per water, the same water as everywhere else on this page. And a supplier&rsquo;s certificate may quote the salt, the hydrate, or the free acid without saying which in the headline number, so read the form before comparing any single-acid weight with the table above.</p>
+
+    <h3>From one acid to a chain, without the 18 Da error</h3>
+    <p>The bridge from this page to the chain pages is one rule: residues, never free masses, plus one water. The AG dipeptide shows it both ways. From residues: alanine 71.0788 + glycine 57.0519 = 128.1307 Da, plus 18.015 Da of water = <strong>146.15 Da</strong>. From free masses: 75.07 + 89.09 = 164.16 Da, minus one water for the single bond: 164.16 &minus; 18.015 = 146.15 Da. Same answer, because the free sum double-counts exactly one water per bond. Longer chains follow the same rule &mdash; the <a href="peptide-calculator.html">Peptide calculator</a> adds disulfides and capped termini, and the <a href="protein-molecular-weight-calculator.html">Protein Molecular Weight calculator</a> applies it to full proteins.</p>
 
     <h3>Try it with the table</h3>
     <ol>
@@ -172,6 +204,14 @@
       <li>For a chain, add residue masses &mdash; never free masses &mdash; then add one water (18.015 Da average).</li>
       <li>Check your answer against the checked examples above (insulin A chain, ubiquitin, GGCK).</li>
     </ol>
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>Serine free is 105.09 Da average. What is its residue mass?</li>
+      <li>Glycine and alanine as free acids sum to 164.16 Da. What does the AG dipeptide weigh?</li>
+      <li>Cysteine hydrochloride: free cysteine 121.15 Da plus one HCl at 36.46 Da. What is the salt&rsquo;s mass?</li>
+    </ol>
+    <p>Answers: (1) 105.09 &minus; 18.015 = 87.08 Da. (2) 164.16 &minus; 18.015 = 146.15 Da &mdash; one bond, one water. (3) 121.15 + 36.46 = 157.61 Da.</p>
+    <p class="cap">Sources: IUPAC abridged standard atomic weights; ExPASy ProtParam (reference tables).</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -183,6 +223,10 @@
       <li><strong>Ile against Leu.</strong> Identical mass (isomers). No mass calculator can tell them apart; the sequence must.</li>
       <li><strong>Salt form.</strong> A TFA or HCl salt weighs more than the free peptide. Check whether the supplier&rsquo;s weight includes the counter-ion.</li>
       <li><strong>Average or monoisotopic?</strong> Picking the wrong one explains most small mismatches with a supplier&rsquo;s certificate, before any other cause.</li>
+      <li><strong>Modified termini.</strong> An N-acetyl terminus adds 42.011 Da and a C-amide terminus subtracts 0.984 Da &mdash; apply both corrections, or a capped peptide will look wrong by exactly those amounts.</li>
+      <li><strong>Unknown letters silently skipped.</strong> Only the 20 standard one-letter codes count, so a sequence containing B, Z, X, U or O has those positions skipped from the total (the calculator flags them) &mdash; check the residue count against the sequence length.</li>
+      <li><strong>Mixed mass types.</strong> Never pair the average water (18.015 Da) with monoisotopic residues, or the monoisotopic water (18.01056 Da) with average residues. Each bond then slips by 0.004 Da &mdash; invisible for one acid, visible across a long chain.</li>
+      <li><strong>Hydrochloride weighed as free acid.</strong> A salt is heavier than its acid by 36.46 Da per HCl. Weighing the salt as if it were the free acid gives less amino acid than planned, and the shortfall grows with every HCl in the form.</li>
     </ol>
     <div class="flagnote"><strong>The 18 Da error is the famous one.</strong> A result about 18 Da &mdash; or a multiple of it &mdash; away from the expected value is almost always a water-count error: free masses summed, termini added twice, or one water per residue. Count bonds: n residues, n&minus;1 waters lost, one water back.</div>
   </section>
@@ -195,30 +239,16 @@
     <details class="faq"><summary>Why do results vary slightly between sources?</summary><div class="ans"><p>Different sources use different precision or older atomic weight values. This site uses one canonical value per compound everywhere. Check, in order: average vs monoisotopic, cysteine state, termini, salt vs free base, and non-standard residues.</p></div></details>
     <details class="faq"><summary>Which amino acid is heaviest, and which is lightest?</summary><div class="ans"><p>Tryptophan is heaviest (204.23 Da free, 186.21 Da residue); glycine is lightest (75.07 Da free, 57.05 Da residue).</p></div></details>
     <details class="faq"><summary>How do I calculate a peptide&rsquo;s mass from this table?</summary><div class="ans"><p>Add the residue masses, then add 18.015 Da (average) for the termini, then apply corrections: &minus;2.016 Da per disulfide, +42.011 Da for N-acetyl, &minus;0.984 Da for C-amide. Worked: GGCK = 363.43 Da average by full-precision residues.</p></div></details>
+    <details class="faq"><summary>Why do isoleucine and leucine have the same mass?</summary><div class="ans"><p>They are isomers with the same formula, C6H13NO2, arranged differently, so both are 131.17 Da free and 113.16 Da residue. No mass calculation can tell them apart; only the sequence can.</p></div></details>
+    <details class="faq"><summary>What does a disulfide bond do to a peptide&rsquo;s mass?</summary><div class="ans"><p>Each disulfide bond subtracts 2.016 Da, because two hydrogens are lost when the bond forms. Worked: CC is 224.29 Da with no disulfide and 222.28 Da with one. Count only bonds you know exist &mdash; two cysteines in a sequence do not prove a bond.</p></div></details>
+    <details class="faq"><summary>Does this calculator include the salt form my supplier sells?</summary><div class="ans"><p>No &mdash; it gives the free peptide. A TFA or HCl salt weighs more, because the counter-ion is included in the supplier&rsquo;s weight but not in the free-peptide mass, so check the certificate of analysis for salt against free base before comparing numbers.</p></div></details>
+    <details class="faq"><summary>What if my protein has modified residues, not just the standard 20?</summary><div class="ans"><p>Then the 20-acid table alone is not enough: each modification changes the mass (for example phosphorylation and glycosylation add mass the standard residue does not carry). Work out the modified residue&rsquo;s mass first, then use the same rule &mdash; residues plus one water, then disulfide and termini corrections.</p></div></details>
+    <details class="faq"><summary>How do I work out a free mass from the formula?</summary><div class="ans"><p>Add the atomic weights of every atom. Glycine, C&#8322;H&#8325;NO&#8322;, is 2 &times; 12.011 + 5 &times; 1.008 + 14.007 + 2 &times; 15.999 = 75.07 Da. The <a href="molar-mass-calculator.html">Molar Mass calculator</a> does any formula the same way.</p></div></details>
+    <details class="faq"><summary>Why does cysteine print as 121.16 in the table but 121.15 from full precision?</summary><div class="ans"><p>Different tables round differently. The printed two-decimal table says 121.16 Da; summing full-precision atoms on this site&rsquo;s weights gives 121.154 Da, which prints as 121.15 Da. Same molecule, 0.01 Da of table rounding &mdash; the GGCK story in miniature.</p></div></details>
+    <details class="faq"><summary>What does a hydrochloride salt add?</summary><div class="ans"><p>36.46 Da per HCl. Cysteine hydrochloride is 121.15 + 36.46 = 157.61 Da on these weights, against 121.15 Da for the free acid.</p></div></details>
+    <details class="faq"><summary>How do I go from one acid to a whole chain?</summary><div class="ans"><p>Add residue masses, never free masses, then add one water (18.015 Da average) for the termini, then disulfide and termini corrections. The <a href="peptide-calculator.html">Peptide calculator</a> does short chains with corrections; the <a href="protein-molecular-weight-calculator.html">Protein Molecular Weight calculator</a> does full proteins.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to &micro;M, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="dna-calculator.html">DNA</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
