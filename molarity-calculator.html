@@ -9,6 +9,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.mo-flask{width:7rem;height:9rem;border:3px solid #5a646b;border-top:none;border-radius:0 0 1.2rem 1.2rem;position:relative;overflow:hidden;margin:.5rem 0 .3rem}
+.mo-liquid{position:absolute;left:0;right:0;bottom:0;height:78%;background:#4a90b8;transform-origin:bottom;animation:mofill 1.4s cubic-bezier(.2,.7,.3,1) both}
+@keyframes mofill{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.mo-mark{position:absolute;left:0;right:0;top:22%;border-top:2px dashed #2b2b2b}
+.mo-cols{display:flex;align-items:flex-end;gap:1.2rem;margin:.5rem 0 .3rem}
+.mo-col{width:4.5rem;background:#5aa469;transform-origin:bottom;animation:mofill 1s cubic-bezier(.2,.7,.3,1) both}
+@media (prefers-reduced-motion:reduce){.mo-liquid,.mo-col{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -97,7 +106,7 @@
 
   <section class="block wrap" id="method">
     <h2 class="head">Two directions, one definition</h2>
-    <p><code>M = n &divide; V</code> with V in litres, and <code>grams = M &times; V(L) &times; molar mass</code>. Purity divides at the end: a solid that is only 95% the compound needs theoretical mass &divide; 0.95 of powder.</p>
+    <p><code>M = n &divide; V</code> with V in litres, and <code>grams = M &times; V(L) &times; molar mass</code>. Purity divides at the end: a solid that is only 95% the compound needs theoretical mass &divide; 0.95 of powder. If you start from a weighed mass rather than moles, the <a href="grams-to-moles-calculator.html">Grams to Moles calculator</a> gives the mole count first.</p>
 
     <h3>Worked by hand: 250 mL of 0.500 M NaOH</h3>
     <p>NaOH weighs 22.990 + 15.999 + 1.008 = <strong>39.997 g/mol</strong>.</p>
@@ -108,6 +117,62 @@
       <li><strong>With 95% purity.</strong> 5.00 &divide; 0.95 = <strong>5.26 g</strong> of powder.</li>
     </ol>
     <p>The default above runs the first direction: 1 mol in 1 L = <strong>1 M</strong> exactly.</p>
+
+    <h3>Worked by hand: molarity from a weighed mass</h3>
+    <p>NaCl weighs 22.990 + 35.45 = <strong>58.44 g/mol</strong>. Suppose 11.69 g is dissolved and made up to 500 mL.</p>
+    <ol>
+      <li><strong>Moles.</strong> 11.69 &divide; 58.44 = <strong>0.200 mol</strong> (to three figures).</li>
+      <li><strong>Litres.</strong> 500 mL = <strong>0.500 L</strong>.</li>
+      <li><strong>Molarity.</strong> 0.200 &divide; 0.500 = <strong>0.400 M</strong>.</li>
+    </ol>
+    <p>Grams alone never give molarity: divide by the <a href="molar-mass-calculator.html">molar mass</a> first, then by litres.</p>
+
+    <h3>Worked by hand: 100 mL of 250 mM glucose</h3>
+    <p>Glucose (C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>) weighs 6 &times; 12.011 + 12 &times; 1.008 + 6 &times; 15.999 = <strong>180.156 g/mol</strong>.</p>
+    <ol>
+      <li><strong>Millimolar to molar.</strong> 250 mM &divide; 1,000 = <strong>0.250 M</strong>.</li>
+      <li><strong>Litres.</strong> 100 mL = <strong>0.100 L</strong>.</li>
+      <li><strong>Moles.</strong> 0.250 &times; 0.100 = <strong>0.0250 mol</strong>.</li>
+      <li><strong>Mass.</strong> 0.0250 &times; 180.156 = <strong>4.50 g</strong>. Dissolve and make up <em>to</em> 100 mL.</li>
+    </ol>
+
+    <p>Mass of NaCl to weigh (58.44 g/mol) for a range of targets and final volumes:</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Target</th><th>100 mL</th><th>250 mL</th><th>500 mL</th><th>1 L</th></tr></thead>
+      <tbody>
+        <tr><td>0.100 M</td><td class="mono">0.584 g</td><td class="mono">1.46 g</td><td class="mono">2.92 g</td><td class="mono">5.84 g</td></tr>
+        <tr><td>0.500 M</td><td class="mono">2.92 g</td><td class="mono">7.31 g</td><td class="mono">14.6 g</td><td class="mono">29.2 g</td></tr>
+        <tr><td>1.000 M</td><td class="mono">5.84 g</td><td class="mono">14.6 g</td><td class="mono">29.2 g</td><td class="mono">58.4 g</td></tr>
+      </tbody>
+    </table></div>
+    <p>Each entry is target molarity &times; litres &times; 58.44, rounded to three figures. Read across for your volume, not down: the mass scales with both the target and the volume.</p>
+    <h3>Make up to the mark: the procedure</h3>
+    <p>The final-volume rule is a procedure, not just a warning. Weigh the solid, dissolve it in part of the solvent in a beaker, and pour that solution into a volumetric flask. Rinse the beaker and the stirring rod into the flask &mdash; the rinse carries the last of the solute with it, and skipping it leaves real moles behind. Then add solvent until the bottom of the meniscus sits on the flask&rsquo;s line, and mix thoroughly. Only now is the volume the volume in the calculation. Adding the full measured volume of solvent to the solid instead gives a larger final volume, because the solid itself takes up space, and a lower molarity than planned.</p>
+    <div class="mo-flask" aria-hidden="true"><div class="mo-liquid"></div><div class="mo-mark"></div></div>
+    <p class="cap">The liquid rises to the dashed mark: dissolve first, fill to the line last.</p>
+
+    <h3>Diluting a stock: M&#8321;V&#8321; = M&#8322;V&#8322;</h3>
+    <p>Dilution keeps the moles and changes the volume: M&#8321;V&#8321; = M&#8322;V&#8322;, with both volumes in the same unit. Worked: make 500 mL of 0.100 M from a 1.000 M stock. V&#8321; = (0.100 &times; 0.500) &divide; 1.000 = 0.050 L, so measure 50 mL of stock and make up to 500 mL. For very low concentrations, split the dilution into steps instead of pipetting a tiny volume once: 1 M to 0.01 M goes as 10 mL of 1 M made up to 100 mL (0.1 M), then 10 mL of that made up to 100 mL again (0.01 M). Each step uses an easy volume, so the pipetting error stays small. For multi-step or repeated dilutions, the <a href="dilution-calculator.html">Dilution calculator</a> carries the chain.</p>
+
+    <h3>Same moles, more water</h3>
+    <p>Topping up a finished solution dilutes it: the moles stay, the volume grows, the molarity falls in proportion. The two columns hold the same 0.125 mol, at different volumes.</p>
+    <div class="mo-cols" aria-hidden="true"><div><div class="mo-col" style="height:8rem;animation-delay:.1s"></div><p class="cap">0.125 mol in 0.250 L = 0.500 M</p></div><div><div class="mo-col" style="height:4rem;animation-delay:.4s;background:#8fbfa5"></div><p class="cap">0.125 mol in 0.500 L = 0.250 M</p></div></div>
+    <p class="cap">Double the volume, half the molarity, same moles.</p>
+
+    <h3>Molarity, molality, and the other concentration units</h3>
+    <p>Molarity is not the only way to say how strong a solution is, and the conversions run through the molar mass. Molality divides moles by kilograms of solvent instead of litres of solution, so it does not move with temperature. Mass-per-volume percent converts as w/v% = (M &times; MW) &divide; 10: a 0.500 M glucose solution is (0.500 &times; 180.156) &divide; 10 = 9.01% w/v, and backwards, 9.01% w/v glucose is 9.01 &times; 10 &divide; 180.156 = 0.500 M. Mass-per-mass percent needs the solution&rsquo;s density as well. Parts per million suits very dilute solutions: 0.001 M NaCl is 0.001 &times; 58.44 &times; 1,000 = 58.44 ppm. Normality counts reactive equivalents instead of moles: 1 M sulfuric acid is 2 N, because each formula unit supplies two H&#8314;, while 1 M NaOH is 1 N. Protein solutions are usually quoted in mg/mL and &micro;M instead &mdash; the <a href="protein-molarity-calculator.html">Protein Molarity calculator</a> converts between them.</p>
+
+    <h3>Temperature moves molarity</h3>
+    <p>Molarity is defined at a temperature, because volume changes with it. Warm a solution and it expands, so the same moles occupy more litres and the molarity drops. Near room temperature water expands roughly 0.021% per degree, so a 1.000 M solution made at 20 &deg;C reads about 1.000 &divide; 1.0021 = 0.998 M at 30 &deg;C &mdash; small, but larger than most weighing errors, and the reason precise work states the temperature. Molality, dividing by kilograms of solvent, has no such drift, which is why it is preferred when temperature varies.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>What mass of KCl do you weigh for 250 mL of 0.200 M?</li>
+      <li>5.00 g of NaOH is made up to 500 mL. What is the molarity?</li>
+      <li>You dilute 25 mL of 2.00 M stock to 250 mL. What is the new molarity?</li>
+    </ol>
+    <p>Answers: (1) 0.200 &times; 0.250 &times; 74.548 = 3.73 g. (2) 5.00 &divide; 39.997 = 0.1250 mol, 0.1250 &divide; 0.500 = 0.250 M. (3) (2.00 &times; 0.025) &divide; 0.250 = 0.200 M.</p>
+    <p class="cap">Sources: BIPM, the SI mole; NIST, 2019 SI redefinition.</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -118,6 +183,11 @@
       <li><strong>Which form?</strong> Weigh the hydrate with the hydrate&rsquo;s molar mass, the anhydrous salt with its own.</li>
       <li><strong>Purity counted once.</strong> Theoretical mass &divide; purity fraction. Multiplying by purity instead understates the weigh-out.</li>
       <li><strong>M is not mM.</strong> 0.5 M is 500 mM. A factor of 1,000 hides in the prefix, not in the arithmetic.</li>
+      <li><strong>Moles are not grams.</strong> 1 mol of NaCl weighs 58.44 g, not 1 g. Divide grams by the molar mass before dividing by litres.</li>
+      <li><strong>mg/mL is not molarity.</strong> 1 mg/mL is 1 g/L, so for NaCl it is 1 &divide; 58.44 = 0.0171 M (17.1 mM). Divide by the molar mass to cross from mass concentration to molarity.</li>
+      <li><strong>Topping up dilutes a finished solution.</strong> Topping 250 mL of 0.500 M (0.125 mol) up to 500 mL gives 0.125 &divide; 0.500 = 0.250 M. The moles stay; the molarity halves.</li>
+      <li><strong>Normality is not molarity.</strong> 1 M H<sub>2</sub>SO<sub>4</sub> is 2 N, because each unit supplies two H&#8314;. Using the molarity where normality is asked for halves the answer for a diprotic acid.</li>
+      <li><strong>Warm solutions read weaker.</strong> A solution made at 20 &deg;C and read at 30 &deg;C loses about 0.2% of its molarity to expansion. State the temperature for precise work, or use molality.</li>
     </ol>
     <div class="flagnote"><strong>The volume is the expensive one.</strong> Everything else in this calculation is a single multiplication, so a mL&ndash;litre slip is a 1,000&times; error that no amount of careful weighing fixes. Convert the volume first, every time.</div>
   </section>
@@ -129,30 +199,17 @@
     <details class="faq"><summary>Do I add the final volume of water?</summary><div class="ans"><p>No. Dissolve the solid in part of the water, transfer it, then top up to the final volume. Adding the full volume gives a larger volume and a lower molarity.</p></div></details>
     <details class="faq"><summary>How does purity change the weigh-out?</summary><div class="ans"><p>Divide the theoretical mass by the purity fraction. At 95% purity, 5.00 g theoretical needs 5.26 g of powder.</p></div></details>
     <details class="faq"><summary>What is the difference between M and mM?</summary><div class="ans"><p>A factor of 1,000. 1 M = 1,000 mM. Check the prefix before the number, especially on protocols copied from another lab.</p></div></details>
+    <details class="faq"><summary>How do I convert mM to M?</summary><div class="ans"><p>Divide by 1,000. 250 mM = 0.250 M; going the other way, multiply by 1,000, so 0.500 M = 500 mM.</p></div></details>
+    <details class="faq"><summary>How do I find molarity from a weighed mass?</summary><div class="ans"><p>Divide grams by the molar mass to get moles, then divide by litres. For 11.69 g of NaCl (58.44 g/mol) made up to 0.500 L: 11.69 &divide; 58.44 = 0.200 mol, and 0.200 &divide; 0.500 = 0.400 M.</p></div></details>
+    <details class="faq"><summary>How much NaCl do I weigh for 100 mL of 1 M?</summary><div class="ans"><p>5.84 g: 1.000 &times; 0.100 &times; 58.44 = 5.844 g, rounded to three figures. Dissolve it and make up to 100 mL.</p></div></details>
+    <details class="faq"><summary>What if my solid is a hydrate?</summary><div class="ans"><p>Use the hydrate&rsquo;s molar mass, not the anhydrous salt&rsquo;s. Copper(II) sulfate pentahydrate (CuSO<sub>4</sub>&middot;5H<sub>2</sub>O) weighs 249.68 g/mol, against 159.60 g/mol for anhydrous CuSO<sub>4</sub>, so weighing with the wrong one throws the molarity out by more than a third.</p></div></details>
+    <details class="faq"><summary>How do I dilute a stock solution?</summary><div class="ans"><p>Use M&#8321;V&#8321; = M&#8322;V&#8322; with both volumes in the same unit. For 500 mL of 0.100 M from 1.000 M stock: (0.100 &times; 0.500) &divide; 1.000 = 0.050 L, so 50 mL of stock made up to 500 mL. The <a href="dilution-calculator.html">Dilution calculator</a> handles multi-step dilutions.</p></div></details>
+    <details class="faq"><summary>What is the difference between molarity and molality?</summary><div class="ans"><p>Molarity divides moles by litres of solution; molality divides moles by kilograms of solvent. Molarity shifts with temperature because volume does; molality does not.</p></div></details>
+    <details class="faq"><summary>What is normality?</summary><div class="ans"><p>Equivalents per litre: N = M &times; equivalents per formula unit. 1 M H<sub>2</sub>SO<sub>4</sub> is 2 N (two H&#8314; per unit); 1 M NaOH is 1 N. Normality belongs to titrations; molarity belongs everywhere else.</p></div></details>
+    <details class="faq"><summary>Why did my molarity change when the lab warmed up?</summary><div class="ans"><p>Expansion. The same moles in a larger volume give a lower molarity &mdash; about 0.2% lower for a 10 &deg;C rise near room temperature. The moles did not change; the litres did.</p></div></details>
+    <details class="faq"><summary>How do I convert w/v% to molarity?</summary><div class="ans"><p>M = w/v% &times; 10 &divide; molar mass. 9.01% w/v glucose is 9.01 &times; 10 &divide; 180.156 = 0.500 M. Mass-per-mass percent needs the density as well.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to &micro;M, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="protein-molecular-weight-calculator.html">Protein Molecular Weight</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
