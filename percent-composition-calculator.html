@@ -9,6 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.pc-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.pc-fill{height:100%;transform-origin:left;animation:pcgrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes pcgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.pc-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -107,6 +113,43 @@
 
     <h3>Hydrates count their water</h3>
     <p>In CuSO<sub>4</sub>&middot;5H<sub>2</sub>O the dot is a separator, not a decimal point, and the 5 multiplies the whole water unit: 9 O and 10 H in total. The compound is 249.677 g/mol, of which water is 90.075 &mdash; 36.08%. Heating 100 g drives off about 36.08 g of water and leaves about 63.92 g of anhydrous salt.</p>
+    <h3>The hydrate, element by element</h3>
+    <p>The water share is only one line of the pentahydrate&rsquo;s story. CuSO<sub>4</sub>&middot;5H<sub>2</sub>O at 249.677 g/mol breaks down as Cu 63.546 &divide; 249.677 = <strong>25.45%</strong>, S 32.06 &divide; 249.677 = <strong>12.84%</strong>, O 9 &times; 15.999 = 143.991 &divide; 249.677 = <strong>57.67%</strong>, H 10 &times; 1.008 = 10.080 &divide; 249.677 = <strong>4.04%</strong> &mdash; and they sum to 100.00%, the built-in check. The bars below are those four shares.</p>
+    <p><strong>Oxygen</strong> &mdash; 57.67%</p>
+    <div class="pc-track"><div class="pc-fill" style="width:57.7%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>Copper</strong> &mdash; 25.45%</p>
+    <div class="pc-track"><div class="pc-fill" style="width:25.5%;animation-delay:.25s;background:#d97b29"></div></div>
+    <p><strong>Sulfur</strong> &mdash; 12.84%</p>
+    <div class="pc-track"><div class="pc-fill" style="width:12.8%;animation-delay:.4s;background:#5aa469"></div></div>
+    <p><strong>Hydrogen</strong> &mdash; 4.04%</p>
+    <div class="pc-track"><div class="pc-fill" style="width:4.0%;animation-delay:.55s;background:#8a7fb8"></div></div>
+    <p class="cap">Ten hydrogens, four percent of the mass: atom count is not mass share.</p>
+
+    <h3>Water, two ways</h3>
+    <p>Water is the sharpest mass-versus-atom lesson there is. By atoms, H<sub>2</sub>O is 66.67% hydrogen and 33.33% oxygen. By mass, it is 11.19% hydrogen and 88.81% oxygen &mdash; because one oxygen atom outweighs two hydrogens nearly eight times over. Bars are hydrogen&rsquo;s share, both ways.</p>
+    <p><strong>Hydrogen, by mass</strong> &mdash; 11.19%</p>
+    <div class="pc-track"><div class="pc-fill" style="width:11.2%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>Hydrogen, by atoms</strong> &mdash; 66.67%</p>
+    <div class="pc-track"><div class="pc-fill" style="width:66.7%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p class="cap">Same molecule, same element, two honest numbers answering two different questions.</p>
+
+    <h3>Why two sources print 53.27% and 53.28%</h3>
+    <p>Glucose oxygen is 95.994 &divide; 180.156 = 53.28% on this page&rsquo;s weights (C 40.00%, H 6.71%, O 53.28%). Another source printing 53.27% is not wrong and not a counting error &mdash; it uses a slightly different atomic-weight table, and the second decimal moves with the table. Compare percentages only on the same weight set, the way the traps warn about mixing tables partway through.</p>
+
+    <h3>From percent back to grams</h3>
+    <p>Percent composition runs in both directions. A 10 g sample of CuSO<sub>4</sub>&middot;5H<sub>2</sub>O holds 10 &times; 25.45% = <strong>2.545 g of copper</strong> &mdash; the number that matters when the question is what you actually weigh out. Set the sample mass to 100 g and the grams column reads as the percent column, exactly. The <a href="element-mass-calculator.html">Element Mass calculator</a> runs this direction for any sample and any element.</p>
+
+    <h3>The same percentages, several formulas</h3>
+    <p>Formaldehyde, CH<sub>2</sub>O, is 12.011 + 2.016 + 15.999 = 30.026 g/mol, and its percentages are C 40.00%, H 6.71%, O 53.28% &mdash; identical to glucose&rsquo;s, because glucose is six CH<sub>2</sub>O units: 180.156 &divide; 30.026 = 6.0 exactly. Percent composition gives the empirical formula, never the molecular one; the molar mass is what separates CH<sub>2</sub>O from C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>. The <a href="empirical-formula-calculator.html">Empirical Formula calculator</a> runs the backwards direction from percentages to the simplest ratio.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>CuSO<sub>4</sub>&middot;5H<sub>2</sub>O is 249.677 g/mol. What is copper&rsquo;s mass percent, and how many grams of copper are in 10 g?</li>
+      <li>Water is 18.015 g/mol. What is hydrogen&rsquo;s mass percent, and what is its atom percent?</li>
+      <li>CH<sub>2</sub>O is 30.026 g/mol and glucose is 180.156 g/mol. Why do they share percentages, and what separates them?</li>
+    </ol>
+    <p>Answers: (1) 63.546 &divide; 249.677 = 25.45%; 10 &times; 25.45% = 2.545 g. (2) Mass: 2.016 &divide; 18.015 = 11.19%; atoms: 2 &divide; 3 = 66.67%. (3) Glucose is six CH<sub>2</sub>O units (180.156 &divide; 30.026 = 6.0), so the ratios match; the molar mass separates them.</p>
+    <p class="cap">Sources: IUPAC abridged standard atomic weights, one canonical set across every page here.</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -118,6 +161,8 @@
       <li><strong>Mixing atomic-weight tables partway through.</strong> O = 16.00 for one element and 15.999 for another breaks the 100% check.</li>
       <li><strong>Panicking over rounding.</strong> A rounded sum of 99.99% or 100.01% is normal. More than about 0.1% off means an atom count or an atomic weight is wrong.</li>
       <li><strong>Confusing it with the empirical formula.</strong> The same percentages fit several molecular formulas; molar mass is what separates them.</li>
+      <li><strong>Quoting the anhydrous percentage for the hydrate.</strong> Copper is 39.82% of anhydrous CuSO<sub>4</sub> (63.546 &divide; 159.602) but only 25.45% of the pentahydrate. The percentage belongs to the form, not just the element.</li>
+      <li><strong>Dividing by the sample mass instead of the molar mass.</strong> Nitrogen in (NH<sub>4</sub>)<sub>2</sub>SO<sub>4</sub> is 28.014 &divide; 132.134 = 21.20%, not 28.014 &divide; 250 = 11.21%. Percent composition is per mole, never per sample.</li>
     </ul>
   </section>
 
@@ -128,30 +173,13 @@
     <details class="faq"><summary>How do I enter a hydrate?</summary><div class="ans"><p>Type the full formula with the dot, an asterisk or a full stop. All the water&rsquo;s atoms are counted: CuSO<sub>4</sub>&middot;5H<sub>2</sub>O has 9 O and 10 H, and water is 36.08% of its mass.</p></div></details>
     <details class="faq"><summary>How do I go backwards to a formula?</summary><div class="ans"><p>Assume 100 g so each percentage becomes grams, then divide by atomic weights and reduce the ratio. The empirical formula calculator does exactly that.</p></div></details>
     <details class="faq"><summary>Can I use it for mixtures or alloys?</summary><div class="ans"><p>Not directly. This works on a pure compound&rsquo;s formula unit. For a mixture, work out each component separately.</p></div></details>
+    <details class="faq"><summary>Why does glucose show 53.27% oxygen on another site?</summary><div class="ans"><p>Different atomic-weight tables move the second decimal. On this page&rsquo;s weights, oxygen is 95.994 &divide; 180.156 = 53.28%. A source printing 53.27% is using slightly different weights, not making a counting error.</p></div></details>
+    <details class="faq"><summary>How many grams of copper are in 10 g of copper sulfate pentahydrate?</summary><div class="ans"><p>2.545 g. Copper is 63.546 &divide; 249.677 = 25.45% of CuSO<sub>4</sub>&middot;5H<sub>2</sub>O, so 10 &times; 25.45% = 2.545 g. The <a href="element-mass-calculator.html">Element Mass calculator</a> does this for any sample.</p></div></details>
+    <details class="faq"><summary>Can two different compounds have the same percent composition?</summary><div class="ans"><p>Yes. Formaldehyde (CH<sub>2</sub>O, 30.026 g/mol) and glucose (C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>, 180.156 g/mol) are both C 40.00%, H 6.71%, O 53.28%, because glucose is six CH<sub>2</sub>O units. Only the molar mass separates them.</p></div></details>
+    <details class="faq"><summary>What is atom percent used for?</summary><div class="ans"><p>Questions that count atoms rather than weigh mass: out of every 100 atoms in water, 66.67 are hydrogen. Mass percent answers weighing questions; atom percent answers counting questions, and the two must never be swapped.</p></div></details>
+    <details class="faq"><summary>How do I enter a nested formula like Ca3(PO4)2?</summary><div class="ans"><p>Type it as written: the bracket multiplier applies to everything inside. Ca<sub>3</sub>(PO<sub>4</sub>)<sub>2</sub> is Ca 3, P 2, O 8, at 310.174 g/mol &mdash; Ca 38.76%, P 19.97%, O 41.26%.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="empirical-formula-calculator.html">Empirical Formula</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
