@@ -9,6 +9,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.mm-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.mm-fill{height:100%;transform-origin:left;animation:mmgrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes mmgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.mm-dot{display:inline-block;width:1.15rem;height:1.15rem;border-radius:50%;margin:0 .18rem .18rem 0;vertical-align:middle}
+.mm-c{background:#2b2b2b}.mm-h{background:#f2f2f2;border:1px solid #c9c9c9}.mm-o{background:#d32f2f}
+@media (prefers-reduced-motion:reduce){.mm-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -102,6 +110,120 @@
       </tbody>
     </table></div>
     <p>So glucose is <strong>180.156 g/mol</strong> = 0.180156 kg/mol = 180.156 Da. The same routine gives sulfuric acid, H<sub>2</sub>SO<sub>4</sub>: (2 &times; 1.008) + 32.06 + (4 &times; 15.999) = <strong>98.072 g/mol</strong>.</p>
+
+    <h3>Worked by hand: calcium hydroxide, Ca(OH)<sub>2</sub></h3>
+    <p>Expand the bracket first: (OH)<sub>2</sub> means 2 O and 2 H, plus the single Ca outside it.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Element</th><th>Atoms</th><th>Atomic weight</th><th>Subtotal</th></tr></thead>
+      <tbody>
+        <tr><td>Ca</td><td class="mono">1</td><td class="mono">40.078</td><td class="mono">40.078</td></tr>
+        <tr><td>O</td><td class="mono">2</td><td class="mono">15.999</td><td class="mono">31.998</td></tr>
+        <tr><td>H</td><td class="mono">2</td><td class="mono">1.008</td><td class="mono">2.016</td></tr>
+        <tr><td><strong>Total</strong></td><td class="mono">5</td><td></td><td class="mono"><strong>74.092</strong></td></tr>
+      </tbody>
+    </table></div>
+    <p>So calcium hydroxide is <strong>74.092 g/mol</strong>: 40.078 + 31.998 + 2.016 = 74.092. Counting only one OH by mistake gives 57.085 g/mol, which is 17.007 short — exactly one OH group.</p>
+
+    <h3>Worked by hand: potassium hexacyanoferrate(II), K<sub>4</sub>[Fe(CN)<sub>6</sub>]</h3>
+    <p>Work from the inside out: (CN)<sub>6</sub> means 6 C and 6 N, inside a square bracket holding one Fe, with 4 K outside it.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Element</th><th>Atoms</th><th>Atomic weight</th><th>Subtotal</th></tr></thead>
+      <tbody>
+        <tr><td>K</td><td class="mono">4</td><td class="mono">39.098</td><td class="mono">156.392</td></tr>
+        <tr><td>Fe</td><td class="mono">1</td><td class="mono">55.845</td><td class="mono">55.845</td></tr>
+        <tr><td>C</td><td class="mono">6</td><td class="mono">12.011</td><td class="mono">72.066</td></tr>
+        <tr><td>N</td><td class="mono">6</td><td class="mono">14.007</td><td class="mono">84.042</td></tr>
+        <tr><td><strong>Total</strong></td><td class="mono">17</td><td></td><td class="mono"><strong>368.345</strong></td></tr>
+      </tbody>
+    </table></div>
+    <p>So K<sub>4</sub>[Fe(CN)<sub>6</sub>] is <strong>368.345 g/mol</strong>: 156.392 + 55.845 + 72.066 + 84.042 = 368.345, or 0.368345 kg/mol.</p>
+
+    <h3>Common compounds at a glance</h3>
+    <p>All values use the same standard atomic weights as the worked examples above, so they match what the calculator gives for each formula.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Formula</th><th>Compound</th><th>Molar mass (g/mol)</th></tr></thead>
+      <tbody>
+        <tr><td>H<sub>2</sub>O</td><td>Water</td><td class="mono">18.015</td></tr>
+        <tr><td>CO<sub>2</sub></td><td>Carbon dioxide</td><td class="mono">44.009</td></tr>
+        <tr><td>NH<sub>3</sub></td><td>Ammonia</td><td class="mono">17.031</td></tr>
+        <tr><td>CH<sub>4</sub></td><td>Methane</td><td class="mono">16.043</td></tr>
+        <tr><td>NaCl</td><td>Sodium chloride</td><td class="mono">58.440</td></tr>
+        <tr><td>NaOH</td><td>Sodium hydroxide</td><td class="mono">39.997</td></tr>
+        <tr><td>HNO<sub>3</sub></td><td>Nitric acid</td><td class="mono">63.012</td></tr>
+        <tr><td>CaCO<sub>3</sub></td><td>Calcium carbonate</td><td class="mono">100.086</td></tr>
+        <tr><td>C<sub>2</sub>H<sub>5</sub>OH</td><td>Ethanol</td><td class="mono">46.069</td></tr>
+        <tr><td>C<sub>9</sub>H<sub>8</sub>O<sub>4</sub></td><td>Aspirin</td><td class="mono">180.159</td></tr>
+        <tr><td>C<sub>12</sub>H<sub>22</sub>O<sub>11</sub></td><td>Sucrose</td><td class="mono">342.297</td></tr>
+        <tr><td>CuSO<sub>4</sub>&middot;5H<sub>2</sub>O</td><td>Copper(II) sulfate pentahydrate</td><td class="mono">249.677</td></tr>
+      </tbody>
+    </table></div>
+    <h3>Reading a formula: what the calculator accepts</h3>
+    <p>Symbols start with a capital letter, with a lower-case second letter where the element has one. Na is sodium; NA will not parse, because the parser reads each capital as the start of a new element. A number straight after a symbol counts that element only. A number after a closing bracket multiplies everything inside it, so Ca<sub>3</sub>(PO<sub>4</sub>)<sub>2</sub> holds 3 Ca, 2 P and 8 O. Groups can nest: work from the inside out, as in the K<sub>4</sub>[Fe(CN)<sub>6</sub>] example above. Hydrates take a dot, an asterisk or a full stop plus a leading number: CuSO<sub>4</sub>&middot;5H<sub>2</sub>O, Na<sub>2</sub>CO<sub>3</sub>.10H<sub>2</sub>O. Spaces are ignored. An unknown symbol or an unbalanced bracket gives an error message, not a wrong number.</p>
+
+    <h3>Units: g/mol, kg/mol, daltons &mdash; and mg/mmol</h3>
+    <p>Grams per mole is the lab unit. Kilograms per mole divides by 1,000. A dalton (Da) carries the same number as g/mol, and is the usual unit for large molecules, quoted in kilodaltons. Milligrams per millimole carries the same number again, which suits small-scale work: 1 g/mol = 1 mg/mmol.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Compound</th><th>g/mol</th><th>kg/mol</th><th>Da</th><th>mg/mmol</th></tr></thead>
+      <tbody>
+        <tr><td>Water, H<sub>2</sub>O</td><td class="mono">18.015</td><td class="mono">0.018015</td><td class="mono">18.015</td><td class="mono">18.015</td></tr>
+        <tr><td>Glucose, C<sub>6</sub>H<sub>12</sub>O<sub>6</sub></td><td class="mono">180.156</td><td class="mono">0.180156</td><td class="mono">180.156</td><td class="mono">180.156</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>From molar mass to moles, grams, and molecules</h3>
+    <p>Three relations cover nearly every conversion: moles = mass &divide; molar mass, mass = moles &times; molar mass, and molecules = moles &times; 6.02214076 &times; 10<sup>23</sup>, Avogadro&rsquo;s number, fixed exactly since the 2019 redefinition of the mole. Worked: 36 g of glucose is 36 &divide; 180.156 = 0.1998 mol, which is 0.1998 &times; 6.02214076 &times; 10<sup>23</sup> = 1.203 &times; 10<sup>23</sup> molecules. The other way: 0.5 mol of sodium chloride weighs 0.5 &times; 58.440 = 29.22 g. The Grams to Moles calculator does both directions with the molecule count alongside.</p>
+
+    <h3>Hydrates: which mass does your bottle need?</h3>
+    <p>The label on the bottle decides, not the name of the salt. Anhydrous copper(II) sulfate is 159.602 g/mol; the pentahydrate on the shelf is 249.677 g/mol, because the five waters add 5 &times; 18.015 = 90.075 g/mol &mdash; 36.08% of the hydrated mass. Washing soda is the same trap at larger scale: anhydrous Na<sub>2</sub>CO<sub>3</sub> is 105.988 g/mol, the decahydrate Na<sub>2</sub>CO<sub>3</sub>&middot;10H<sub>2</sub>O is 286.138 g/mol. A recipe calling for 1 mol of sodium carbonate needs 286.138 g of the decahydrate; weighing 105.988 g of it gives only 105.988 &divide; 286.138 = 0.370 mol, barely more than a third of what was meant. The dot number need not be whole: plaster, CaSO<sub>4</sub>&middot;&frac12;H<sub>2</sub>O, is 136.134 + 9.0075 = 145.142 g/mol. Heating a hydrate drives the water off, so the mass lost on full heating is the water share &mdash; 36.08% for copper(II) sulfate pentahydrate.</p>
+
+    <h3>Isotopes and labelled compounds</h3>
+    <p>Standard atomic weights are natural-abundance averages, which is what weighing and ordinary stoichiometry need. A labelled sample is a different substance for mass purposes. Heavy water, D<sub>2</sub>O, is 2 &times; 2.014 + 15.999 = 20.027 g/mol, not 18.015, because each deuterium weighs 2.014. Glucose with all six carbons as carbon-13 shifts its molecular ion from 180 to 186, one unit per carbon. Use the average table for weighing a bottle; use exact isotopic masses for mass spectrometry, NMR tracers, and any work where individual isotopes are resolved.</p>
+
+    <h3>Molar mass from a gas experiment</h3>
+    <p>When the formula is unknown but the substance is a gas, the ideal gas law gives the molar mass: M = mRT &divide; PV, with m in grams, R = 0.082057 L&middot;atm/(mol&middot;K), T in kelvin, P in atm, V in litres. Worked: 2 g of an unknown gas at 1 atm, 273.15 K, in 1 L gives n = (1 &times; 1) &divide; (0.082057 &times; 273.15) = 0.04462 mol, so M = 2 &divide; 0.04462 = 44.83 g/mol &mdash; near carbon dioxide at 44.009, but nearness is not identity, and a second test is needed before naming the gas. The method is only as good as the ideal-gas approximation: light gases, low pressure, near room temperature. At high pressure real gases deviate and the answer drifts.</p>
+
+    <h3>Percent composition and the empirical formula</h3>
+    <p>Each element&rsquo;s mass share is its subtotal divided by the total, times 100, and the shares always add to 100 &mdash; a sum of 97% or 103% means something went wrong. The shares also run backwards into a formula: combustion analysis reporting 40.0% C, 6.7% H and 53.3% O gives, per 100 g, 40.0 &divide; 12.011 = 3.33 mol C, 6.7 &divide; 1.008 = 6.65 mol H and 53.3 &divide; 15.999 = 3.33 mol O, a ratio of 1:2:1, so the empirical formula is CH<sub>2</sub>O at 30.026 g/mol. The same percentage does not mean the same compound: glucose, C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>, shares the 1:2:1 ratio with formaldehyde, CH<sub>2</sub>O. Dividing a measured molecular mass by the empirical mass picks the multiple: 180.156 &divide; 30.026 = 6. The Percent Composition and Empirical Formula calculators carry both directions.</p>
+
+    <h3>Why another table gives a slightly different number</h3>
+    <p>IUPAC revises its weights, so tables from different years disagree in the second or third decimal. Older tables print C = 12.0107 and H = 1.00794, which makes water 18.016 g/mol where this page gives 18.015. A few elements have no single value at all: lithium ranges from 6.938 to 6.997 and sulfur from 32.059 to 32.076 depending on the source of the sample, so a table must pick a representative figure. This page uses one canonical set across every calculation. A gap in the last decimals is an edition effect, not chemistry; check the other source&rsquo;s table before assuming either side is wrong.</p>
+
+    <h3>Ions, mixtures, and polymers</h3>
+    <p>A charge adds or removes electrons, at 0.00055 g/mol each. Neutral H<sub>3</sub>NSi is 3.024 + 14.007 + 28.085 = 45.116 g/mol; as the ion (H<sub>3</sub>NSi)<sup>+</sup> it is 45.116 &minus; 0.00055 = 45.115 g/mol, a difference below the last digit most tables print, so ordinary weighing ignores it. A mixture has no single molar mass either: take the mole-fraction weighted average, so a 50/50 mix of N<sub>2</sub> (28.014) and O<sub>2</sub> (31.998) averages 30.006 g/mol. Polymers work the same way by construction: the repeating unit C<sub>2</sub>H<sub>4</sub> is 28.054 g/mol, so a chain of 1,000 units averages 28,054 g/mol, and real samples quote a number-average or weight-average because chains are never all the same length.</p>
+
+    <h3>How precise should the answer be?</h3>
+    <p>Match the measurement, not the table. Weighing to &plusmn;0.01 g justifies two decimals, not five; most everyday calculations need only three or four significant figures; analytical work uses full precision and rounds only the final answer. This calculator rounds once, at the end, for the same reason: rounding each subtotal first lets small errors accumulate, and in a large molecule they reach a full g/mol.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>How many moles are in 25 g of K<sub>4</sub>[Fe(CN)<sub>6</sub>]?</li>
+      <li>You weigh 50 g of washing soda decahydrate, Na<sub>2</sub>CO<sub>3</sub>&middot;10H<sub>2</sub>O. How many moles is that, and how many grams of Na<sub>2</sub>CO<sub>3</sub> are inside it?</li>
+      <li>An unknown gas: 2 g at 1 atm, 273.15 K, in 1 L. What is its molar mass?</li>
+    </ol>
+    <p>Answers: (1) 25 &divide; 368.345 = 0.06787 mol. (2) 50 &divide; 286.138 = 0.1747 mol, containing 50 &times; (105.988 &divide; 286.138) = 18.52 g of Na<sub>2</sub>CO<sub>3</sub>. (3) 44.83 g/mol.</p>
+        <h3>How big is a mole, really?</h3>
+    <p>A mole is a count, not a size &mdash; 6.02214076 &times; 10<sup>23</sup> of anything. The count is so large that everyday comparisons break in entertaining ways. Count one atom per second and reaching a mole takes 1.91 &times; 10<sup>16</sup> years, about 1.4 million times the age of the universe. Stack a mole of ordinary paper sheets, each 0.1 mm thick, and the pile reaches about 6,400 light-years. And a mole of water is the most ordinary thing of all: 18.015 g, about 18 mL, just over a tablespoon.</p>
+
+    <h3>One mole of each, side by side</h3>
+    <p>The same count weighs very differently depending on what is being counted. Each bar below is one mole, drawn to scale against sucrose, the heaviest of the four.</p>
+    <p><strong>Water</strong> &mdash; 18.015 g</p>
+    <div class="mm-track"><div class="mm-fill" style="width:5.3%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>Table salt</strong> &mdash; 58.440 g</p>
+    <div class="mm-track"><div class="mm-fill" style="width:17.1%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p><strong>Glucose</strong> &mdash; 180.156 g</p>
+    <div class="mm-track"><div class="mm-fill" style="width:52.6%;animation-delay:.4s;background:#d97b29"></div></div>
+    <p><strong>Sucrose</strong> &mdash; 342.297 g</p>
+    <div class="mm-track"><div class="mm-fill" style="width:100%;animation-delay:.55s;background:#7b5ea7"></div></div>
+    <p class="cap">Bars grow to their full length when the page loads. A mole of sucrose weighs about nineteen times a mole of water, for the same number of formula units.</p>
+
+    <h3>Watch glucose build up</h3>
+    <p>Twenty-four atoms, one at a time: 6 carbon, 12 hydrogen, 6 oxygen. Each dot pops in after the last, and the total at the end is the molar mass.</p>
+    <p aria-hidden="true"><span class="mm-dot mm-c anim-pop" style="animation-delay:.05s"></span><span class="mm-dot mm-c anim-pop" style="animation-delay:.15s"></span><span class="mm-dot mm-c anim-pop" style="animation-delay:.25s"></span><span class="mm-dot mm-c anim-pop" style="animation-delay:.35s"></span><span class="mm-dot mm-c anim-pop" style="animation-delay:.45s"></span><span class="mm-dot mm-c anim-pop" style="animation-delay:.55s"></span><span class="mm-dot mm-h anim-pop" style="animation-delay:.65s"></span><span class="mm-dot mm-h anim-pop" style="animation-delay:.75s"></span><span class="mm-dot mm-h anim-pop" style="animation-delay:.85s"></span><span class="mm-dot mm-h anim-pop" style="animation-delay:.95s"></span><span class="mm-dot mm-h anim-pop" style="animation-delay:1.05s"></span><span class="mm-dot mm-h anim-pop" style="animation-delay:1.15s"></span><span class="mm-dot mm-h anim-pop" style="animation-delay:1.25s"></span><span class="mm-dot mm-h anim-pop" style="animation-delay:1.35s"></span><span class="mm-dot mm-h anim-pop" style="animation-delay:1.45s"></span><span class="mm-dot mm-h anim-pop" style="animation-delay:1.55s"></span><span class="mm-dot mm-h anim-pop" style="animation-delay:1.65s"></span><span class="mm-dot mm-h anim-pop" style="animation-delay:1.75s"></span><span class="mm-dot mm-o anim-pop" style="animation-delay:1.85s"></span><span class="mm-dot mm-o anim-pop" style="animation-delay:1.95s"></span><span class="mm-dot mm-o anim-pop" style="animation-delay:2.05s"></span><span class="mm-dot mm-o anim-pop" style="animation-delay:2.15s"></span><span class="mm-dot mm-o anim-pop" style="animation-delay:2.25s"></span><span class="mm-dot mm-o anim-pop" style="animation-delay:2.35s"></span></p>
+    <p class="cap">6 carbon (72.066) + 12 hydrogen (12.096) + 6 oxygen (95.994) = 180.156 g/mol.</p>
+
+    <h3>Molar mass in the kitchen and the medicine cabinet</h3>
+    <p>Spoon measures are rough, but they make the numbers tangible. A tablespoon of water, about 15 g, is about 0.83 mol. A level teaspoon of table salt, about 6 g, is about 0.10 mol. A teaspoon of sugar, about 4 g, is about 0.012 mol of sucrose. A teaspoon of baking soda, about 5 g, is about 0.060 mol. And one ordinary 325 mg aspirin tablet is 0.325 &divide; 180.159 = 0.0018 mol of aspirin. Same unit, same arithmetic, from the kitchen to the lab bench.</p>
+    <p class="cap">Sources: IUPAC Atomic Weights of the Elements 2021; NIST Chemistry WebBook; OpenStax Chemistry 2e, chapter 3, Composition of Substances.</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -113,6 +235,11 @@
       <li><strong>Average is not monoisotopic.</strong> Chlorine&rsquo;s 35.45 g/mol averages about 76% Cl-35 with 24% Cl-37. Mass spectrometry wants the monoisotopic figure instead.</li>
       <li><strong>Round once.</strong> Keep full precision until the final line; rounding each subtotal first drifts the total.</li>
       <li><strong>Some elements have no standard atomic weight.</strong> Many radioactive and synthetic ones do not; this calculator says so rather than inventing a value.</li>
+      <li><strong>Isomers share a molar mass.</strong> Glucose and fructose are both C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>, so both are 180.156 g/mol — the number alone cannot tell them apart.</li>
+      <li><strong>Atom count is not mass share.</strong> Water is two-thirds hydrogen by atom count but only 11.19% hydrogen by mass (2.016 out of 18.015).</li>
+      <li><strong>Hydrogen is not H&#8322;.</strong> One H atom is 1.008 g/mol; hydrogen gas, H<sub>2</sub>, is 2.016. Using the element where the question means the gas halves the answer.</li>
+      <li><strong>Mass is not molar mass.</strong> 18.015 g of water is a mass; 18.015 g/mol is the mass of a mole of it. The numbers matching does not make them the same quantity.</li>
+      <li><strong>Atomic number is not atomic weight.</strong> Carbon&rsquo;s box shows 6, the proton count, and 12.011, the weight. Using 6 halves every carbon contribution.</li>
     </ol>
     <div class="flagnote"><strong>Why another calculator may disagree by 0.01 to 0.07 g/mol.</strong> Almost always the atomic-weight table or the rounding rule. Water is 18.015 g/mol here and 18.016 with O = 16.00. A gap that small is an edition effect, not chemistry.</div>
   </section>
@@ -124,6 +251,15 @@
     <details class="faq"><summary>How do I enter a hydrate?</summary><div class="ans"><p>Type the full formula with the dot, or an asterisk or full stop. CuSO4&middot;5H2O is 249.677 g/mol, not the anhydrous 159.602.</p></div></details>
     <details class="faq"><summary>Do parentheses and brackets change the answer?</summary><div class="ans"><p>Yes. A subscript after a closing bracket multiplies every atom inside it. K4[Fe(CN)6] holds 6 C and 6 N, and weighs 368.345 g/mol.</p></div></details>
     <details class="faq"><summary>Why does my answer differ slightly from another source?</summary><div class="ans"><p>The atomic-weight table or the rounding rule, nearly every time. Check which values the other source uses before assuming either is wrong.</p></div></details>
+    <details class="faq"><summary>What is a dalton, and when is it used?</summary><div class="ans"><p>A dalton (Da) is the unit of molecular mass, and its number equals the molar mass in g/mol: glucose is 180.156 Da. Daltons are the usual unit for large molecules — proteins are quoted in kilodaltons (kDa), thousands of daltons.</p></div></details>
+    <details class="faq"><summary>Can two different compounds have the same molar mass?</summary><div class="ans"><p>Yes, when they share a formula: isomers such as glucose and fructose are both C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> and both 180.156 g/mol. Unrelated formulas can also land close together, so always check the formula, not just the number.</p></div></details>
+    <details class="faq"><summary>Should I use the average or the monoisotopic mass?</summary><div class="ans"><p>Use the average (standard atomic weight) mass for weighing and ordinary stoichiometry — that is what this calculator gives. Use the monoisotopic mass, built from the lightest isotope of each element, for mass spectrometry, where individual isotopes are resolved.</p></div></details>
+    <details class="faq"><summary>How do I turn a molar mass into grams?</summary><div class="ans"><p>Multiply moles by molar mass: grams = moles &times; g/mol. Two moles of glucose weigh 2 &times; 180.156 = 360.312 g. The Grams to Moles calculator does this step in both directions.</p></div></details>
+    <details class="faq"><summary>What mass do I use for a hydrated salt?</summary><div class="ans"><p>The form on the bottle. Anhydrous Na<sub>2</sub>CO<sub>3</sub> is 105.988 g/mol; the decahydrate Na<sub>2</sub>CO<sub>3</sub>&middot;10H<sub>2</sub>O is 286.138 g/mol. Weighing the decahydrate as if it were anhydrous under-doses by nearly two-thirds. Always read the dot and the water count before weighing.</p></div></details>
+    <details class="faq"><summary>Can I find molar mass without a formula?</summary><div class="ans"><p>For a gas, yes: weigh a known volume at a known pressure and temperature and use M = mRT &divide; PV, as worked in the gas-experiment section above. The result identifies a candidate, not a certainty &mdash; confirm it with a second measurement. For solids and liquids, some other measurement (freezing-point depression, titration, mass spectrometry) has to supply the missing information.</p></div></details>
+    <details class="faq"><summary>Do ions have a different molar mass?</summary><div class="ans"><p>Technically yes, by one electron mass (0.00055 g/mol) per unit of charge: (H<sub>3</sub>NSi)<sup>+</sup> is 45.115 g/mol against 45.116 neutral. The difference sits below the last digit most tables print, so ordinary weighing and stoichiometry ignore it.</p></div></details>
+    <details class="faq"><summary>Can I use this for a mixture or a polymer?</summary><div class="ans"><p>Only as an average. A mixture takes the mole-fraction weighted average of its components; a polymer takes its repeating unit times the degree of polymerization, and real samples quote a number-average or weight-average because chains differ in length. Neither has one exact molar mass.</p></div></details>
+    <details class="faq"><summary>How many decimals should I report?</summary><div class="ans"><p>As many as your least precise measurement justifies. Most everyday calculations need only three or four significant figures; a balance reading to &plusmn;0.01 g does not justify five decimals. Keep full precision through the working and round once, at the end.</p></div></details>
   </section>
 
   <section class="block wrap" id="hub">
