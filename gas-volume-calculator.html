@@ -9,6 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.gv-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.gv-fill{height:100%;transform-origin:left;animation:gvgrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes gvgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.gv-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -147,6 +153,38 @@
         <tr><td class="mono">mmHg</td><td class="mono">L</td><td class="mono">62.364 L&middot;mmHg/(mol&middot;K)</td></tr>
       </tbody>
     </table></div>
+    <h3>The same litre, wildly different masses</h3>
+    <p>One litre at textbook STP holds 1 &divide; 22.414 = 0.0446 mol of any ideal gas &mdash; but the mass in that litre depends entirely on which gas it is. CO<sub>2</sub>: 0.0446 &times; 44.009 = <strong>1.96 g</strong>. H<sub>2</sub>: 0.0446 &times; 2.016 = <strong>0.090 g</strong>. Same volume, <strong>21.8 times</strong> the mass. Molar volume is universal; density is not.</p>
+    <p><strong>1 L of CO&#8322; at STP</strong> &mdash; 1.96 g</p>
+    <div class="gv-track"><div class="gv-fill" style="width:100%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>1 L of H&#8322; at STP</strong> &mdash; 0.090 g</p>
+    <div class="gv-track"><div class="gv-fill" style="width:4.6%;animation-delay:.25s;background:#d97b29"></div></div>
+    <p class="cap">Identical volumes, 21.8-fold mass gap: molar mass does the work.</p>
+
+    <h3>From a weighed sample to litres</h3>
+    <p>The moles in a gas problem usually come from a weighed sample first: 44 g of CO<sub>2</sub> is 44 &divide; 44.009 = 0.9998 mol, effectively 1.00 mol, which fills 1.00 &times; 22.414 = <strong>22.41 L</strong> at textbook STP. The moles-from-mass step is the <a href="grams-to-moles-calculator.html">Grams to Moles calculator&rsquo;s</a> job; this page takes over once moles are known.</p>
+
+    <h3>Which STP, stated three ways</h3>
+    <p>A question can mean textbook STP (0 &deg;C, 1 atm, 22.414 L/mol), IUPAC STP (0 &deg;C, 1 bar, 22.711 L/mol), or SATP mislabelled as STP (25 &deg;C, 1 bar, 24.790 L/mol). For 2.50 mol of N<sub>2</sub> those give 56.04, 56.78 and 61.97 L &mdash; a spread of 5.93 L, <strong>10.6%</strong>, from the same letters. Read the question&rsquo;s pressure and temperature words, not just its initials.</p>
+    <p><strong>Textbook STP</strong> &mdash; 56.04 L</p>
+    <div class="gv-track"><div class="gv-fill" style="width:90.4%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>IUPAC STP</strong> &mdash; 56.78 L</p>
+    <div class="gv-track"><div class="gv-fill" style="width:91.6%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p><strong>SATP</strong> &mdash; 61.97 L</p>
+    <div class="gv-track"><div class="gv-fill" style="width:100%;animation-delay:.4s;background:#d97b29"></div></div>
+    <p class="cap">2.50 mol of N&#8322; under three standards. The first two differ by pressure alone.</p>
+
+    <h3>The twelvefold Kelvin trap, worked</h3>
+    <p>One mole at 25 &deg;C and 1 atm: V = 1 &times; 0.082057 &times; 298.15 &divide; 1 = 24.47 L. Put 25 in place of 298.15 and you get 1 &times; 0.082057 &times; 25 = 2.05 L &mdash; 11.93 times too small, about twelvefold. The gas law wants kelvin, always; the Celsius number is not a temperature for this equation, it is a label.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>44 g of CO<sub>2</sub> at textbook STP: how many moles, and how many litres?</li>
+      <li>2.50 mol of N<sub>2</sub> under textbook STP, IUPAC STP and SATP: what are the three volumes, and the spread?</li>
+      <li>One mole at 25 &deg;C and 1 atm with 25 used instead of 298.15: what volume do you get, and how many times too small is it?</li>
+    </ol>
+    <p>Answers: (1) 44 &divide; 44.009 = 0.9998 mol, effectively 1.00 mol; 22.41 L. (2) 56.04, 56.78 and 61.97 L; spread 5.93 L, 10.6%. (3) 2.05 L instead of 24.47 L &mdash; 11.93 times too small.</p>
+    <p class="cap">Sources: IUPAC STP definition (0 &deg;C, 1 bar, since 1982); R = 8.314462618 J/(mol&middot;K); the page&rsquo;s own arithmetic throughout.</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -160,6 +198,8 @@
       <li><strong>Applying the gas shortcut to a solution.</strong> Dissolved moles do not occupy 22.414 L. Use litres = moles &divide; molarity.</li>
       <li><strong>Assuming litres tell you mass.</strong> One mole of H<sub>2</sub> and one of CO<sub>2</sub> fill the same 22.414 L, but CO<sub>2</sub> is about 1.96 g/L against 0.09 g/L &mdash; roughly 22 times heavier.</li>
       <li><strong>Treating the ideal gas law as exact.</strong> It is a good estimate at low pressure and well above the boiling point. For compressed gas, or vapours near condensation such as ammonia or water, treat the answer as an estimate.</li>
+      <li><strong>Forgetting water vapour in a collected gas.</strong> A gas collected over water at 25 &deg;C and 1 atm total pressure is not at 101.325 kPa of dry gas: water vapour contributes 3.17 kPa, so the dry pressure is 101.325 &minus; 3.17 = 98.155 kPa. Use the dry pressure in PV = nRT.</li>
+      <li><strong>Correcting temperature but not pressure.</strong> Converting a measurement back to STP needs both corrections. Cooling alone, or pressurising alone, leaves half the error in place &mdash; the worked measurement above corrects 22 &deg;C to 0 &deg;C and 0.98 atm to 1 atm together.</li>
     </ul>
   </section>
 
@@ -170,30 +210,12 @@
     <details class="faq"><summary>Can I use 22.4 L/mol at room temperature?</summary><div class="ans"><p>No &mdash; only at 0 &deg;C. At 25 &deg;C and 1 atm use 24.465 L/mol, or the full gas law.</p></div></details>
     <details class="faq"><summary>What is the difference between STP and SATP?</summary><div class="ans"><p>STP is at 0 &deg;C; SATP is at 25 &deg;C and 1 bar, giving 24.790 L/mol.</p></div></details>
     <details class="faq"><summary>Is one mole of CO<sub>2</sub> the same volume as one mole of helium?</summary><div class="ans"><p>For an ideal gas at the same temperature and pressure, yes. They differ in mass and density: about 1.96 g/L against 0.18 g/L at STP.</p></div></details>
+    <details class="faq"><summary>How do I convert a weighed sample to litres?</summary><div class="ans"><p>Mass &divide; molar mass gives moles, then moles &times; molar volume gives litres. 44 g of CO<sub>2</sub> is 0.9998 mol, effectively 1.00 mol, which fills 22.41 L at textbook STP. The <a href="grams-to-moles-calculator.html">Grams to Moles calculator</a> does the first step.</p></div></details>
+    <details class="faq"><summary>What if my gas was collected over water?</summary><div class="ans"><p>Subtract the water vapour pressure first. At 25 &deg;C and 1 atm total, the dry gas is at 101.325 &minus; 3.17 = 98.155 kPa. Use that dry pressure in PV = nRT, not the total.</p></div></details>
+    <details class="faq"><summary>Why does using &deg;C instead of K shrink the answer twelvefold?</summary><div class="ans"><p>Because the gas law scales with absolute temperature: 298.15 K against the 25 you typed, a ratio of 11.93. One mole at 25 &deg;C and 1 atm is 24.47 L with kelvin, 2.05 L with the Celsius number.</p></div></details>
+    <details class="faq"><summary>How much heavier is a litre of CO<sub>2</sub> than a litre of H<sub>2</sub>?</summary><div class="ans"><p>At textbook STP, 1.96 g against 0.090 g &mdash; 21.8 times heavier, at identical volume. Same moles per litre, very different molar masses.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="molar-mass-calculator.html">Molar Mass</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
