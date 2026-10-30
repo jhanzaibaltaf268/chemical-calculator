@@ -9,6 +9,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.dn-pill{display:inline-block;background:#eef3f6;border:1px solid #c9d6dd;border-radius:999px;padding:.3rem .8rem;margin:0 .2rem .4rem 0;font-weight:600}
+.dn-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.dn-fill{height:100%;transform-origin:left;animation:dngrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes dngrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.dn-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -92,6 +99,64 @@
       <li><strong>Multiply.</strong> 670 &times; 660 = <strong>442,200 Da</strong> = 442.2 kDa.</li>
     </ol>
     <p>With a sequence instead, the same rule applies to its length, and GC content follows: ACGTACGTAC is 10 bases, 5 of them G or C, so <strong>50.0% GC</strong>; single-stranded it weighs 10 &times; 330 = <strong>3,300 Da</strong>.</p>
+
+    <h3>Worked by hand: 20-base single-stranded primer</h3>
+    <ol>
+      <li><strong>Length and GC content.</strong> ATGCGTACGTAGCTAGCTAA is 20 bases, 9 of them G or C, so 9 &divide; 20 &times; 100 = <strong>45.0% GC</strong>.</li>
+      <li><strong>Multiply.</strong> 20 &times; 330 = <strong>6,600 Da</strong> = 6.6 kDa (estimate).</li>
+    </ol>
+    <p>The same 20 units double-stranded would be 20 &times; 660 = 13,200 Da &mdash; the strand factor again, not a different length.</p>
+
+    <h3>Worked by hand: 5.2 kilobases, double-stranded</h3>
+    <ol>
+      <li><strong>Convert.</strong> 5.2 kb = 5.2 &times; 1,000 = 5,200 bp.</li>
+      <li><strong>Multiply.</strong> 5,200 &times; 660 = <strong>3,432,000 Da</strong> = 3,432 kDa = 3.432 MDa (estimate).</li>
+    </ol>
+
+    <h3>Length to weight at a glance</h3>
+    <p>Every value below is the length-rule estimate: single-stranded at 330 Da per base, double-stranded at 660 Da per base pair.</p>
+    <div class="scroll"><table>
+      <tr><th>Length</th><th>Single-stranded</th><th>Double-stranded</th></tr>
+      <tr><td>10 bases / 10 bp</td><td class="mono">3,300 Da (3.3 kDa)</td><td class="mono">6,600 Da (6.6 kDa)</td></tr>
+      <tr><td>20 bases / 20 bp</td><td class="mono">6,600 Da (6.6 kDa)</td><td class="mono">13,200 Da (13.2 kDa)</td></tr>
+      <tr><td>100 bases / 100 bp</td><td class="mono">33,000 Da (33.0 kDa)</td><td class="mono">66,000 Da (66.0 kDa)</td></tr>
+      <tr><td>500 bases / 500 bp</td><td class="mono">165,000 Da (165.0 kDa)</td><td class="mono">330,000 Da (330.0 kDa)</td></tr>
+      <tr><td>1,000 bases / 1,000 bp</td><td class="mono">330,000 Da (330.0 kDa)</td><td class="mono">660,000 Da (660.0 kDa)</td></tr>
+      <tr><td>5,000 bases / 5,000 bp</td><td class="mono">1,650,000 Da (1,650.0 kDa)</td><td class="mono">3,300,000 Da (3,300.0 kDa)</td></tr>
+    </table></div>
+    <h3>Exact when you have the sequence: sum the residues</h3>
+    <p>The length rule is an estimate. The exact weight sums the actual residues: A 313.2, T 304.2, C 289.2, G 329.2 Da. Worked for ACGTACGTAC, single-stranded: A 3 &times; 313.2 + C 3 &times; 289.2 + G 2 &times; 329.2 + T 2 &times; 304.2 = 939.6 + 867.6 + 658.4 + 608.4 = <strong>3,074.0 Da</strong>. The length rule says 10 &times; 330 = 3,300 Da &mdash; higher, because it averages over compositions instead of counting this sequence&rsquo;s bases. Then the end chemistry: a synthesised strand with 5&prime; and 3&prime; hydroxyl ends subtracts about 62 Da (some tools use 61 Da &mdash; the same correction, rounded differently), giving 3,074.0 &minus; 62 = 3,012.0 Da for the synthesised form. RNA sums the same way with its own residue weights (A 329.2, U 306.2, C 305.2, G 345.2) &mdash; the <a href="rna-calculator.html">RNA calculator</a> states its 5&prime; end.</p>
+
+    <h3>Double-stranded, exactly: sum both strands</h3>
+    <p>Doubling the sense strand is wrong for an exact weight, because the complementary strand has different residues. ACGTACGTAC pairs with TGCATGCATG: T 3 &times; 304.2 + G 3 &times; 329.2 + C 2 &times; 289.2 + A 2 &times; 313.2 = 912.6 + 987.6 + 578.4 + 626.4 = <strong>3,105.0 Da</strong> &mdash; 31 Da more than the sense strand, because the antisense carries more of the heavy G. The exact double-stranded weight, synthesised form, is 3,074.0 + 3,105.0 &minus; 2 &times; 62 = <strong>6,055.0 Da</strong>, against 6,600 Da by the length rule. A restriction fragment adds 79 Da per 5&prime; monophosphate the enzyme leaves: 6,055.0 + 2 &times; 79 = <strong>6,213.0 Da</strong>.</p>
+    <p aria-hidden="true"><span class="dn-pill anim-pop" style="animation-delay:.05s">A 313.2 &harr; T 304.2</span><span class="dn-pill anim-pop" style="animation-delay:.3s">C 289.2 &harr; G 329.2</span><span class="dn-pill anim-pop" style="animation-delay:.55s">G 329.2 &harr; C 289.2</span><span class="dn-pill anim-pop" style="animation-delay:.8s">T 304.2 &harr; A 313.2</span></p>
+    <p class="cap">Each pair pops in: a base and its complement weigh differently, so both strands must be summed.</p>
+
+    <h3>Why two tables differ by 18 Da per base</h3>
+    <p>Some tables list A 331.2, T 322.2, G 347.2, C 307.2 Da &mdash; exactly 18.0 Da more per base than the residue set above. Neither table is wrong: the larger set lists free nucleotides, the smaller lists in-chain residues, and each phosphodiester bond loses one water (18.015 Da) when it forms. It is the same water story as proteins. The rule is simple: sum residues for a chain, never free nucleotides &mdash; and use one table consistently, with that table&rsquo;s terminal correction.</p>
+
+    <h3>Which form is your DNA?</h3>
+    <p>Pick the correction by the ends, not by the name. A synthetic oligo with 5&prime; and 3&prime; hydroxyl ends subtracts about 62 Da per strand. A restriction fragment adds 79 Da per 5&prime; monophosphate the enzyme leaves. A circular plasmid has no free ends, so it takes neither correction. Ends unknown or unstated: use the length rule on this page, and state its basis (660 Da/bp double-stranded, 330 Da/base single-stranded) when you quote the number.</p>
+
+    <h3>Single against double, by the length rule</h3>
+    <p>The same 10 units, both strands by the page&rsquo;s rule:</p>
+    <p><strong>Single-stranded, 10 bases</strong> &mdash; 3,300 Da</p>
+    <div class="dn-track"><div class="dn-fill" style="width:50.0%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>Double-stranded, 10 bp</strong> &mdash; 6,600 Da</p>
+    <div class="dn-track"><div class="dn-fill" style="width:100%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p class="cap">The strand factor again: double the strands, double the weight.</p>
+
+    <h3>From weight to moles</h3>
+    <p>The weight exists so a mass can become moles. Picomoles = nanograms &times; 1,000 &divide; weight in Da. Worked: 250 ng of the 670 bp fragment (442,200 Da) is 250 &times; 1,000 &divide; 442,200 = <strong>0.565 pmol</strong>. And a concentration: 10 &micro;L of a 50 ng/&micro;L solution of the same fragment holds 500 ng, which is 500 &times; 1,000 &divide; 442,200 = 1.131 pmol in 10 &micro;L, or <strong>113.07 nM</strong>. The <a href="molarity-calculator.html">Molarity calculator</a> turns moles and volume into molarity for any solute.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>ACGTACGTAC single-stranded, residue sum: A 3 &times; 313.2 + C 3 &times; 289.2 + G 2 &times; 329.2 + T 2 &times; 304.2. What is it, and what does the synthesised form weigh?</li>
+      <li>The same sequence double-stranded, synthesised form: sense 3,074.0 Da, antisense 3,105.0 Da. What is the total?</li>
+      <li>660 ng of a 1,000 bp double-stranded fragment (660,000 Da). How many picomoles?</li>
+    </ol>
+    <p>Answers: (1) 3,074.0 Da; synthesised, 3,074.0 &minus; 62 = 3,012.0 Da. (2) 3,074.0 + 3,105.0 &minus; 124 = 6,055.0 Da. (3) 660 &times; 1,000 &divide; 660,000 = 1 pmol.</p>
+    <p class="cap">Sources: ThermoFisher residue weights; SelectScience nucleic-acid sheet (terminal corrections).</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -102,6 +167,11 @@
       <li><strong>Estimate, not exact.</strong> 660 Da/bp averages base composition. A GC-rich fragment weighs slightly more per pair than an AT-rich one; for an exact weight, sum the actual residues.</li>
       <li><strong>Ends unstated.</strong> Phosphorylated, hydroxyl or overhanging ends shift the weight. The length rule assumes a standard linear fragment.</li>
       <li><strong>Kilobases.</strong> 1 kb is 1,000 bp, not 1,024. A 4.42 kb plasmid is about 2,917 kDa double-stranded by this rule.</li>
+      <li><strong>Salt form unstated.</strong> 617.96 Da/bp is the sodium-salt figure, not the 660 Da/bp free-acid estimate used here. State the basis before comparing two weights.</li>
+      <li><strong>Letters outside A, T, G and C.</strong> Anything else in the sequence &mdash; U, N, spaces &mdash; is not counted as a base. Clean the sequence first instead of assuming the entered length was used.</li>
+      <li><strong>Doubling an exact strand weight.</strong> Doubling works for the length estimate, but not for an exact sum: the complementary strand has different residues. Sum both strands separately for an exact double-stranded weight.</li>
+      <li><strong>Summing free nucleotides into a chain.</strong> The free-nucleotide table runs 18 Da per base above the residue table. Summing it as if it were residues overstates a 10-base chain by 180 Da &mdash; use residues for chains, always.</li>
+      <li><strong>Forgetting the terminal correction on an exact sum.</strong> A residue sum without its end correction describes a different form: subtract about 62 Da per synthesised strand, or add 79 Da per restriction phosphate, or the exact number answers a question nobody asked.</li>
     </ol>
     <div class="flagnote"><strong>The strand factor is the expensive one.</strong> Everything else here is a single multiplication, so entering bases where base pairs belong &mdash; or the reverse &mdash; is a clean factor-of-two error that no rounding fixes. State the strand before the length.</div>
   </section>
@@ -113,30 +183,17 @@
     <details class="faq"><summary>How do I calculate GC content?</summary><div class="ans"><p>Count G plus C, divide by the total bases, times 100. ACGTACGTAC is 5 of 10, so 50.0% GC. A length alone cannot give GC content.</p></div></details>
     <details class="faq"><summary>Single-stranded or double-stranded for a primer?</summary><div class="ans"><p>Single-stranded: use 330 Da per base. A 20-base primer is about 6,600 Da by this rule.</p></div></details>
     <details class="faq"><summary>Why does another source give a different weight for the same fragment?</summary><div class="ans"><p>Usually the per-unit rule (660 vs 617.96 Da/bp for the sodium salt form, or a base-exact sum) or the end chemistry. Check which basis the other source states before assuming either is wrong.</p></div></details>
+    <details class="faq"><summary>How much does 1 kb of double-stranded DNA weigh?</summary><div class="ans"><p>About 660,000 Da, or 660 kDa, by this rule: 1,000 &times; 660 = 660,000 Da.</p></div></details>
+    <details class="faq"><summary>How do I convert daltons to kilodaltons or megadaltons?</summary><div class="ans"><p>Divide by 1,000 for kDa and by 1,000,000 for MDa. So 3,432,000 Da = 3,432 kDa = 3.432 MDa.</p></div></details>
+    <details class="faq"><summary>How do I turn nanograms into picomoles?</summary><div class="ans"><p>Picomoles = nanograms &times; 1,000 &divide; molecular weight in Da. For example, 660 ng of a 1,000 bp double-stranded fragment (660,000 Da) is 660 &times; 1,000 &divide; 660,000 = 1 pmol.</p></div></details>
+    <details class="faq"><summary>Does a circular plasmid weigh the same as a linear fragment of the same length?</summary><div class="ans"><p>By this length rule, yes &mdash; the estimate is the same. Exactly, the end chemistry differs: a circular molecule has no free ends, so a residue-by-residue sum must use the circular form, not linear end assumptions.</p></div></details>
+    <details class="faq"><summary>How do I calculate double-stranded DNA weight exactly?</summary><div class="ans"><p>Sum both strands separately, because the complement has different residues. ACGTACGTAC: sense 3,074.0 Da, antisense 3,105.0 Da, synthesised total 3,074.0 + 3,105.0 &minus; 124 = 6,055.0 Da. Doubling the sense strand misses the 31 Da difference.</p></div></details>
+    <details class="faq"><summary>Why do two tables differ by 18 Da per base?</summary><div class="ans"><p>One lists free nucleotides, the other in-chain residues, and each phosphodiester bond loses one water (18.015 Da) when it forms. Sum residues for a chain, never free nucleotides.</p></div></details>
+    <details class="faq"><summary>What does a restriction cut add?</summary><div class="ans"><p>79 Da per 5&prime; monophosphate the enzyme leaves &mdash; 79 Da for a single strand, 158 Da for a double-stranded fragment. A synthesised strand with hydroxyl ends subtracts about 62 Da per strand instead.</p></div></details>
+    <details class="faq"><summary>What is GC content good for?</summary><div class="ans"><p>GC pairs carry three hydrogen bonds against AT&rsquo;s two, so GC-rich DNA melts at a higher temperature. GC content feeds melting-temperature estimates and primer design &mdash; and it is why the length rule is only an average: a GC-rich fragment weighs slightly more per pair than an AT-rich one.</p></div></details>
+    <details class="faq"><summary>Can I use this for RNA?</summary><div class="ans"><p>Not with DNA weights: RNA uses U instead of T and different residue weights (A 329.2, U 306.2, C 305.2, G 345.2 Da), and a transcript carries a 5&prime; triphosphate. Use the <a href="rna-calculator.html">RNA calculator</a>, which states its 5&prime; end.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="empirical-formula-calculator.html"><span class="t">Empirical Formula</span><span class="d">Composition back to the simplest ratio, with a triage table for when to multiply and when to stop.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to &micro;M, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="rna-calculator.html">RNA</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
