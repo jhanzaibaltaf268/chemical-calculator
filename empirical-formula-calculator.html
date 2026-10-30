@@ -9,6 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <link rel="stylesheet" href="site.css">
+<style>
+.em-track{height:1.35rem;background:#efece6;border-radius:999px;overflow:hidden;margin:.25rem 0 .95rem}
+.em-fill{height:100%;transform-origin:left;animation:emgrow 1s cubic-bezier(.2,.7,.3,1) both}
+@keyframes emgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.em-fill{animation:none!important}}
+</style>
 </head>
 <body>
 
@@ -117,6 +123,46 @@
     <h3>Hydrates and combustion</h3>
     <p><strong>Hydrate.</strong> Heat 2.50 g of CuSO<sub>4</sub>&middot;xH<sub>2</sub>O to constant mass and 1.60 g of anhydrous salt remains, so 0.90 g of water left. Water: 0.90 &divide; 18.015 = 0.0500 mol. Salt: 1.60 &divide; 159.602 = 0.0100 mol. The ratio is 5.0, so x = 5. Treat H<sub>2</sub>O as one unit here &mdash; splitting it into H and O double-counts the oxygen.</p>
     <p><strong>Combustion.</strong> 4.40 g CO<sub>2</sub> gives 0.1000 mol C; 1.80 g H<sub>2</sub>O gives 2 &times; 0.0999 = 0.1998 mol H, because each water carries two hydrogens. The C:H part is CH<sub>2</sub>. Oxygen can only come from the mass difference against the original sample &mdash; never assume it.</p>
+    <h3>When the percentages don&rsquo;t add to 100</h3>
+    <p>Take the glucose data with oxygen unmeasured: C 40.00% + H 6.71% = 46.71%, leaving 53.29% unaccounted. Without oxygen, the moles are C 40.00 &divide; 12.011 = 3.330 and H 6.71 &divide; 1.008 = 6.657, a ratio of 1 : 2.00 &mdash; CH<sub>2</sub>, which is not a formula. Assign the remainder to oxygen (and only if the analysis says oxygen was the unmeasured element): O 53.29 &divide; 15.999 = 3.331, and the ratio becomes 1 : 2.00 : 1.00 &mdash; CH<sub>2</sub>O. The missing element changes the answer, so it must be stated as a hypothesis, never assigned silently. That is the page&rsquo;s own trap, worked rather than just warned about.</p>
+
+    <h3>Thirds: the &times;3 case</h3>
+    <p>Halves get the attention, but thirds are just as mechanical. Ratios of 1.00 : 1.33 : 2.67 clear by multiplying everything by 3 &mdash; 3 : 4 : 8 &mdash; the same move the traps warn about doing one ratio at a time. Rounding 1.33 to 1 and 2.67 to 3 first would give 1 : 1 : 3, a different compound. The rule never changes: multiply every ratio together, then round, never the other way round.</p>
+
+    <h3>Clearing the fraction, seen as bars</h3>
+    <p>Iron oxide again: the raw ratios are Fe 1.00 and O 1.50, and clearing means doubling both. Bars are scaled to the cleared oxygen value of 3.</p>
+    <p><strong>Fe, raw 1.00 &rarr; cleared 2</strong></p>
+    <div class="em-track"><div class="em-fill" style="width:33.3%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <div class="em-track"><div class="em-fill" style="width:66.7%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p><strong>O, raw 1.50 &rarr; cleared 3</strong></p>
+    <div class="em-track"><div class="em-fill" style="width:50.0%;animation-delay:.4s;background:#d97b29"></div></div>
+    <div class="em-track"><div class="em-fill" style="width:100%;animation-delay:.55s;background:#5aa469"></div></div>
+    <p class="cap">Both bars double together. Doubling one alone invents a compound.</p>
+
+    <h3>When <em>n</em> is not a whole number</h3>
+    <p>Empirical CH<sub>2</sub>O at 30.026 g/mol with a measured molar mass of 165 g/mol gives <em>n</em> = 165 &divide; 30.026 = 5.50 &mdash; exactly halfway between 5 and 6, and therefore determined by neither. The molecular formula is undetermined until the measurement is rechecked: a better molar mass, a purer sample, or a re-examination of the percentages. Rounding 5.50 to 6 would report glucose on data that supports no such claim. The page&rsquo;s own tolerance is 0.05 around a whole number; 5.50 is ten times that far from either neighbour.</p>
+
+    <h3>The <em>n</em> ladder: one ratio, three compounds</h3>
+    <p>CH<sub>2</sub>O at 30.026 g/mol is the bottom rung. Times 2 it is C<sub>2</sub>H<sub>4</sub>O<sub>2</sub> (acetic acid) at 60.052 g/mol; times 6 it is C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> (glucose) at 180.156 g/mol. Bars are scaled to glucose.</p>
+    <p><strong>CH&#8322;O, <em>n</em> = 1</strong> &mdash; 30.026 g/mol</p>
+    <div class="em-track"><div class="em-fill" style="width:16.7%;animation-delay:.1s;background:#4a90b8"></div></div>
+    <p><strong>C&#8322;H&#8324;O&#8322;, <em>n</em> = 2</strong> &mdash; 60.052 g/mol</p>
+    <div class="em-track"><div class="em-fill" style="width:33.3%;animation-delay:.25s;background:#5aa469"></div></div>
+    <p><strong>C&#8326;H&#8321;&#8322;O&#8326;, <em>n</em> = 6</strong> &mdash; 180.156 g/mol</p>
+    <div class="em-track"><div class="em-fill" style="width:100%;animation-delay:.4s;background:#d97b29"></div></div>
+    <p class="cap">Same ratio, three compounds. Only the measured molar mass picks the rung.</p>
+
+    <h3>Reducing a formula you already know</h3>
+    <p>The backwards direction also runs forwards: divide a known formula&rsquo;s subscripts by their greatest common divisor. C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> &divide; 6 = CH<sub>2</sub>O; C<sub>2</sub>H<sub>4</sub>O<sub>2</sub> &divide; 2 = CH<sub>2</sub>O; Fe<sub>2</sub>O<sub>3</sub> has no common divisor, so it is already empirical. The percentages this page starts from come from the <a href="percent-composition-calculator.html">Percent Composition calculator</a>, and the measured molar mass that finishes the job comes from experiment or from the <a href="molar-mass-calculator.html">Molar Mass calculator</a> for a known formula.</p>
+
+    <h3>Try it yourself</h3>
+    <ol>
+      <li>A compound is 69.94% Fe and 30.06% O. What are the moles, the ratio, and the formula?</li>
+      <li>Only C 40.00% and H 6.71% were measured. What ratio do they give alone, and what does adding the 53.29% remainder as oxygen give?</li>
+      <li>Empirical CH<sub>2</sub>O (30.026 g/mol) with a measured molar mass of 165 g/mol. What is <em>n</em>, and what is the molecular formula?</li>
+    </ol>
+    <p>Answers: (1) Fe 1.2524 mol, O 1.8789 mol, ratio 1.00 : 1.50, &times;2 &rarr; Fe<sub>2</sub>O<sub>3</sub>. (2) Alone: 1 : 2.00 (CH<sub>2</sub>, incomplete); with oxygen: 1 : 2.00 : 1.00 (CH<sub>2</sub>O). (3) <em>n</em> = 5.50 &mdash; undetermined; neither 5 nor 6.</p>
+    <p class="cap">Sources: IUPAC abridged standard atomic weights, one canonical set across every page here.</p>
   </section>
 
   <section class="block wrap" id="traps">
@@ -129,6 +175,8 @@
       <li><strong>Assuming the missing percent is oxygen.</strong> If the rows total 85%, the rest could be an unmeasured element, water or an impurity. Say so rather than assigning it silently.</li>
       <li><strong>Forcing a non-integer <em>n</em>.</strong> If molar mass &divide; empirical mass is 5.4, something upstream is wrong.</li>
       <li><strong>Treating the empirical formula as an identification.</strong> CH<sub>2</sub>O is formaldehyde, acetic acid and glucose alike.</li>
+      <li><strong>Splitting the hydrate unit.</strong> When finding x in CuSO<sub>4</sub>&middot;xH<sub>2</sub>O, treat H<sub>2</sub>O as one unit: 0.90 g of water is 0.0500 mol of water, not 0.0500 mol of H plus 0.0500 mol of O. Splitting it double-counts the oxygen.</li>
+      <li><strong>Trusting a &times;5 or &times;6 multiplier without checking.</strong> The page flags multipliers of 5 and above as a warning, not a solution. A large multiplier usually means noisy data, a missing element, or an impure sample &mdash; check those before trusting the formula.</li>
     </ul>
   </section>
 
@@ -140,30 +188,12 @@
     <details class="faq"><summary>How do I get the molecular formula?</summary><div class="ans"><p><em>n</em> = molar mass &divide; empirical formula mass, then multiply every subscript by <em>n</em>. For CH<sub>2</sub>O at 30.026 g/mol with a measured 180 g/mol, <em>n</em> = 6 and the formula is C<sub>6</sub>H<sub>12</sub>O<sub>6</sub>.</p></div></details>
     <details class="faq"><summary>Can the empirical and molecular formulas be the same?</summary><div class="ans"><p>Yes, when <em>n</em> = 1 &mdash; water, carbon dioxide, formaldehyde. For ionic compounds such as NaCl or Fe<sub>2</sub>O<sub>3</sub>, the empirical formula <em>is</em> the formula; there is no separate molecular one.</p></div></details>
     <details class="faq"><summary>Why do different compounds share one empirical formula?</summary><div class="ans"><p>Empirical means ratio only. CH<sub>2</sub>O fits formaldehyde, acetic acid and glucose equally well. Molar mass and structure data are what separate them.</p></div></details>
+    <details class="faq"><summary>How do I handle a hydrate?</summary><div class="ans"><p>Treat H<sub>2</sub>O as one unit. Heat 2.50 g of CuSO<sub>4</sub>&middot;xH<sub>2</sub>O: 1.60 g of salt remains, so 0.90 g of water left. Water: 0.90 &divide; 18.015 = 0.0500 mol; salt: 1.60 &divide; 159.602 = 0.0100 mol; the ratio is 5.0, so x = 5. Splitting the water into H and O would double-count the oxygen.</p></div></details>
+    <details class="faq"><summary>What does the multiplier warning mean?</summary><div class="ans"><p>A multiplier of 5 or 6 is a warning flag, not a solution. Large multipliers usually mean noisy data, a missing element, or an impure sample &mdash; check those before trusting the formula the multiplier produces.</p></div></details>
+    <details class="faq"><summary>Can I reduce a formula I already know?</summary><div class="ans"><p>Yes: divide every subscript by their greatest common divisor. C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> &divide; 6 = CH<sub>2</sub>O; C<sub>2</sub>H<sub>4</sub>O<sub>2</sub> &divide; 2 = CH<sub>2</sub>O. Fe<sub>2</sub>O<sub>3</sub> has no common divisor, so it is already empirical.</p></div></details>
+    <details class="faq"><summary>What if <em>n</em> comes out as 5.5?</summary><div class="ans"><p>Then the molecular formula is undetermined. CH<sub>2</sub>O at 30.026 g/mol with a measured 165 g/mol gives <em>n</em> = 5.50, exactly between 5 and 6. Recheck the molar mass, the purity, and the percentages &mdash; do not round 5.50 to 6 and report glucose.</p></div></details>
   </section>
 
-  <section class="block wrap" id="hub">
-    <h2 class="head">The other calculators</h2>
-    <p>This page is a spoke. It links back to the hub and on to the next useful step; the hub links to every calculator here.</p>
-    <div class="spokes">
-      <a class="spoke" href="molecular-weight-finder.html"><span class="t">Molecular Weight Finder</span><span class="d">Search by name, trade name or synonym, resolved to a formula and a specific form before any arithmetic.</span></a>
-      <a class="spoke" href="percent-composition-calculator.html"><span class="t">Percent Composition</span><span class="d">Mass share of every element, grams in a weighed sample, and mass percent against atom percent.</span></a>
-      <a class="spoke" href="element-mass-calculator.html"><span class="t">Element Mass</span><span class="d">Grams of one element in a sample, the reverse calculation, and elemental against salt labelling.</span></a>
-      <a class="spoke" href="batch-molecular-weight-calculator.html"><span class="t">Batch Compare</span><span class="d">Several compounds ranked at once, with isomer ties kept, differences, ratios and moles per fixed mass.</span></a>
-      <a class="spoke" href="dilution-calculator.html"><span class="t">Dilution</span><span class="d">C₁V₁ = C₂V₂, when to split a large factor into steps, and correcting a stock for purity.</span></a>
-      <a class="spoke" href="protein-molarity-calculator.html"><span class="t">Protein Molarity</span><span class="d">mg/mL to µM, purity-corrected reconstitution, and picking the right molecular weight.</span></a>
-      <a class="spoke" href="gas-volume-calculator.html"><span class="t">Gas Volume</span><span class="d">Moles to litres, and which STP the question means — 22.414 or 22.711 L/mol.</span></a>
-      <a class="spoke" href="molar-mass-calculator.html"><span class="t">Molar Mass</span><span class="d">Molar mass from any formula, with every atom counted and every subtotal shown.</span></a>
-      <a class="spoke" href="grams-to-moles-calculator.html"><span class="t">Grams to Moles</span><span class="d">Grams to moles and back, with the molar mass and the molecule count alongside.</span></a>
-      <a class="spoke" href="molarity-calculator.html"><span class="t">Molarity</span><span class="d">Moles, litres and molarity in both directions, plus the mass to weigh out.</span></a>
-      <a class="spoke" href="protein-molecular-weight-calculator.html"><span class="t">Protein Molecular Weight</span><span class="d">Protein weight from a one-letter sequence, average or monoisotopic, water included.</span></a>
-      <a class="spoke" href="peptide-calculator.html"><span class="t">Peptide</span><span class="d">Peptide weight from a one-letter sequence, with disulfide, acetyl and amide corrections.</span></a>
-      <a class="spoke" href="amino-acid-calculator.html"><span class="t">Amino Acid</span><span class="d">One amino acid at a time: free mass against residue mass, and chains summed properly.</span></a>
-      <a class="spoke" href="dna-calculator.html"><span class="t">DNA</span><span class="d">DNA weight from a sequence or a length, single or double stranded, with GC content.</span></a>
-      <a class="spoke" href="rna-calculator.html"><span class="t">RNA</span><span class="d">RNA weight from a base sequence, with the poly-A tail and the 5′ end stated.</span></a>
-    </div>
-    <p class="nextstep"><strong>Next:</strong> <a href="element-mass-calculator.html">Element Mass</a> &middot; <a href="index.html">Back to the hub</a></p>
-  </section>
 </main>
 
 <footer class="site">
